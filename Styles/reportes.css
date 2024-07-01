@@ -1,0 +1,35 @@
+ button.btn.insert, button.btn.new, button.btn.cancel{
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+
+button.btn.update, button.btn.insert, button.btn.new{
+    color: #FFFFFF;
+    background-color: #52672E;
+    border-color: #52672E;
+}
+
+button.btn.cancel{
+    color: #FFFFFF;
+    background-color: #672e2e;
+    border-color: #672e2e;
+}
+
+/*Esta validacion sera completamente temporal y sera para categoria solamente*/
+input:placeholder-shown:focus+label::after {
+    content: 'Este campo no puede estar vacio';
+    color: red;
+}
+
+input:not(:placeholder-shown):focus+label::after {
+    content: '';
+}
+
+input:invalid:focus:not(:placeholder-shown)+label::before {
+    content: 'Error en la informacion ingresada';
+    color: red;
+}
+
+input:valid:focus+label::before {
+    content: '';
+}

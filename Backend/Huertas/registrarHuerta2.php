@@ -1,5 +1,5 @@
 <?php
-require_once($_SERVER['DOCUMENT_ROOT']."/APEJAL/Backend/DataBase/connectividad.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/proyectoApeajal/APEJAL/Backend/DataBase/connectividad.php");
 
 $id_huerta = $_POST['hue'];
 $id_productor = $_POST['propietario'];

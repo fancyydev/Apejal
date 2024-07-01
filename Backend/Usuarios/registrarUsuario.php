@@ -1,5 +1,5 @@
 <?php
-require_once($_SERVER['DOCUMENT_ROOT']."/APEJAL/Backend/DataBase/connectividad.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/proyectoApeajal/APEJAL/Backend/DataBase/connectividad.php");
 
 // Obtener datos del formulario
 $tipo = $_POST['tipo'];
