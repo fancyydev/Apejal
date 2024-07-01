@@ -1,0 +1,17 @@
+ .btn.insert, .btn.new, .btn.cancel{
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+
+.btn.update, .btn.insert, .btn.new, .btn.show,  .btn.download{
+    color: #FFFFFF;
+    background-color: #52672E;
+    border-color: #52672E;
+}
+
+.btn.cancel{
+    color: #FFFFFF;
+    background-color: #672e2e;
+    border-color: #672e2e;
+}
+

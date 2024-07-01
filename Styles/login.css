@@ -1,0 +1,20 @@
+.card.login {
+    border-radius: 5rem;
+    border-color: #52672E;
+}
+
+.area {
+    padding-left: 3rem!important;
+    padding-right: 3rem!important;
+}
+
+a.btn.link, button.btn.link{
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+
+a.btn.link, button.btn.link{
+    color: #FFFFFF;
+    background-color: #52672E;
+    border-color: #52672E;
+}
