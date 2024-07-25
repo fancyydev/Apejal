@@ -226,7 +226,11 @@
                                     <div class="col-md-4">
                                         <label for="staticEmail" class="form-label">Altura nivel del mar</label>
                                         <input class="form-control" type="text" name="altNivMar" id="altNivMar" />
-                                    </div>                                
+                                    </div>   
+                                    <div class="col-md-4">
+                                        <label for="staticEmail" class="form-label">Fecha de registro</label>
+                                        <input class="form-control" type="text" name="fechaReg" id="fechaReg" />
+                                    </div>                         
                                 </div>
                                 <br>
                                 <div class="row g-3">
@@ -303,7 +307,7 @@
             });
         },
         error: function(xhr, status, error) {
-            console.error('Error al obtener los productores:', status, error);
+            console.error('Error al obtener juntas locales:', status, error);
         }
     });
 
@@ -342,6 +346,12 @@
                 changeYear: true        
             });
 
+            $("#fechaReg").datepicker({
+                dateFormat: 'yy-mm-dd', 
+                changeMonth: true,      
+                changeYear: true        
+            });
+
             $('#regristar').click(function() {
 
                 var resultado=aux.validateAll(
@@ -367,6 +377,7 @@
                         {"valor": document.getElementById("longitud").value, "typeOf": "double", "mensaje": "<p>Insertar longitud</p><br>"},
                         {"valor": document.getElementById("altitud").value, "typeOf": "double", "mensaje": "<p>Insertar altitud</p><br>"},
                         {"valor": document.getElementById("altNivMar").value, "typeOf": "double", "mensaje": "<p>Insertar altura sobre nivel de mar</p><br>"},
+                        {"valor": document.getElementById("fechaReg").value, "typeOf": "date", "mensaje": "<p>Insertar fecha de registro</p><br>"},
                         {"valor": document.getElementById("arcKML").value, "typeOf": "file", "mensaje": "<p>Insertar archivo KML</p><br>"},
                     ]
                 )
@@ -402,6 +413,7 @@
                     formData.append('centroide', document.getElementById('centroide').value);
                     formData.append('longitud', document.getElementById('longitud').value);
                     formData.append('altitud', document.getElementById('altitud').value);
+                    formData.append('fechaReg', document.getElementById('fechaReg').value);
                     formData.append('altNivMar', document.getElementById('altNivMar').value);
 
                     $.ajax({

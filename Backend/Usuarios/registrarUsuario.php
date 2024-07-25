@@ -9,6 +9,9 @@ $telefono = $_POST['telefono'];
 $contra = $_POST['contra'];
 $rfc = isset($_POST['rfc']) ? $_POST['rfc'] : '';
 $curp = isset($_POST['curp']) ? $_POST['curp'] : '';
+$municipiosSeleccionados = isset($_POST['municipio']) ? $_POST['municipio'] : [];
+$jl = $_POST['jl'];
+$municipio = implode(',', $municipiosSeleccionados);
 
 // Insertar en tabla usuario
 $sql_usuario = "INSERT INTO usuario (id_tipo, nombre, correo, teléfono, contraseña)
@@ -75,6 +78,18 @@ if ($resultado) {
         $stmt_productor->bindParam(3, $curp, PDO::PARAM_STR);
 
         $resultado_productor = $stmt_productor->execute();
+    } else if($tipo == "tecnico") {
+        $ultimo_id = $conn->lastInsertId();
+        $sql_tecnico = "INSERT INTO tecnico (id_usuario, idjuntaLocal, carga_municipios) VALUES (?, ?, ?)";
+        $stmt_tecnico = $conn->prepare($sql_tecnico);
+        if (!$stmt_tecnico) {
+            die("Error en la preparación de la consulta de productor: " . implode(", ", $conn->errorInfo()));
+        }
+        $stmt_tecnico->bindParam(1, $ultimo_id, PDO::PARAM_INT);
+        $stmt_tecnico->bindParam(2, $jl, PDO::PARAM_INT);
+        $stmt_tecnico->bindParam(3, $municipio, PDO::PARAM_STR);
+
+        $resultado_tecnico = $stmt_tecnico->execute();
     }
 
     // Cerrar statement y conexión

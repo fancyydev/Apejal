@@ -1,0 +1,16 @@
+#municipio-checkboxes {
+    max-height: 150px; /* Ajusta la altura */
+    overflow-y: auto; /* Habilita el desplazamiento vertical si el contenido excede la altura */
+    border: 1px solid #ccc; /* Agrega un borde para definir el área del contenedor */
+    padding: 10px; /* Opcional: Agrega espacio interno */
+    box-sizing: border-box; /* Incluye el borde y el padding en el tamaño total del contenedor */
+}
+
+#municipio-checkboxes label {
+    display: block;
+    padding: 2px;
+}
+
+#municipio-checkboxes input[type="checkbox"] {
+    margin-right: 8px;
+}

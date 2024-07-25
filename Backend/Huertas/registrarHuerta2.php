@@ -22,6 +22,7 @@ $totalarboles = $_POST['totArboles'];
 $etapafenologica = $_POST['etaFenologica'];
 $fechasv_01 = $_POST['fechaSV1'];
 $fechasv_02 = $_POST['fechaSV2'];
+$fechaReg = $_POST['fechaReg'];
 
 $carpetaDestinoBase = "../kmls/";
 $rutaKML = '';
@@ -45,9 +46,9 @@ if (isset($_FILES["file"])) {
     if (move_uploaded_file($origen, $destino)) {
         $rutaKML = $destino;
         $sql = "INSERT INTO huertas 
-        (id_hue, id_productor, id_juntalocal, nombre, localidad, centroide, hectareas, pronostico_de_cosecha, longitud, altitud, altura_nivel_del_mar, variedad, nomempresa, encargadoempresa, supervisorhuerta, añoplantacion, arbolesporhectareas, totalarboles, etapafenologica, fechasv_01, fechasv_02, rutaKML)
+        (id_hue, id_productor, id_juntalocal, nombre, localidad, centroide, hectareas, pronostico_de_cosecha, longitud, altitud, altura_nivel_del_mar, variedad, nomempresa, encargadoempresa, supervisorhuerta, añoplantacion, arbolesporhectareas, totalarboles, etapafenologica, fechasv_01, fechasv_02, rutaKML, fechaRegistro)
         VALUES 
-        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 
         $conexion = new DB_Connect();
@@ -85,7 +86,8 @@ if (isset($_FILES["file"])) {
         $stmt_huertas->bindParam(20, $fechasv_01, PDO::PARAM_STR);
         $stmt_huertas->bindParam(21, $fechasv_02, PDO::PARAM_STR);
         $stmt_huertas->bindParam(22, $rutaKML, PDO::PARAM_STR);    
-    
+        $stmt_huertas->bindParam(23, $fechaReg, PDO::PARAM_STR);
+
         $resultado = $stmt_huertas->execute();
 
         if ($resultado) {  
