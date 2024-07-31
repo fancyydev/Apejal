@@ -265,6 +265,15 @@
                         {"valor": document.getElementById("contra").value, "typeOf": "string", "mensaje": "<p>Insertar contraseña</p><br>"}
                     ]);
                     break;
+                case "adminJL":
+                    resultado = aux.validateAll([
+                        {"valor": document.getElementById("tipo").value, "typeOf": "string", "mensaje": "<p>Seleccione tipo de usuario</p><br>"},
+                        {"valor": document.getElementById("nombre").value, "typeOf": "string", "mensaje": "<p>Insertar nombre</p><br>"},
+                        {"valor": document.getElementById("email").value, "typeOf": "string", "mensaje": "<p>Insertar email</p><br>"},
+                        {"valor": document.getElementById("telefono").value, "typeOf": "string", "mensaje": "<p>Insertar telefono</p><br>"},
+                        {"valor": document.getElementById("contra").value, "typeOf": "string", "mensaje": "<p>Insertar contraseña</p><br>"}
+                    ]);
+                    break;
                 default:
                     resultado = { estado: false, texto: "Tipo de usuario inválido" };
                     break;
