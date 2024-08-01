@@ -1,0 +1,46 @@
+Intentando iniciar sesión con usuario: david@gamail.comResultado de la consulta: array (
+  'estado' => 1,
+  'id_usuario' => 1,
+  'nombre' => 'David Fregoso',
+  'id_tipo' => 1,
+)Intentando iniciar sesión con usuario: david@gamail.comResultado de la consulta: array (
+  'estado' => 1,
+  'id_usuario' => 1,
+  'nombre' => 'David Fregoso',
+  'id_tipo' => 1,
+)Intentando iniciar sesión con usuario: david@gamail.comResultado de la consulta: array (
+  'estado' => 1,
+  'id_usuario' => 1,
+  'nombre' => 'David Fregoso',
+  'id_tipo' => 1,
+)Intentando iniciar sesión con usuario: david@gamail.comResultado de la consulta: array (
+  'estado' => 1,
+  'id_usuario' => 1,
+  'nombre' => 'David Fregoso',
+  'id_tipo' => 1,
+)Intentando iniciar sesión con usuario: david@gamail.comResultado de la consulta: array (
+  'estado' => 1,
+  'id_usuario' => 1,
+  'nombre' => 'David Fregoso',
+  'id_tipo' => 1,
+)Intentando iniciar sesión con usuario: david@gamail.comResultado de la consulta: array (
+  'estado' => 1,
+  'id_usuario' => 1,
+  'nombre' => 'David Fregoso',
+  'id_tipo' => 1,
+)Intentando iniciar sesión con usuario: david@gamail.comResultado de la consulta: array (
+  'estado' => 1,
+  'id_usuario' => 1,
+  'nombre' => 'David Fregoso',
+  'id_tipo' => 1,
+)Intentando iniciar sesión con usuario: david@gamail.comResultado de la consulta: array (
+  'estado' => 0,
+  'id_usuario' => NULL,
+  'nombre' => NULL,
+  'id_tipo' => NULL,
+)Intentando iniciar sesión con usuario: david@gamail.comResultado de la consulta: array (
+  'estado' => 0,
+  'id_usuario' => NULL,
+  'nombre' => NULL,
+  'id_tipo' => NULL,
+)
