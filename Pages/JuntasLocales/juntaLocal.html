@@ -78,13 +78,19 @@
                 </div>
                 <div class="col-lg-8">
                     <div class="card">
-                        <div class="card-header">Cliente</div>
+                        <div class="card-header">Junta Local</div>
                             <div class="card-body">
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <label for="staticEmail" class="form-label">Nombre</label>
                                         <input class="form-control" type="text" name="nombre" id="nombre" />
                                     </div>
+                                    <div class="col-md-6">
+                                        <label for="staticEmail" class="form-label">Administrador junta local</label>
+                                        <select class="form-control" name="admin" id="admin" >
+                                            <option value="">Seleccione administrador</option>
+                                        </select>
+                                    </div>  
                                 </div>
                                 <br>
                                 <div class="row g-3">
@@ -142,12 +148,30 @@
         const aux = new auxliar();
         $(document).ready(function(){
             //session.confirmarlogin("No-Clientes");
+
+            $.ajax({
+                url: '../../Backend/JuntasLocales/obtenerAdminJL.php',
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    //Itera sobre el array de respuesta y agrega lo que encuentra en la base de datos
+                    $.each(response, function(index, user) {
+                        $('#admin').append($('<option>', {
+                            value: user.id_usuario,
+                            text: user.nombre
+                        }));
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error al obtener los administradores:', status, error);
+                }
+            });
+
             $.ajax({
                 url: '../../Backend/JuntasLocales/obtenerMunicipios.php',
                 method: 'GET',
                 dataType: 'json',
                 success: function(data) {
-                    console.log(data); // Verifica qué tipo de dato es data y su contenido
                     data.forEach(function(municipio) {
                         $('#municipio').append(`<option value="${municipio.id_municipio}">${municipio.nombre}</option>`);
                     });
