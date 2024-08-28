@@ -1,0 +1,218 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500&display=swap');
+
+:root {
+    --color-barra-lateral: rgb(255,255,255);
+    --color-texto: rgb(0,0,0);
+    --color-texto-menu: rgb(134,136,144);
+
+    --color-boton: #52672E;
+    --color-boton-texto: rgb(255,255,255);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+}
+
+body {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    background-color: darkcyan;
+}
+
+.barra-lateral {
+    width: 250px;
+    height: 100%;
+    overflow: hidden;
+    padding: 20px 15px;
+    background-color: var(--color-barra-lateral);
+    transition: width 0.5s ease;
+}
+
+.mini-barra-lateral {
+    width: 80px;
+}
+
+.barra-lateral span {
+    width: 100px;
+    white-space: nowrap;
+    font-size: 18px;
+    text-align: left;
+    opacity: 1;
+    transition: opacity 0.5s ease, width 0.5s ease;
+}
+
+.barra-lateral span.oculto {
+    opacity: 0;
+    width: 0;
+}
+
+/* Nombre de la pagina */
+
+.barra-lateral .nombre-pagina {
+    width: 100%;
+    height: 45px;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.barra-lateral .nombre-pagina img {
+    min-width: 50px;
+    font-size: 40px;
+    cursor: pointer;
+}
+
+.barra-lateral .nombre-pagina span {
+    margin-left: 5px;
+    font-size: 25px;
+}
+
+/*Boton*/
+.barra-lateral .boton {
+    width: 100%;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--color-boton);
+    color: var(--color-boton-texto);
+    margin-bottom: 25px;
+    cursor: pointer;
+}
+
+.barra-lateral .boton ion-icon {
+    min-width: 50px;
+    font-size: 25px;
+}
+
+
+/* Usuario */
+.barra-lateral .usuario {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-top: 150px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background-color: rgb(190,233,223);
+    border-radius: 10px;
+}
+
+#key {
+    min-width: 50px;
+    font-size: 25px;
+    border-radius: 10px;
+}
+
+.barra-lateral .usuario .info-usuario {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--color-texto);
+    overflow: hidden;
+}
+
+.barra-lateral .usuario .nombre-email {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-left: 5px;
+}
+
+.barra-lateral .usuario .nombre-email .nombre {
+    width: 120px;
+    font-size: 13px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.barra-lateral .usuario .nombre-email .email {
+    width: 120px;
+    font-size: 12px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    display: block;
+}
+#settings {
+    width: 50px;
+    cursor: pointer;
+    font-size: 25px;
+}
+
+/* Tabla bro you know what im saying */
+/* Contenido principal */
+
+.contenido-principal {
+    flex-grow: 1;
+    margin: 0;
+    padding: 0;
+
+    box-sizing: border-box;
+    background-color: rgb(190,233,223);
+
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+table, th, td {
+    border-collapse: collapse;
+    padding: 1rem;
+}
+
+thead th {
+    position: sticky;
+    top: 0;
+    left: 0;
+    background-color: #d5d1defe;
+}
+
+.table {
+    width: 82vw;
+    height: 700px;
+    background-color: #fff5;
+    box-shadow: 0 .4rem .8rem #0005;
+    border-radius: .8rem;
+    overflow: hidden;
+}
+
+.table-header  h1 {
+    width: 100%;
+    height: 10%;
+    background: rgba(119, 116, 116, 0.267);
+    padding: .8rem 1rem;
+}
+
+
+.table-body {
+    width: 95%;
+    max-height: 89%;
+    background-color: #fffb;
+    margin: .8rem auto;
+    border-radius: .6rem;
+    overflow: auto;
+} 
+
+
+.table-body::-webkit-scrollbar-thumb {
+    visibility: hidden;
+}
+
+table {
+    width: 100%;
+    height: 700px;
+
+}
+
