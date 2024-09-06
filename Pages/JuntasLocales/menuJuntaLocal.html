@@ -55,7 +55,7 @@
     <div class="contenido-principal">
         <div class="table">
             <section class="table-header">
-                <h1>Productores</h1>
+                <h1 id="title" >Productores</h1>
                 <input id="inputSearch" type="text">
                 <button id="btnAdd"> Agregar </button>
             </section>
@@ -74,25 +74,31 @@
     </div>
     
     <script>
-        $(document).ready(function() {
+    $(document).ready(function() {
+
     $('button[data-content="productores"]').click(function() {
-        cargarProductores();
+        $('#title').text('Productores'); 
+        cargarProductores(); 
     });
 
     $('button[data-content="solicitudes"]').click(function() {
-        cargarSolicitudes();
+        $('#title').text('Solicitudes'); 
+        cargarSolicitudes(); 
     });
 
     $('button[data-content="huertas"]').click(function() {
-        cargarHuertas();
+        $('#title').text('Huertas');
+        cargarHuertas(); 
     });
 
     $('button[data-content="tecnicos"]').click(function() {
-        cargarTecnicos();
+        $('#title').text('Técnicos'); 
+        cargarTecnicos(); 
     });
 
     $('button[data-content="municipios"]').click(function() {
-        cargarMunicipios();
+        $('#title').text('Municipios');
+        cargarMunicipios(); 
     });
 
     function cargarProductores() {
