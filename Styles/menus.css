@@ -150,6 +150,7 @@ body {
     font-size: 25px;
 }
 
+
 /* Tabla bro you know what im saying */
 /* Contenido principal */
 
@@ -170,6 +171,11 @@ body {
 table, th, td {
     border-collapse: collapse;
     padding: 1rem;
+    vertical-align: top; /* Aligns cell content to the top */
+}
+
+table th, table td {
+    min-width: 120px; /* Cambia este valor según tus necesidades */
 }
 
 thead th {
@@ -181,24 +187,53 @@ thead th {
 
 .table {
     width: 82vw;
-    height: 700px;
+    height: 80%;
     background-color: #fff5;
     box-shadow: 0 .4rem .8rem #0005;
     border-radius: .8rem;
     overflow: hidden;
 }
 
-.table-header  h1 {
+.table-header {
     width: 100%;
     height: 10%;
     background: rgba(119, 116, 116, 0.267);
-    padding: .8rem 1rem;
+    padding: 0.8rem 1rem;
+    display: flex; /* Enable flexbox */
+    align-items: center; /* Center vertically */
+    justify-content: space-between; /* Space between h1 and button */
 }
 
 
+/*Boton de agregar*/
+#btnAdd {
+    background-color: #56e956; /* Pastel green color */
+    color: black; /* Text color */
+    border: none; /* Removes the default border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px 20px; /* Padding inside the button */
+    font-size: 16px; /* Font size of the text */
+    font-weight: bold; /* Makes the text bold */
+    cursor: pointer; /* Changes the cursor to a pointer when hovering */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effects */
+    width: 15%;
+}
+
+#btnAdd:hover {
+    background-color: #66cc66; /* Slightly darker green on hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Increases shadow on hover */
+}
+
+#btnAdd:active {
+    background-color: #55bb55; /* Even darker green when clicked */
+    box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2); /* Reduces shadow when clicked */
+    transform: translateY(2px); /* Slightly moves the button down when clicked */
+}
+
 .table-body {
     width: 95%;
-    max-height: 89%;
+    height: 80%;
     background-color: #fffb;
     margin: .8rem auto;
     border-radius: .6rem;
@@ -212,7 +247,57 @@ thead th {
 
 table {
     width: 100%;
-    height: 700px;
+ 
 
 }
 
+/*Botones de borrar y editar*/
+/* Estilo general para los botones dentro de la tabla */
+table button {
+    background-color: transparent; /* Fondo transparente */
+    border: none; /* Sin borde */
+    cursor: pointer; /* Muestra un cursor de mano al pasar sobre el botón */
+    align-items: center; /* Center vertically */
+    justify-content: space-between; /* Space between h1 and button */; /* Flexbox para alinear icono y texto */
+    justify-content: center; /* Centra el contenido horizontalmente */
+    padding: 0.5rem; /* Espaciado dentro del botón */
+    font-size: 16px; /* Tamaño de la fuente */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Transición suave para cambios de color */
+}
+
+/* Estilo específico para el botón de editar (color verde) */
+#btnEdit {
+    color: white; /* Color del texto y el icono */
+    background-color: rgb(108, 194, 108);
+    border-radius: 5px;
+}
+
+#btnEdit:hover {
+    background-color: rgba(0, 128, 0, 0.1); /* Fondo verde claro al pasar el ratón */
+    color: black;
+}
+
+/* Estilo específico para el botón de eliminar (color rojo) */
+#btnDelete {
+    color: white; /* Color del texto y el icono */
+    background-color: rgb(206, 103, 103);
+    border-radius: 5px;
+}
+
+#btnDelete:hover {
+    background-color: rgba(255, 0, 0, 0.1); /* Fondo rojo claro al pasar el ratón */
+    color: black;
+}
+
+
+/*Input search*/
+#inputSearch {
+    height: 40px;
+    width: 50%;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.ocultar-iconos {
+    display: none;
+}
