@@ -12,7 +12,7 @@
     <div class="barra-lateral">
         <div class="nombre-pagina">
             <img id="img_apeajal" src="../../Assets/Img/Imagenes/Logo.jpeg" width="50VW" height="50VH" class="d-inline-block align-top" alt="">
-            <span>JuntaLocal</span>
+            <span>Apeajal</span>
         </div>
 
         <button class="boton" data-content="solicitudes">
@@ -25,14 +25,9 @@
             <span>Huertas</span>
         </button>
 
-        <button class="boton" data-content="tecnicos">
+        <button class="boton" data-content="usuarios">
             <ion-icon name="build-outline"></ion-icon>
-            <span>Tecnicos</span>
-        </button>
-
-        <button class="boton" data-content="productores">
-            <ion-icon name="person-circle-outline"></ion-icon>
-            <span>Productores</span>
+            <span>Usuarios</span>
         </button>
 
         <button class="boton" data-content="municipios">
@@ -57,7 +52,6 @@
             <section class="table-header">
                 <h1 id="title" >Solicitudes</h1>
                 <input id="inputSearch" type="text">
-                <button id="btnSearch"> Buscar </button>
                 <button id="btnAdd"> Agregar </button>
             </section>
             
@@ -76,145 +70,30 @@
     
     <script>
     $(document).ready(function() {
-        let currentContext = '';
 
-        // Detectar contexto actual (Productores, Técnicos o Huertas)
-        $('button[data-content="productores"]').click(function() {
-            $('#title').text('Productores'); 
-            cargarProductores(); 
-            currentContext = 'productores';
-        });
+    $('button[data-content="solicitudes"]').click(function() {
+        $('#title').text('Solicitudes'); 
+        cargarSolicitudes(); 
+    });
 
-        $('button[data-content="huertas"]').click(function() {
-            $('#title').text('Huertas');
-            cargarHuertas(); 
-            currentContext = 'huertas';
-        });
+    $('button[data-content="huertas"]').click(function() {
+        $('#title').text('Huertas');
+        cargarHuertas(); 
+    });
 
-        $('button[data-content="tecnicos"]').click(function() {
-            $('#title').text('Técnicos'); 
-            cargarTecnicos(); 
-            currentContext = 'tecnicos';
-        });
-        
-        $('button[data-content="municipios"]').click(function() {
-            $('#title').text('Municipios');
-            cargarMunicipios(); 
-            currentContext = 'municipios';
-        });
+    $('button[data-content="usuarios"]').click(function() {
+        $('#title').text('Usuarios'); 
+        cargarUsuarios(); 
+    });
 
-        // Evento de búsqueda (al hacer clic en el botón o presionar Enter)
-        $('#btnSearch').click(function() {
-            filtrarDatos(currentContext);
-        });
-
-        $('#inputSearch').on('keypress', function(e) {
-            if (e.which === 13) { // Tecla Enter
-                filtrarDatos(currentContext);
-            }
-        });
-
-        // Función para filtrar los datos según el contexto
-    function filtrarDatos(context) {
-        const searchValue = $('#inputSearch').val().toLowerCase();
-
-        $('.table-body tbody tr').each(function() {
-            const row = $(this);
-            let showRow = false;
-
-            if (context === 'productores') {
-                const nombre = row.find('td:eq(2)').text().toLowerCase(); // Nombre Usuario
-                const correo = row.find('td:eq(3)').text().toLowerCase(); // Correo
-                if (nombre.includes(searchValue) || correo.includes(searchValue)) {
-                    showRow = true;
-                }
-            } else if (context === 'tecnicos') {
-                const nombre = row.find('td:eq(2)').text().toLowerCase(); // Nombre Usuario
-                const correo = row.find('td:eq(4)').text().toLowerCase(); // Correo
-                const junta = row.find('td:eq(3)').text().toLowerCase();  // Nombre Junta Local
-                if (nombre.includes(searchValue) || correo.includes(searchValue) || junta.includes(searchValue)) {
-                    showRow = true;
-                }
-            } else if (context === 'huertas') {
-                const productor = row.find('td:eq(2)').text().toLowerCase(); // Nombre Productor
-                const junta = row.find('td:eq(3)').text().toLowerCase();    // Nombre Junta Local
-                const huerta = row.find('td:eq(4)').text().toLowerCase();   // Nombre Huerta
-                const localidad = row.find('td:eq(5)').text().toLowerCase(); // Localidad
-                if (productor.includes(searchValue) || junta.includes(searchValue) || huerta.includes(searchValue) || localidad.includes(searchValue)) {
-                    showRow = true;
-                }
-            } else if (context === 'municipios') {
-                const nombre = row.find('td:eq(2)').text().toLowerCase(); // Nombre Productor
-                if (nombre.includes(searchValue)) {
-                    showRow = true;
-                }
-            }
-
-            // Mostrar o esconder la fila según el resultado del filtro
-            if (showRow) {
-                row.show();
-            } else {
-                row.hide();
-            }
-        });
-    }
-
-    function cargarProductores() {
-        // Cambiar los encabezados de la tabla
-        $('.table-body thead').html(`
-                <tr>
-                    <th>Id</th>
-                    <th>Accion</th>
-                    <th>Nombre Usuario</th>
-                    <th>Correo</th>
-                    <th>Telefono</th>
-                    <th>RFC</th>
-                    <th>Curp</th>
-                    <th>Estatus</th>
-                </tr>
-            `);
-
-        $.ajax({
-            url: '../../Backend/JuntasLocales/obtenerProductores.php',
-            type: 'GET',
-            dataType: 'json',
-            success: function(data) {
-                const tableBody = $('.table-body tbody');
-                tableBody.empty();
-
-                $.each(data, function(index, productor) {
-                    const row = `
-                        <tr>
-                            <td>${productor.id_productor}</td>
-                            <td>
-                                <button id="btnEdit" onclick="editRow(this)">
-                                    <ion-icon name="pencil-outline"></ion-icon>
-                                </button>
-                                <button id="btnDelete" onclick="deleteRow(this)">
-                                    <ion-icon name="trash-outline"></ion-icon>
-                                </button>
-                            </td>
-                            <td>${productor.nombre}</td>
-                            <td>${productor.correo}</td>
-                            <td>${productor.teléfono}</td>
-                            <td>${productor.rfc}</td>
-                            <td>${productor.curp}</td>
-                            <td>${productor.estatus}</td>
-                        </tr>
-                    `;
-                    tableBody.append(row);
-                });
-            },
-            error: function(xhr, status, error) {
-                console.error('Error al obtener los productores:', status, error);
-                console.error('Respuesta del servidor:', xhr.responseText);
-            }
-        });
-    }
+    $('button[data-content="municipios"]').click(function() {
+        $('#title').text('Municipios');
+        cargarMunicipios(); 
+    });
 
     function cargarSolicitudes() {
         $.ajax({
-            url: '../../Backend/JuntasLocales/obtenerSolicitudes.php',
+            url: '../../Backend/Apeajal/obtenerSolicitudes.php',
             type: 'GET',
             dataType: 'json',
             success: function(data) {
@@ -273,7 +152,7 @@
 
     // Hacer la llamada AJAX para obtener las huertas
     $.ajax({
-        url: '../../Backend/JuntasLocales/obtenerHuertas.php', // La URL del archivo PHP
+        url: '../../Backend/Apeajal/obtenerHuertas.php', // La URL del archivo PHP
         type: 'GET',
         dataType: 'json',
         success: function(data) {
@@ -339,7 +218,7 @@
 }
 
 
-    function cargarTecnicos() {
+    function cargarUsuarios() {
     // Cambiar los encabezados de la tabla
     $('.table-body thead').html(`
         <tr>
@@ -349,14 +228,12 @@
             <th>Nombre Junta Local</th>
             <th>Correo</th>
             <th>Teléfono</th>
-            <th>Carga municipios</th>
-            <th>Estatus</th>
         </tr>
     `);
 
     // Hacer la llamada AJAX para obtener los técnicos
     $.ajax({
-        url: '../../Backend/JuntasLocales/obtenerTecnicos.php', // La URL del archivo PHP
+        url: '../../Backend/Apeajal/obtenerTecnicos.php', // La URL del archivo PHP
         type: 'GET',
         dataType: 'json',
         success: function(data) {
@@ -382,8 +259,6 @@
                             <td>${tecnico.nombre_junta}</td>
                             <td>${tecnico.correo}</td>
                             <td>${tecnico.teléfono }</td>
-                            <td>${tecnico.nombres_municipios}</td> 
-                            <td>${tecnico.estatus}</td>
                         </tr>
                     `;
                     tableBody.append(row); // Agregar la fila a la tabla
@@ -417,7 +292,7 @@
 
     // Hacer la llamada AJAX para obtener los municipios
     $.ajax({
-        url: '../../Backend/JuntasLocales/obtenerMunicipios.php', // La URL correcta para obtener los municipios
+        url: '../../Backend/Apeajal/obtenerMunicipios.php', // La URL correcta para obtener los municipios
         type: 'GET',
         dataType: 'json',
         success: function(data) {
@@ -467,6 +342,6 @@
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <!-- Script of menu -->
-    <script src="../../Components/JuntasLocales/menuDesplegable.js"></script>
+    <script src="../../Components/Apeajal/menuDesplegable.js"></script>
 </body>
 </html>
