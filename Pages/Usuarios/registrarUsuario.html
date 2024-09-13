@@ -129,11 +129,19 @@
                                     <option value="">Seleccione Junta local</option>
                                 </select>
                             </div>
+                            <div class="col-md-5"></div>
+                                <label for="status" class="form-label">Estatus</label>
+                                <select class="form-control" name="status" id="status">
+                                    <option value="">Seleccione el estatus</option>
+                                    <option value="activo">Activo</option>
+                                    <option value="inactivo">Inactivo</option>
+                                </select>
+                            </div>
                         </div>
                         <br>
 
                         <!-- Campos generales para todos los usuarios -->
-                        <div class="row g-3">
+                        <div class="row g-3 p-4">
                             <div class="col-md-5">
                                 <label for="staticEmail" class="form-label">Nombre</label>
                                 <input class="form-control" type="text" name="nombre" id="nombre" />
@@ -141,7 +149,7 @@
                         </div>
                         <br>
 
-                        <div class="row g-3">
+                        <div class="row g-3 p-4">
                             <div class="col-md-4">
                                 <label for="correo" class="form-label">Correo</label>
                                 <input class="form-control" type="text" name="email" id="email" />
