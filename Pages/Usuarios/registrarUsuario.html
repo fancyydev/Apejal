@@ -18,7 +18,6 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2-multi-checkboxes@0.1.1/select2.multi-checkboxes.min.js"></script>
 
-    
     <!--Links para jquery-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
@@ -36,7 +35,6 @@
     <!--Links para funciones auxliar-->
     <script src="../../Components/Auxiliar/auxliar.js" ></script>
     <script src="../../Components/Login/login.js"></script>
-
 
 </head>
 <body onload="onload()">
@@ -59,14 +57,12 @@
         </nav>
         <div class="container">
             <div class="row">
-                <div class="col-lg-2 ">
-                </div>
+                <div class="col-lg-2 "></div>
                 <div class="col-lg-8 card-body">
                     <div class="row g-3">
-                        <div class="col-md-3">
-                        </div>
+                        <div class="col-md-3"></div>
                         <div class="col-md-6">
-                            <h3 class="text-center"> Nuevo Usuario</h3>
+                            <h3 class="text-center">Nuevo Usuario</h3>
                         </div>
                         <div class="col-md-3">
                             <label for="staticEmail" class="form-label">Fecha</label>
@@ -74,309 +70,233 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-2 ">
-                </div>
+                <div class="col-lg-2 "></div>
             </div>
         </div>
     </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-2 ">
-                </div>
-                <div class="col-lg-8">
-                    <div class="card">
-                        <div class="card-header">Usuario</div>
-                            <div class="card-body">
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label for="tipo" class="form-label">Tipo usuario</label>
-                                        <select class="form-control" name="tipo" id="tipo" onchange="toggleRFCandCURP()">
-                                            <option value="" disabled selected>Seleccione un tipo de usuario</option>
-                                            <option value="tecnico">Técnico</option>
-                                            <option value="productor">Productor</option>
-                                            <option value="personalLab">Personal Laboratorio</option>
-                                            <option value="adminJL">Administrador de Junta Local</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <br>
-                                <div class="row g-3" id="rfcCurpFields" style="display: none;">
-                                    <div class="col-md-5">
-                                        <label for="rfc" class="form-label">RFC</label>
-                                        <input class="form-control" type="text" name="rfc" id="rfc" />
-                                    </div>
-                                    <div class="col-md-5">
-                                        <label for="curp" class="form-label">CURP</label>
-                                        <input class="form-control" type="text" name="curp" id="curp" />
-                                    </div>
-                                    <div class="col-md-5">
-                                        <label for="status" class="form-label">Estatus</label>
-                                        <select class="form-control" name="status" id="status">
-                                            <option value="">Seleccione el estatus</option>
-                                            <option value="activo">Activo</option>
-                                            <option value="inactivo">Inactivo</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <br>
-                                <div class="row g-3" id="munJlFields" style="display: none;">
-                                    <div class="col-md-5">
-                                        <label for="municipio" class="form-label">Municipios a cargo</label>
-                                        <div id="municipio-checkboxes" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <label for="staticEmail" class="form-label">Junta Local</label>
-                                        <select class="form-control" name="jl" id="jl" >
-                                            <option value="">Seleccione Junta local</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <br>
-                                <div class="row g-3">
-                                    <div class="col-md-5">
-                                        <label for="staticEmail" class="form-label">Nombre</label>
-                                        <input class="form-control" type="text" name="nombre" id="nombre" />
-                                    </div>
-                                </div>
-                                <br>
-                                <div class="row g-3">                      
-                                    <div class="col-md-4">
-                                        <label for="correo" class="form-label">Correo</label>
-                                        <input class="form-control" type="text" name="email" id="email" />
-                                    </div>                          
-                                    <div class="col-md-4">
-                                        <label for="telefono" class="form-label">Teléfono</label>
-                                        <input class="form-control" type="text" name="telefono" id="telefono" />
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label for="contra" class="form-label">Contraseña</label>
-                                        <input class="form-control" type="text" name="contra" id="contra" />
-                                    </div>
-                                    
-                                </div>
-                                <br>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-2 "></div>
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header">Usuario</div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="tipo" class="form-label">Tipo usuario</label>
+                                <select class="form-control" name="tipo" id="tipo" onchange="toggleRFCandCURP()">
+                                    <option value="" disabled selected>Seleccione un tipo de usuario</option>
+                                    <option value="tecnico">Técnico</option>
+                                    <option value="productor">Productor</option>
+                                    <option value="personalLab">Personal Laboratorio</option>
+                                    <option value="adminJL">Administrador de Junta Local</option>
+                                </select>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg-2">
+                        <br>
+
+                        <!-- Campos para RFC y CURP (Productor) -->
+                        <div class="row g-3" id="rfcCurpFields" style="display: none;">
+                            <div class="col-md-5">
+                                <label for="rfc" class="form-label">RFC</label>
+                                <input class="form-control" type="text" name="rfc" id="rfc" />
+                            </div>
+                            <div class="col-md-5">
+                                <label for="curp" class="form-label">CURP</label>
+                                <input class="form-control" type="text" name="curp" id="curp" />
+                            </div>
+                            <div class="col-md-5">
+                                <label for="status" class="form-label">Estatus</label>
+                                <select class="form-control" name="status" id="status">
+                                    <option value="">Seleccione el estatus</option>
+                                    <option value="activo">Activo</option>
+                                    <option value="inactivo">Inactivo</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br>
+
+                        <!-- Campos para Municipios y Junta Local (Técnico) -->
+                        <div class="row g-3" id="munJlFields" style="display: none;">
+                            <div class="col-md-5">
+                                <label for="municipio" class="form-label">Municipios a cargo</label>
+                                <div id="municipio-checkboxes" class="form-control"></div>
+                            </div>
+                            <div class="col-md-5">
+                                <label for="staticEmail" class="form-label">Junta Local</label>
+                                <select class="form-control" name="jl" id="jl">
+                                    <option value="">Seleccione Junta local</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br>
+
+                        <!-- Campos generales para todos los usuarios -->
+                        <div class="row g-3">
+                            <div class="col-md-5">
+                                <label for="staticEmail" class="form-label">Nombre</label>
+                                <input class="form-control" type="text" name="nombre" id="nombre" />
+                            </div>
+                        </div>
+                        <br>
+
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="correo" class="form-label">Correo</label>
+                                <input class="form-control" type="text" name="email" id="email" />
+                            </div>
+                            <div class="col-md-4">
+                                <label for="telefono" class="form-label">Teléfono</label>
+                                <input class="form-control" type="text" name="telefono" id="telefono" />
+                            </div>
+                            <div class="col-md-4">
+                                <label for="contra" class="form-label">Contraseña</label>
+                                <input class="form-control" type="text" name="contra" id="contra" />
+                            </div>
+                        </div>
+                        <br>
                     </div>
                 </div>
             </div>
+            <div class="col-lg-2"></div>
         </div>
+    </div>
 
-        <br>
-        <div class="container">
-            <div class="row ">
-                <div class="col-lg-3 ">
-                </div>
-                <div class="col-lg-3">
-                    <button type="button" id="regristar" class="btn insert btn-xs btn-block text-center" >Guardar usuario</button>
-                </div>
-                <div class="col-lg-3">
-                    <button type="button" id="Cancelar" class="btn cancel btn-xs btn-block text-center" >Cancelar</button>
-                </div>
-                <div class="col-lg-3">
-                </div>
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-3">
+                <button type="button" id="regristar" class="btn insert btn-xs btn-block text-center">Guardar usuario</button>
             </div>
+            <div class="col-lg-3">
+                <button type="button" id="Cancelar" class="btn cancel btn-xs btn-block text-center">Cancelar</button>
+            </div>
+            <div class="col-lg-3"></div>
         </div>
-<br>
-<script>
-    
+    </div>
+    <br>
 
-    const aux = new auxliar();
+    <script>
+        const aux = new auxliar();
 
-    $(document).ready(function(){
-        $.ajax({
-            url: '../../Backend/JuntasLocales/obtenerMunicipios.php',
-            method: 'GET',
-            dataType: 'json',
-            success: function(data) {
-                console.log(data); // Verifica qué tipo de dato es data y su contenido
-                data.forEach(function(municipio) {
-                    $('#municipio-checkboxes').append(`
-                        <label>
-                            <input type="checkbox" name="municipio[]" value="${municipio.id_municipio}"> ${municipio.nombre}
-                        </label>
-                    `);
-                });
-            },
-            error: function() {
-                aux.alert('<h5>Error</h5><br/><p>No se pudieron cargar los municipios</p>', true, true);
-            }
-        });
-
-        $.ajax({
-            url: '../../Backend/Huertas/obtenerJL.php',
-            type: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                //Itera sobre el array de respuesta y agrega lo que encuentra en la base de datos
-                $.each(response, function(index, jl) {
-                    $('#jl').append($('<option>', {
-                        value: jl.idjuntalocal,
-                        text: jl.nombre
-                    }));
-                });
-            },
-            error: function(xhr, status, error) {
-                console.error('Error al obtener juntas locales:', status, error);
-            }
-        });
-
-        $('#regristar').click(function() {
-            var tipoUsuario = document.getElementById("tipo").value;
-            var resultado;
-            var municipiosSeleccionados = [];
-            $('input[name="municipio[]"]:checked').each(function() {
-                municipiosSeleccionados.push($(this).val());
+        $(document).ready(function(){
+            // Cargar Municipios
+            $.ajax({
+                url: '../../Backend/JuntasLocales/obtenerMunicipios.php',
+                method: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    data.forEach(function(municipio) {
+                        $('#municipio-checkboxes').append(`
+                            <label>
+                                <input type="checkbox" name="municipio[]" value="${municipio.id_municipio}"> ${municipio.nombre}
+                            </label>
+                        `);
+                    });
+                },
+                error: function() {
+                    aux.alert('<h5>Error</h5><br/><p>No se pudieron cargar los municipios</p>', true, true);
+                }
             });
-            switch (tipoUsuario) {
-                case "tecnico":
-                    resultado = aux.validateAll([
-                        {"valor": document.getElementById("tipo").value, "typeOf": "string", "mensaje": "<p>Seleccione tipo de usuario</p><br>"},
-                        {"valor": document.getElementById("nombre").value, "typeOf": "string", "mensaje": "<p>Insertar nombre</p><br>"},
-                        {"valor": document.getElementById("email").value, "typeOf": "string", "mensaje": "<p>Insertar email</p><br>"},
-                        {"valor": document.getElementById("telefono").value, "typeOf": "string", "mensaje": "<p>Insertar telefono</p><br>"},
-                        {"valor": document.getElementById("contra").value, "typeOf": "string", "mensaje": "<p>Insertar contraseña</p><br>"},
-                        {"valor": municipiosSeleccionados.length > 0 ? "1" : "", "typeOf": "string", "mensaje": "<p>Insertar municipios</p><br>"},
-                        {"valor": document.getElementById("jl").value, "typeOf": "string", "mensaje": "<p>Insertar junta local</p><br>"}
 
-                    ]);
-                    break;
-                case "personalLab":
-                    resultado = aux.validateAll([
-                        {"valor": document.getElementById("tipo").value, "typeOf": "string", "mensaje": "<p>Seleccione tipo de usuario</p><br>"},
-                        {"valor": document.getElementById("nombre").value, "typeOf": "string", "mensaje": "<p>Insertar nombre</p><br>"},
-                        {"valor": document.getElementById("email").value, "typeOf": "string", "mensaje": "<p>Insertar email</p><br>"},
-                        {"valor": document.getElementById("telefono").value, "typeOf": "string", "mensaje": "<p>Insertar telefono</p><br>"},
-                        {"valor": document.getElementById("contra").value, "typeOf": "string", "mensaje": "<p>Insertar contraseña</p><br>"}
-                    ]);
-                    break;
-                case "productor":
-                    resultado = aux.validateAll([
-                        {"valor": document.getElementById("tipo").value, "typeOf": "string", "mensaje": "<p>Seleccione tipo de usuario</p><br>"},
-                        {"valor": document.getElementById("nombre").value, "typeOf": "string", "mensaje": "<p>Insertar nombre</p><br>"},
-                        {"valor": document.getElementById("curp").value, "typeOf": "string", "mensaje": "<p>Insertar CURP</p><br>"},
-                        {"valor": document.getElementById("rfc").value, "typeOf": "string", "mensaje": "<p>Insertar RFC</p><br>"},
-                        {"valor": document.getElementById("email").value, "typeOf": "string", "mensaje": "<p>Insertar email</p><br>"},
-                        {"valor": document.getElementById("telefono").value, "typeOf": "string", "mensaje": "<p>Insertar telefono</p><br>"},
-                        {"valor": document.getElementById("status").value, "typeOf": "string", "mensaje": "<p>Insertar estatus</p><br>"},
-                        {"valor": document.getElementById("contra").value, "typeOf": "string", "mensaje": "<p>Insertar contraseña</p><br>"}
-                    ]);
-                    break;
-                case "adminJL":
-                    resultado = aux.validateAll([
-                        {"valor": document.getElementById("tipo").value, "typeOf": "string", "mensaje": "<p>Seleccione tipo de usuario</p><br>"},
-                        {"valor": document.getElementById("nombre").value, "typeOf": "string", "mensaje": "<p>Insertar nombre</p><br>"},
-                        {"valor": document.getElementById("email").value, "typeOf": "string", "mensaje": "<p>Insertar email</p><br>"},
-                        {"valor": document.getElementById("telefono").value, "typeOf": "string", "mensaje": "<p>Insertar telefono</p><br>"},
-                        {"valor": document.getElementById("contra").value, "typeOf": "string", "mensaje": "<p>Insertar contraseña</p><br>"}
-                    ]);
-                    break;
-                default:
-                    resultado = { estado: false, texto: "Tipo de usuario inválido" };
-                    break;
-            }
-            
+            // Cargar Juntas Locales
+            $.ajax({
+                url: '../../Backend/Huertas/obtenerJL.php',
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    $.each(response, function(index, jl) {
+                        $('#jl').append($('<option>', {
+                            value: jl.idjuntalocal,
+                            text: jl.nombre
+                        }));
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error al obtener juntas locales:', status, error);
+                }
+            });
 
-
-            if (resultado.estado) {
-                aux.alert("<h5>Listo</h5><br/><p>Validación exitosa</p>");
-                
-                // Realizar la solicitud AJAX
-                $.ajax({
-                    url: '../../Backend/Usuarios/registrarUsuario.php',
-                    type: 'POST',
-                    data: {
-                        tipo: tipoUsuario,
-                        nombre: document.getElementById("nombre").value,
-                        email: document.getElementById("email").value,
-                        telefono: document.getElementById("telefono").value,
-                        contra: document.getElementById("contra").value,
-                        rfc: document.getElementById("rfc").value,
-                        curp: document.getElementById("curp").value,
-                        municipio: municipiosSeleccionados,
-                        jl: document.getElementById("jl").value
-                    },
-                    success: function(response) {                        
-                        // Verificar si response ya es un objeto JavaScript
-                        if (typeof response === 'object') {
-                            if (response.success) {
-                                Swal.fire({
-                                    title: 'Listo',
-                                    html: '<p>Guardado correctamente</p>',
-                                    icon: 'success',
-                                    showConfirmButton: true,
-                                    allowOutsideClick: false
-                                });
-                            } else {
-                                aux.alert("<h5>Error</h5><br/><p>Ocurrió un error al guardar el usuario</p>", true, true);
-                            }
-                        } else {
-                            try {
-                                var res = JSON.parse(response); // Intentar parsear la respuesta JSON
-                                console.log(res); // Verificar el objeto res parseado
-                                
-                                if (res.success) {
-                                    Swal.fire({
-                                    title: 'Listo',
-                                    html: '<p>Guardado correctamente</p>',
-                                    icon: 'success',
-                                    showConfirmButton: true,
-                                    allowOutsideClick: false
-                                });
-                                } else {
-                                    aux.alert("<h5>Error</h5><br/><p>Ocurrió un error al guardar el usuario</p>", true, true);
-                                }
-                            } catch (error) {
-                                console.error('Error al parsear la respuesta JSON:', error);
-                                aux.alert("<h5>Error</h5><br/><p>Respuesta inválida del servidor</p>", true, true);
-                            }
-                        }
-                    },
-                    error: function() {
-                        aux.alert("<h5>Error</h5><br/><p>Ocurrió un error en la solicitud</p>", true, true);
-                    }
+            // Evento para registrar usuario
+            $('#regristar').click(function() {
+                var tipoUsuario = document.getElementById("tipo").value;
+                var municipiosSeleccionados = [];
+                $('input[name="municipio[]"]:checked').each(function() {
+                    municipiosSeleccionados.push($(this).val());
                 });
+                var resultado = aux.validateAll([
+                    {"valor": document.getElementById("tipo").value, "typeOf": "string", "mensaje": "<p>Seleccione tipo de usuario</p><br>"},
+                    {"valor": document.getElementById("nombre").value, "typeOf": "string", "mensaje": "<p>Insertar nombre</p><br>"},
+                    {"valor": document.getElementById("email").value, "typeOf": "string", "mensaje": "<p>Insertar email</p><br>"},
+                    {"valor": document.getElementById("telefono").value, "typeOf": "string", "mensaje": "<p>Insertar telefono</p><br>"},
+                    {"valor": document.getElementById("contra").value, "typeOf": "string", "mensaje": "<p>Insertar contraseña</p><br>"}
+                ]);
+
+                if (resultado.estado) {
+                    $.ajax({
+                        url: '../../Backend/Usuarios/registrarUsuario.php',
+                        type: 'POST',
+                        data: {
+                            tipo: tipoUsuario,
+                            nombre: document.getElementById("nombre").value,
+                            email: document.getElementById("email").value,
+                            telefono: document.getElementById("telefono").value,
+                            contra: document.getElementById("contra").value,
+                            rfc: document.getElementById("rfc").value,
+                            curp: document.getElementById("curp").value,
+                            municipio: municipiosSeleccionados,
+                            jl: document.getElementById("jl").value
+                        },
+                        success: function(response) {
+                            Swal.fire({
+                                title: 'Listo',
+                                html: '<p>Guardado correctamente</p>',
+                                icon: 'success',
+                                showConfirmButton: true,
+                                allowOutsideClick: false
+                            });
+                        },
+                        error: function() {
+                            aux.alert("<h5>Error</h5><br/><p>Ocurrió un error al guardar el usuario</p>", true, true);
+                        }
+                    });
+                } else {
+                    aux.alert(resultado.texto, true, true);
+                }
+            });
+
+            $('#Cancelar').click(function() {
+                window.location.href = "../login.html";
+            });
+        });
+
+        // Función para mostrar/ocultar campos según el tipo de usuario
+        function toggleRFCandCURP() {
+            var tipoUsuario = document.getElementById("tipo").value;
+            var rfcCurpFields = document.getElementById("rfcCurpFields");
+            var munJlFields = document.getElementById("munJlFields");
+
+            if (tipoUsuario === "productor") {
+                rfcCurpFields.style.display = "flex";
+                munJlFields.style.display = "none";
+            } else if (tipoUsuario === "tecnico") {
+                rfcCurpFields.style.display = "none";
+                munJlFields.style.display = "flex";
             } else {
-                aux.alert(resultado.texto, true, true);
+                rfcCurpFields.style.display = "none";
+                munJlFields.style.display = "none";
             }
-
-        });
-                
-
-        $('#Cancelar').click(function() {
-            //Ver a donde redireccionar
-            //window.location.href = "../login.html";
-
-        });
-    });
-
-    function onload(){
-        var now = new Date();
-        var dateString = moment(now).format('YYYY-MM-DD');
-        document.getElementById("Fecha").value = dateString;
-    }
-
-    function toggleRFCandCURP() {
-        var tipoUsuario = document.getElementById("tipo").value;
-        var rfcCurpFields = document.getElementById("rfcCurpFields");
-        if (tipoUsuario === "productor") {
-            rfcCurpFields.style.display = "flex";
-        } else {
-            rfcCurpFields.style.display = "none";
         }
-    }
 
-    function toggleRFCandCURP() {
-        var tipoUsuario = document.getElementById("tipo").value;
-        var rfcCurpFields = document.getElementById("munJlFields");
-        if (tipoUsuario === "tecnico") {
-            rfcCurpFields.style.display = "flex";
-        } else {
-            rfcCurpFields.style.display = "none";
+        // Función para establecer la fecha actual en el campo de fecha
+        function onload(){
+            var now = new Date();
+            var dateString = moment(now).format('YYYY-MM-DD');
+            document.getElementById("Fecha").value = dateString;
         }
-    }
-</script>
+    </script>
 
+</body>
+</html>
