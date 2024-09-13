@@ -234,13 +234,55 @@
                 $('input[name="municipio[]"]:checked').each(function() {
                     municipiosSeleccionados.push($(this).val());
                 });
-                var resultado = aux.validateAll([
-                    {"valor": document.getElementById("tipo").value, "typeOf": "string", "mensaje": "<p>Seleccione tipo de usuario</p><br>"},
-                    {"valor": document.getElementById("nombre").value, "typeOf": "string", "mensaje": "<p>Insertar nombre</p><br>"},
-                    {"valor": document.getElementById("email").value, "typeOf": "string", "mensaje": "<p>Insertar email</p><br>"},
-                    {"valor": document.getElementById("telefono").value, "typeOf": "string", "mensaje": "<p>Insertar telefono</p><br>"},
-                    {"valor": document.getElementById("contra").value, "typeOf": "string", "mensaje": "<p>Insertar contraseña</p><br>"}
-                ]);
+                
+                var resultado;
+                switch (tipoUsuario) {
+                    case "tecnico":
+                        resultado = aux.validateAll([
+                            {"valor": document.getElementById("tipo").value, "typeOf": "string", "mensaje": "<p>Seleccione tipo de usuario</p><br>"},
+                            {"valor": document.getElementById("nombre").value, "typeOf": "string", "mensaje": "<p>Insertar nombre</p><br>"},
+                            {"valor": document.getElementById("email").value, "typeOf": "string", "mensaje": "<p>Insertar email</p><br>"},
+                            {"valor": document.getElementById("telefono").value, "typeOf": "string", "mensaje": "<p>Insertar telefono</p><br>"},
+                            {"valor": document.getElementById("contra").value, "typeOf": "string", "mensaje": "<p>Insertar contraseña</p><br>"},
+                            {"valor": municipiosSeleccionados.length > 0 ? "1" : "", "typeOf": "string", "mensaje": "<p>Insertar municipios</p><br>"},
+                            {"valor": document.getElementById("jl").value, "typeOf": "string", "mensaje": "<p>Insertar junta local</p><br>"}
+
+                        ]);
+                        break;
+                    case "personalLab":
+                        resultado = aux.validateAll([
+                            {"valor": document.getElementById("tipo").value, "typeOf": "string", "mensaje": "<p>Seleccione tipo de usuario</p><br>"},
+                            {"valor": document.getElementById("nombre").value, "typeOf": "string", "mensaje": "<p>Insertar nombre</p><br>"},
+                            {"valor": document.getElementById("email").value, "typeOf": "string", "mensaje": "<p>Insertar email</p><br>"},
+                            {"valor": document.getElementById("telefono").value, "typeOf": "string", "mensaje": "<p>Insertar telefono</p><br>"},
+                            {"valor": document.getElementById("contra").value, "typeOf": "string", "mensaje": "<p>Insertar contraseña</p><br>"}
+                        ]);
+                        break;
+                    case "productor":
+                        resultado = aux.validateAll([
+                            {"valor": document.getElementById("tipo").value, "typeOf": "string", "mensaje": "<p>Seleccione tipo de usuario</p><br>"},
+                            {"valor": document.getElementById("nombre").value, "typeOf": "string", "mensaje": "<p>Insertar nombre</p><br>"},
+                            {"valor": document.getElementById("curp").value, "typeOf": "string", "mensaje": "<p>Insertar CURP</p><br>"},
+                            {"valor": document.getElementById("rfc").value, "typeOf": "string", "mensaje": "<p>Insertar RFC</p><br>"},
+                            {"valor": document.getElementById("email").value, "typeOf": "string", "mensaje": "<p>Insertar email</p><br>"},
+                            {"valor": document.getElementById("telefono").value, "typeOf": "string", "mensaje": "<p>Insertar telefono</p><br>"},
+                            {"valor": document.getElementById("status").value, "typeOf": "string", "mensaje": "<p>Insertar estatus</p><br>"},
+                            {"valor": document.getElementById("contra").value, "typeOf": "string", "mensaje": "<p>Insertar contraseña</p><br>"}
+                        ]);
+                        break;
+                    case "adminJL":
+                        resultado = aux.validateAll([
+                            {"valor": document.getElementById("tipo").value, "typeOf": "string", "mensaje": "<p>Seleccione tipo de usuario</p><br>"},
+                            {"valor": document.getElementById("nombre").value, "typeOf": "string", "mensaje": "<p>Insertar nombre</p><br>"},
+                            {"valor": document.getElementById("email").value, "typeOf": "string", "mensaje": "<p>Insertar email</p><br>"},
+                            {"valor": document.getElementById("telefono").value, "typeOf": "string", "mensaje": "<p>Insertar telefono</p><br>"},
+                            {"valor": document.getElementById("contra").value, "typeOf": "string", "mensaje": "<p>Insertar contraseña</p><br>"}
+                        ]);
+                        break;
+                    default:
+                        resultado = { estado: false, texto: "Tipo de usuario inválido" };
+                        break;
+                }
 
                 if (resultado.estado) {
                     $.ajax({
