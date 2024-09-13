@@ -231,6 +231,32 @@ thead th {
     transform: translateY(2px); /* Slightly moves the button down when clicked */
 }
 
+#btnSearch {
+    background-color: rgba(0, 13, 255, 0.333); /* Pastel green color */
+    color: white; /* Text color */
+    border: none; /* Removes the default border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px 20px; /* Padding inside the button */
+    font-size: 16px; /* Font size of the text */
+    font-weight: bold; /* Makes the text bold */
+    cursor: pointer; /* Changes the cursor to a pointer when hovering */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effects */
+    width: 15%;
+}
+
+#btnSearch:hover {
+    background-color: rgba(2, 12, 206, 0.333); /* Slightly darker green on hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Increases shadow on hover */
+}
+
+#btnSearch:active {
+    background-color: rgba(2, 9, 159, 0.333); /* Even darker green when clicked */
+    box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2); /* Reduces shadow when clicked */
+    transform: translateY(2px); /* Slightly moves the button down when clicked */
+}
+
+
 .table-body {
     width: 95%;
     height: 80%;

@@ -1,7 +1,6 @@
 <?php
 header('Content-Type: application/json'); // Asegúrate de que el tipo de contenido es JSON
 
-//USAR EL CONECTAR PARA REUTILIZAR CODIGO
 // Configuración de la base de datos
 $servername = "localhost";
 $username = "root"; // Ajusta esto según tu configuración
@@ -17,18 +16,20 @@ if ($conn->connect_error) {
     exit();
 }
 
-// Consulta para obtener los datos
-$sql = "SELECT p.id_productor, u.nombre, u.correo, u.teléfono, p.rfc, p.curp, p.estatus
-        FROM productores p
-        JOIN usuario u ON p.id_usuario = u.id_usuario";
+// Consulta para obtener los datos del técnico, usuario, y junta local
+$sql = "SELECT t.id_tecnico, u.nombre AS nombre_usuario, u.correo, u.teléfono, j.nombre AS nombre_junta
+        FROM tecnico t
+        JOIN usuario u ON t.id_usuario = u.id_usuario
+        JOIN juntaslocales j ON t.idjuntalocal = j.idjuntalocal";
+
 $result = $conn->query($sql);
 
-$productores = array();
+$tecnicos = array();
 
 if ($result->num_rows > 0) {
     // Convertir los datos en un array asociativo
     while ($row = $result->fetch_assoc()) {
-        $productores[] = $row;
+        $tecnicos[] = $row;
     }
 } else {
     echo json_encode(['error' => 'No se encontraron datos']);
@@ -36,7 +37,7 @@ if ($result->num_rows > 0) {
 }
 
 // Devolver datos en formato JSON
-echo json_encode($productores);
+echo json_encode($tecnicos);
 
 // Cerrar conexión
 $conn->close();
