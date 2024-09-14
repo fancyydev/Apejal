@@ -65,6 +65,8 @@ $resultado = $stmt->execute();
 if ($resultado) {    
     // Si el usuario es productor, insertar en tabla productores
     if ($tipo == "productor") {
+        //Ultimo id es el que se generá automaticamente con el auto increment en la tabla usurio
+        //Esto con la finalidad de que cuando se vaya a la tabla productor ese id que se genero se asocie con id_usuario en la tabla
         $ultimo_id = $conn->lastInsertId();
 
         $sql_productor = "INSERT INTO productores (id_usuario, rfc, estatus, curp) VALUES (?, ?, 'activo', ?)";
@@ -79,6 +81,9 @@ if ($resultado) {
 
         $resultado_productor = $stmt_productor->execute();
     } else if($tipo == "tecnico") {
+        //Ultimo id es el que se generá automaticamente con el auto increment en la tabla usurio
+        //Esto con la finalidad de que cuando se vaya a la tabla tecnico ese id que se genero se asocie con id_usuario en la tabla
+        $ultimo_id = $conn->lastInsertId();
         $ultimo_id = $conn->lastInsertId();
         $sql_tecnico = "INSERT INTO tecnico (id_usuario, idjuntaLocal, carga_municipios) VALUES (?, ?, ?)";
         $stmt_tecnico = $conn->prepare($sql_tecnico);
