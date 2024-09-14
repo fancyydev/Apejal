@@ -2,9 +2,9 @@
 session_start();
 
 // Verifica que el usuario ha iniciado sesión y tiene el tipo correcto
-if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] != 1) {
+if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] != 4) {
     // Redirige al usuario a la página de inicio de sesión si no tiene permiso
-    header('Location: ../index.html');
+    header('Location: ../../index.html');
     exit();
 }
 
