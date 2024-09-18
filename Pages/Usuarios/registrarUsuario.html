@@ -114,24 +114,32 @@
                                     <option value="inactivo">Inactivo</option>
                                 </select>
                             </div>
-                        </div>
-                        <br>
-
-                        <!-- Campos para Municipios y Junta Local (Técnico) -->
-                        <div class="row g-3" id="munJlFields" style="display: none;">
-                            <div class="col-md-5">
-                                <label for="municipio" class="form-label">Municipios a cargo</label>
-                                <div id="municipio-checkboxes" class="form-control"></div>
-                            </div>
                             <div class="col-md-5">
                                 <label for="staticEmail" class="form-label">Junta Local</label>
                                 <select class="form-control" name="jl" id="jl">
                                     <option value="">Seleccione Junta local</option>
                                 </select>
                             </div>
-                            <div class="col-md-5"></div>
+                            </div>
+                        </div>
+                        
+                        <br>
+
+                        <!-- Campos para Municipios y Junta Local (Técnico) -->
+                        <div class="row g-3 p-4" id="munJlFields" style="display: none;">
+                            <div class="col-md-5">
+                                <label for="municipio" class="form-label">Municipios a cargo</label>
+                                <div id="municipio-checkboxes" class="form-control"></div>
+                            </div>
+                            <div class="col-md-5">
+                                <label for="staticEmail" class="form-label">Junta Local</label>
+                                <select class="form-control" name="jlT" id="jlT">
+                                    <option value="">Seleccione Junta local</option>
+                                </select>
+                            </div>
+                            <div class="col-md-5">
                                 <label for="status" class="form-label">Estatus</label>
-                                <select class="form-control" name="status" id="status">
+                                <select class="form-control" name="statusT" id="statusT">
                                     <option value="">Seleccione el estatus</option>
                                     <option value="activo">Activo</option>
                                     <option value="inactivo">Inactivo</option>
@@ -227,6 +235,23 @@
                 }
             });
 
+            $.ajax({
+                url: '../../Backend/Huertas/obtenerJL.php',
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    $.each(response, function(index, jl) {
+                        $('#jlT').append($('<option>', {
+                            value: jl.idjuntalocal,
+                            text: jl.nombre
+                        }));
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error al obtener juntas locales:', status, error);
+                }
+            });
+
             // Evento para registrar usuario
             $('#regristar').click(function() {
                 var tipoUsuario = document.getElementById("tipo").value;
@@ -245,7 +270,8 @@
                             {"valor": document.getElementById("telefono").value, "typeOf": "string", "mensaje": "<p>Insertar telefono</p><br>"},
                             {"valor": document.getElementById("contra").value, "typeOf": "string", "mensaje": "<p>Insertar contraseña</p><br>"},
                             {"valor": municipiosSeleccionados.length > 0 ? "1" : "", "typeOf": "string", "mensaje": "<p>Insertar municipios</p><br>"},
-                            {"valor": document.getElementById("jl").value, "typeOf": "string", "mensaje": "<p>Insertar junta local</p><br>"}
+                            {"valor": document.getElementById("statusT").value, "typeOf": "string", "mensaje": "<p>Insertar estatus</p><br>"},
+                            {"valor": document.getElementById("jlT").value, "typeOf": "string", "mensaje": "<p>Insertar junta local</p><br>"}
 
                         ]);
                         break;
@@ -267,7 +293,8 @@
                             {"valor": document.getElementById("email").value, "typeOf": "string", "mensaje": "<p>Insertar email</p><br>"},
                             {"valor": document.getElementById("telefono").value, "typeOf": "string", "mensaje": "<p>Insertar telefono</p><br>"},
                             {"valor": document.getElementById("status").value, "typeOf": "string", "mensaje": "<p>Insertar estatus</p><br>"},
-                            {"valor": document.getElementById("contra").value, "typeOf": "string", "mensaje": "<p>Insertar contraseña</p><br>"}
+                            {"valor": document.getElementById("contra").value, "typeOf": "string", "mensaje": "<p>Insertar contraseña</p><br>"},
+                            {"valor": document.getElementById("jl").value, "typeOf": "string", "mensaje": "<p>Insertar junta local</p><br>"}
                         ]);
                         break;
                     case "adminJL":
@@ -297,7 +324,10 @@
                             rfc: document.getElementById("rfc").value,
                             curp: document.getElementById("curp").value,
                             municipio: municipiosSeleccionados,
-                            jl: document.getElementById("jl").value
+                            jl: document.getElementById("jl").value,
+                            status: document.getElementById("status").value,
+                            statusT: document.getElementById("statusT").value,
+                            jlT: document.getElementById("jlT").value
                         },
                         success: function(response) {
                             Swal.fire({

@@ -12,6 +12,9 @@ $curp = isset($_POST['curp']) ? $_POST['curp'] : '';
 $municipiosSeleccionados = isset($_POST['municipio']) ? $_POST['municipio'] : [];
 $jl = $_POST['jl'];
 $municipio = implode(',', $municipiosSeleccionados);
+$estatus = $_POST["status"];
+$estatusT = $_POST["statusT"];
+$jlT = $_POST['jlT'];
 
 // Insertar en tabla usuario
 $sql_usuario = "INSERT INTO usuario (id_tipo, nombre, correo, teléfono, contraseña)
@@ -69,7 +72,7 @@ if ($resultado) {
         //Esto con la finalidad de que cuando se vaya a la tabla productor ese id que se genero se asocie con id_usuario en la tabla
         $ultimo_id = $conn->lastInsertId();
 
-        $sql_productor = "INSERT INTO productores (id_usuario, rfc, estatus, curp) VALUES (?, ?, 'activo', ?)";
+        $sql_productor = "INSERT INTO productores (id_usuario, rfc, estatus, curp, idjuntalocal) VALUES (?, ?, ?, ?, ?)";
         $stmt_productor = $conn->prepare($sql_productor);
         if (!$stmt_productor) {
             die("Error en la preparación de la consulta de productor: " . implode(", ", $conn->errorInfo()));
@@ -77,22 +80,25 @@ if ($resultado) {
         
         $stmt_productor->bindParam(1, $ultimo_id, PDO::PARAM_INT);
         $stmt_productor->bindParam(2, $rfc, PDO::PARAM_STR);
-        $stmt_productor->bindParam(3, $curp, PDO::PARAM_STR);
-
+        $stmt_productor->bindParam(3, $estatus, PDO::PARAM_STR);
+        $stmt_productor->bindParam(4, $curp, PDO::PARAM_STR);
+        $stmt_productor->bindParam(5, $jl, PDO::PARAM_INT);
+        
         $resultado_productor = $stmt_productor->execute();
     } else if($tipo == "tecnico") {
         //Ultimo id es el que se generá automaticamente con el auto increment en la tabla usurio
         //Esto con la finalidad de que cuando se vaya a la tabla tecnico ese id que se genero se asocie con id_usuario en la tabla
         $ultimo_id = $conn->lastInsertId();
         $ultimo_id = $conn->lastInsertId();
-        $sql_tecnico = "INSERT INTO tecnico (id_usuario, idjuntaLocal, carga_municipios) VALUES (?, ?, ?)";
+        $sql_tecnico = "INSERT INTO tecnico (id_usuario, idjuntaLocal, carga_municipios, estatus) VALUES (?, ?, ?, ?)";
         $stmt_tecnico = $conn->prepare($sql_tecnico);
         if (!$stmt_tecnico) {
             die("Error en la preparación de la consulta de productor: " . implode(", ", $conn->errorInfo()));
         }
         $stmt_tecnico->bindParam(1, $ultimo_id, PDO::PARAM_INT);
-        $stmt_tecnico->bindParam(2, $jl, PDO::PARAM_INT);
+        $stmt_tecnico->bindParam(2, $jlT, PDO::PARAM_INT);
         $stmt_tecnico->bindParam(3, $municipio, PDO::PARAM_STR);
+        $stmt_tecnico->bindParam(4, $estatusT, PDO::PARAM_STR);
 
         $resultado_tecnico = $stmt_tecnico->execute();
     }

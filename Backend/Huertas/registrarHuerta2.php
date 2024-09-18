@@ -3,7 +3,7 @@ require_once($_SERVER['DOCUMENT_ROOT']."/proyectoApeajal/APEJAL/Backend/DataBase
 
 $id_huerta = $_POST['hue'];
 $id_productor = $_POST['propietario'];
-$id_juntalocal = $_POST['jl'];
+//$id_juntalocal = $_POST['jl'];
 $nombre = $_POST['nomHuerta'];
 $localidad = $_POST['ciudad'];
 $centroide = $_POST['centroide'];
@@ -46,9 +46,9 @@ if (isset($_FILES["file"])) {
     if (move_uploaded_file($origen, $destino)) {
         $rutaKML = $destino;
         $sql = "INSERT INTO huertas 
-        (id_hue, id_productor, id_juntalocal, nombre, localidad, centroide, hectareas, pronostico_de_cosecha, longitud, altitud, altura_nivel_del_mar, variedad, nomempresa, encargadoempresa, supervisorhuerta, añoplantacion, arbolesporhectareas, totalarboles, etapafenologica, fechasv_01, fechasv_02, rutaKML, fechaRegistro)
+        (id_hue, id_productor, nombre, localidad, centroide, hectareas, pronostico_de_cosecha, longitud, altitud, altura_nivel_del_mar, variedad, nomempresa, encargadoempresa, supervisorhuerta, añoplantacion, arbolesporhectareas, totalarboles, etapafenologica, fechasv_01, fechasv_02, rutaKML, fechaRegistro)
         VALUES 
-        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 
         $conexion = new DB_Connect();
@@ -66,7 +66,7 @@ if (isset($_FILES["file"])) {
         $stmt_huertas = $conn->prepare($sql);
         $stmt_huertas->bindParam(1, $id_huerta, PDO::PARAM_STR);
         $stmt_huertas->bindParam(2, $id_productor, PDO::PARAM_INT);
-        $stmt_huertas->bindParam(3, $id_juntalocal, PDO::PARAM_INT);
+        //$stmt_huertas->bindParam(3, $id_juntalocal, PDO::PARAM_INT);
         $stmt_huertas->bindParam(4, $nombre, PDO::PARAM_STR);
         $stmt_huertas->bindParam(5, $localidad, PDO::PARAM_STR);
         $stmt_huertas->bindParam(6, $centroide, PDO::PARAM_STR);

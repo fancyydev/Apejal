@@ -123,12 +123,7 @@
                                 </div>
                                 <br>
                                 <div class="row g-3">
-                                    <div class="col-md-4">
-                                        <label for="staticEmail" class="form-label">Ciudad</label>
-                                        <select class="form-control" name="ciudad" id="ciudad">
-                                            <option value="">Seleccione ciudad</option>
-                                        </select>
-                                    </div>                          
+                                                          
                                     <div class="col-md-4 ocultar">
                                         <label for="staticEmail" class="form-label">Municipio</label>
                                         <select class="form-control" name="municipio" id="municipio">
@@ -145,12 +140,20 @@
                                 </div>
                                 <br>
                                 <div class="row g-3">
+                                    <!--
                                     <div class="col-md-4">
                                         <label for="staticEmail" class="form-label">Junta Local</label>
                                         <select class="form-control" name="jl" id="jl" >
                                             <option value="">Seleccione Junta local</option>
                                         </select>
-                                    </div>                                    
+                                    </div>  
+                                    -->
+                                    <div class="col-md-4">
+                                        <label for="staticEmail" class="form-label">Ciudad</label>
+                                        <select class="form-control" name="ciudad" id="ciudad">
+                                            <option value="">Seleccione ciudad</option>
+                                        </select>
+                                    </div>                                      
                                     <div class="col-md-4">
                                         <label for="staticEmail" class="form-label">Hectareas</label>
                                         <select class="form-control" name="hectareas" id="hectareas" >
@@ -292,7 +295,7 @@
         }
     });
 
-
+    /*
     $.ajax({
         url: '../../Backend/Huertas/obtenerJL.php',
         type: 'GET',
@@ -310,6 +313,8 @@
             console.error('Error al obtener juntas locales:', status, error);
         }
     });
+    */
+    
 
         const aux = new auxliar();
         $(document).ready(function(){
@@ -363,7 +368,7 @@
                         {"valor": document.getElementById("encEmpresa").value, "typeOf": "string", "mensaje": "<p>Insertar nombre de encargado de empresa</p><br>"},
                         {"valor": document.getElementById("supHue").value, "typeOf": "string", "mensaje": "<p>Insertar supervisor</p><br>"},
                         {"valor":document.getElementById("ciudad").value,"typeOf":"string","mensaje":"<p>Insertar ciudad</p><br>"},
-                        {"valor": document.getElementById("jl").value, "typeOf": "string", "mensaje": "<p>Insertar junta local</p><br>"},
+                        //{"valor": document.getElementById("jl").value, "typeOf": "string", "mensaje": "<p>Insertar junta local</p><br>"},
                         {"valor": document.getElementById("hectareas").value, "typeOf": "int", "mensaje": "<p>Insertar hectareas</p><br>"},
                         {"valor": document.getElementById("proCosecha").value, "typeOf": "int", "mensaje": "<p>Insertar pronostico de cosecha</p><br>"},
                         {"valor": document.getElementById("variedad").value, "typeOf": "string", "mensaje": "<p>Insertar variedad</p><br>"},
@@ -400,7 +405,7 @@
                     formData.append('encEmpresa', document.getElementById('encEmpresa').value);
                     formData.append('supHue', document.getElementById('supHue').value);
                     formData.append('ciudad', document.getElementById('ciudad').value);
-                    formData.append('jl', document.getElementById('jl').value);
+                    //formData.append('jl', document.getElementById('jl').value);
                     formData.append('hectareas', document.getElementById('hectareas').value);
                     formData.append('proCosecha', document.getElementById('proCosecha').value);
                     formData.append('variedad', document.getElementById('variedad').value);
