@@ -2,19 +2,42 @@
 require_once($_SERVER['DOCUMENT_ROOT']."/proyectoApeajal/APEJAL/Backend/DataBase/connectividad.php");
 
 // Obtener datos del formulario
-$tipo = $_POST['tipo'];
-$nombre = $_POST['nombre'];
-$correo = $_POST['email'];
-$telefono = $_POST['telefono'];
-$contra = $_POST['contra'];
-$rfc = isset($_POST['rfc']) ? $_POST['rfc'] : '';
-$curp = isset($_POST['curp']) ? $_POST['curp'] : '';
-$municipiosSeleccionados = isset($_POST['municipio']) ? $_POST['municipio'] : [];
-$jl = $_POST['jl'];
-$municipio = implode(',', $municipiosSeleccionados);
-$estatus = $_POST["status"];
-$estatusT = $_POST["statusT"];
-$jlT = $_POST['jlT'];
+$tipo = $_POST['tipo'] ?? '';
+$nombre = $_POST['nombre'] ?? '';
+$correo = $_POST['email'] ?? '';
+$telefono = $_POST['telefono'] ?? '';
+$contra = $_POST['contra'] ?? '';
+$rfc = $_POST['rfc'] ?? '';
+$curp = $_POST['curp'] ?? '';
+$jl = $_POST['jl'] ?? '';
+$estatus = $_POST["status"] ?? '';
+$estatusT = $_POST["statusT"] ?? '';
+$jlT = $_POST['jlT'] ?? '';
+
+// Validar campos obligatorios
+$errores = [];
+if (empty($nombre)) {
+    $errores[] = "El nombre es obligatorio.";
+}
+if (empty($tipo)) {
+    $errores[] = "El tipo de usuario es obligatorio.";
+}
+if (empty($correo)) {
+    $errores[] = "El correo es obligatorio.";
+}
+if (empty($telefono)) {
+    $errores[] = "El teléfono es obligatorio.";
+}
+if (empty($contra)) {
+    $errores[] = "La contraseña es obligatoria.";
+}
+
+// Si hay errores, devolver respuesta JSON
+if (!empty($errores)) {
+    header('Content-Type: application/json', true, 400);
+    echo json_encode(["success" => false, "errors" => $errores]);
+    exit; // Terminar el script
+}
 
 // Insertar en tabla usuario
 $sql_usuario = "INSERT INTO usuario (id_tipo, nombre, correo, teléfono, contraseña)
@@ -111,6 +134,7 @@ if ($resultado) {
     header('Content-Type: application/json');
     echo json_encode(["success" => true]);
 } else {
+    echo json_encode(["success" => false, "message" => "Error al ejecutar la consulta: " . implode(", ", $errorInfo)]);
     die("Error al ejecutar la consulta de inserción: " . implode(", ", $stmt->errorInfo()));
 }
 ?>
