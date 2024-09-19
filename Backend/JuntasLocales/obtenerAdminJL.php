@@ -1,34 +1,43 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "materiaseca_apeajal";
+require_once($_SERVER['DOCUMENT_ROOT']."/proyectoApeajal/APEJAL/Backend/DataBase/connectividad.php");
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+// Conexión a la base de datos
+$conexion = new DB_Connect();
+$conn = $conexion->connect();
 
-if ($conn->connect_error) {
-    die("Conexión fallida: " . $conn->connect_error);
+// Verificar la conexión a la base de datos
+if ($conn->errorCode() !== "00000") {
+    // Manejo del error de conexión aquí
+    $errorInfo = $conn->errorInfo();
+    die("Conexión fallida: " . implode(", ", $errorInfo));
 }
 
 $sql = "SELECT id_usuario, nombre FROM usuario WHERE id_tipo = 4";
+$stmt = $conn->query($sql);
 
-$result = $conn->query($sql);
-
-// Verificar si hay resultados
-if ($result->num_rows > 0) {
+// Verificar si la consulta fue exitosa
+if ($stmt !== false) {
     $options = array();
-    while ($row = $result->fetch_assoc()) {
-        $options[] = array(
-            'id_usuario' => $row['id_usuario'],
-            'nombre' => $row['nombre']
-        );
+    // Verificar si hay resultados
+    if ($stmt->rowCount() > 0) {
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $options[] = array(
+                'id_usuario' => $row['id_usuario'],
+                'nombre' => $row['nombre']
+            );
+        }
+    } else {
+        $options[] = array('id_usuario' => '', 'nombre' => 'No hay administradores disponibles');
     }
 } else {
-    $options = array('id_usuario' => '', 'nombre' => 'No hay administradores disponibles');
+    // Manejar error en la consulta SQL
+    die("Error en la consulta: " . implode(", ", $conn->errorInfo()));
 }
 
-$conn->close();
+// Cerrar la conexión
+$conn = null;
+$stmt = null;
 
-// Devolver las opciones como formato JSON
+// Devolver las opciones en formato JSON
 echo json_encode($options);
 ?>

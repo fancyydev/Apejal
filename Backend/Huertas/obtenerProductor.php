@@ -1,13 +1,15 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "materiaseca_apeajal";
+require_once($_SERVER['DOCUMENT_ROOT']."/proyectoApeajal/APEJAL/Backend/DataBase/connectividad.php");
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+// Crear conexión
+$conexion = new DB_Connect();
+$conn = $conexion->connect();
 
-if ($conn->connect_error) {
-    die("Conexión fallida: " . $conn->connect_error);
+// Verificar la conexión a la base de datos
+if ($conn->errorCode() !== "00000") {
+    // Manejo del error de conexión aquí
+    $errorInfo = $conn->errorInfo();
+    die("Conexión fallida: " . implode(", ", $errorInfo));
 }
 
 $sql = "SELECT id_usuario, nombre FROM usuario WHERE id_tipo = 1";
@@ -15,9 +17,9 @@ $sql = "SELECT id_usuario, nombre FROM usuario WHERE id_tipo = 1";
 $result = $conn->query($sql);
 
 // Verificar si hay resultados
-if ($result->num_rows > 0) {
+if ($result !== false && $result->rowCount() > 0) {
     $options = array();
-    while ($row = $result->fetch_assoc()) {
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         $options[] = array(
             'id_usuario' => $row['id_usuario'],
             'nombre' => $row['nombre']
@@ -27,7 +29,9 @@ if ($result->num_rows > 0) {
     $options = array('id_usuario' => '', 'nombre' => 'No hay productores disponibles');
 }
 
-$conn->close();
+// Cerrar la conexión
+$conn = null;
+$result = null;
 
 // Devolver las opciones como formato JSON
 echo json_encode($options);

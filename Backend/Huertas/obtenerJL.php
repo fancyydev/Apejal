@@ -1,16 +1,16 @@
 <?php
-// Conexión a la base de datos (reemplaza con tus datos de conexión)
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "materiaseca_apeajal";
+
+require_once($_SERVER['DOCUMENT_ROOT']."/proyectoApeajal/APEJAL/Backend/DataBase/connectividad.php");
 
 // Crear conexión
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conexion = new DB_Connect();
+$conn = $conexion->connect();
 
-// Verificar conexión
-if ($conn->connect_error) {
-    die("Conexión fallida: " . $conn->connect_error);
+// Verificar la conexión a la base de datos
+if ($conn->errorCode() !== "00000") {
+    // Manejo del error de conexión aquí
+    $errorInfo = $conn->errorInfo();
+    die("Conexión fallida: " . implode(", ", $errorInfo));
 }
 
 $sql = "SELECT idjuntalocal, nombre FROM  juntaslocales";
@@ -18,9 +18,9 @@ $sql = "SELECT idjuntalocal, nombre FROM  juntaslocales";
 $result = $conn->query($sql);
 
 // Verificar si hay resultados
-if ($result->num_rows > 0) {
+if ($result !== false && $result->rowCount() > 0) {
     $options = array();
-    while ($row = $result->fetch_assoc()) {
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         $options[] = array(
             'idjuntalocal' => $row['idjuntalocal'],
             'nombre' => $row['nombre']
@@ -30,7 +30,9 @@ if ($result->num_rows > 0) {
     $options = array('idjuntalocal' => '', 'nombre' => 'No hay productores disponibles');
 }
 
-$conn->close();
+// Cerrar la conexión
+$conn = null;
+$result = null;
 
 // Devolver las opciones como respuesta (formato JSON)
 echo json_encode($options);
