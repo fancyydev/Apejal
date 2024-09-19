@@ -1,17 +1,3 @@
-<?php
-session_start();
-
-// Verifica que el usuario ha iniciado sesión y tiene el tipo correcto
-if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] != 1) {
-    // Redirige al usuario a la página de inicio de sesión si no tiene permiso
-    header('Location: ../index.html');
-    exit();
-}
-
-// Aquí podrías incluir lógica específica para el tipo de usuario 1
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -130,6 +116,17 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                                         </select>
                                     </div>
                                 </div>
+                                <br>
+                                <div class="row g-3"></div>
+                                    <div class="col-md-5">
+                                        <label for="status" class="form-label">Estatus</label>
+                                        <select class="form-control" name="status" id="status">
+                                            <option value="">Seleccione el estatus</option>
+                                            <option value="activo">Activo</option>
+                                            <option value="inactivo">Inactivo</option>
+                                        </select>
+                                    </div>                                                   
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -204,6 +201,8 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                         {"valor":document.getElementById("telefono").value,"typeOf":"string","mensaje":"<p>Insertar teléfono</p><br>"},
                         {"valor":document.getElementById("correo").value,"typeOf":"string","mensaje":"<p>Insertar correo</p><br>"},
                         {"valor":document.getElementById("municipio").value,"typeOf":"int","mensaje":"<p>Seleccionar municipio</p><br>"},
+                        {"valor":document.getElementById("admin").value,"typeOf":"int","mensaje":"<p>Seleccionar administrador</p><br>"},
+                        {"valor":document.getElementById("status").value,"typeOf":"int","mensaje":"<p>Seleccionar estatus</p><br>"},
                      ]
                 );
             console.log(resultado)
@@ -214,6 +213,8 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                 formData.append("telefono", document.getElementById("telefono").value);
                 formData.append("correo", document.getElementById("correo").value);
                 formData.append("municipio", document.getElementById("municipio").value);
+                formData.append("admin", document.getElementById("admin").value);
+                formData.append("status", document.getElementById("status").value);
 
                 $.ajax({
                     url: '../../Backend/JuntasLocales/registrarJuntaLocal.php',
@@ -224,15 +225,18 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                         "telefono":document.getElementById("telefono").value,
                         "correo":document.getElementById("correo").value,
                         "municipio":document.getElementById("municipio").value,
+                        "admin":document.getElementById("admin").value,
+                        "status":document.getElementById("status").value
                     }),
                     contentType: 'application/json',
-                    beforeSend: function() {
-                        aux.alert('<h5>Espere</h5><br/><p>Guardando datos</p>', false, false);
-                    },
                     success: function(respuesta){
-                        console.log(respuesta)
-                        aux.alert("datos guardados", true, true);
-                        //window.location.href = "../SistemaCliente/login.html";
+                        Swal.fire({
+                                title: 'Listo',
+                                html: '<p>Guardado correctamente</p>',
+                                icon: 'success',
+                                showConfirmButton: true,
+                                allowOutsideClick: false
+                            });
                     },
                     error: function() {
                         aux.cerrar();

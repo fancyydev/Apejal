@@ -1,20 +1,17 @@
 <?php
 header('Content-Type: application/json'); // Asegúrate de que el tipo de contenido es JSON
 
-//USAR EL CONECTAR PARA REUTILIZAR CODIGO
-// Configuración de la base de datos
-$servername = "localhost";
-$username = "root"; // Ajusta esto según tu configuración
-$password = ""; // Ajusta esto según tu configuración
-$dbname = "materiaseca_apeajal";
+require_once($_SERVER['DOCUMENT_ROOT']."/proyectoApeajal/APEJAL/Backend/DataBase/connectividad.php");
 
 // Crear conexión
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conexion = new DB_Connect();
+$conn = $conexion->connect();
 
-// Verificar conexión
-if ($conn->connect_error) {
-    echo json_encode(['error' => 'Conexión fallida: ' . $conn->connect_error]);
-    exit();
+// Verificar la conexión a la base de datos
+if ($conn->errorCode() !== "00000") {
+    // Manejo del error de conexión aquí
+    $errorInfo = $conn->errorInfo();
+    die("Conexión fallida: " . implode(", ", $errorInfo));
 }
 
 // Consulta para obtener los datos
@@ -25,9 +22,9 @@ $result = $conn->query($sql);
 
 $productores = array();
 
-if ($result->num_rows > 0) {
+if ($result !== false && $result->rowCount() > 0) {
     // Convertir los datos en un array asociativo
-    while ($row = $result->fetch_assoc()) {
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         $productores[] = $row;
     }
 } else {
@@ -35,9 +32,11 @@ if ($result->num_rows > 0) {
     exit();
 }
 
+// Cerrar la conexión
+$conn = null;
+$result = null;
+
 // Devolver datos en formato JSON
 echo json_encode($productores);
 
-// Cerrar conexión
-$conn->close();
 ?>

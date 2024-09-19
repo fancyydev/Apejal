@@ -6,28 +6,22 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
-$servername = "localhost";
-$username = "root"; // Cambia esto si usas otro nombre de usuario
-$password = ""; // Cambia esto si tienes una contraseña
-$dbname = "materiaseca_apeajal";
-$port = 3306; // Puerto de MySQL en XAMPP
+require_once($_SERVER['DOCUMENT_ROOT']."/proyectoApeajal/APEJAL/Backend/DataBase/connectividad.php");
 
-// Crear conexión
-$conn = new mysqli($servername, $username, $password, $dbname, $port);
 
-// Verificar conexión
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+// Conexión a la base de datos
+$conexion = new DB_Connect();
+$conn = $conexion->connect();
+
+// Verificar la conexión a la base de datos
+if ($conn->errorCode() !== "00000") {
+    // Manejo del error de conexión aquí
+    $errorInfo = $conn->errorInfo();
+    die("Conexión fallida: " . implode(", ", $errorInfo));
 }
 
 // Obtener datos enviados por POST (JSON)
 $data = json_decode(file_get_contents("php://input"));
-
-// Mostrar valores obtenidos para verificar
-echo "Datos recibidos:<br>";
-echo "<pre>";
-print_r($data);
-echo "</pre>";
 
 // Verificar si los datos se reciben correctamente
 if (!$data) {
@@ -40,18 +34,26 @@ $domicilio = $data->domicilio;
 $telefono = $data->telefono;
 $correo = $data->correo;
 $municipio = $data->municipio;
+$admin = $data->admin;
+$status = $data->status;
 
 // Preparar la consulta SQL
-$sql = "INSERT INTO juntaslocales (nombre, domicilio, telefono, correo, id_municipio, id_usuario, estatus) VALUES (?, ?, ?, ?, ?, 1, 'Activo')";
+$sql = "INSERT INTO juntaslocales (id_municipio, id_usuario, nombre, domicilio, teléfono, correo, estatus) VALUES (?, ?, ?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
 
 // Verificar si la consulta se preparó correctamente
 if (!$stmt) {
-    die('Error al preparar la consulta: ' . $conn->error);
+    die("Error en la preparación de la consulta: " . implode(", ", $conn->errorInfo()));
 }
 
 // Vincular parámetros
-$stmt->bind_param("ssssi", $nombre, $domicilio, $telefono, $correo, $municipio);
+$stmt->bindParam(1, $municipio);
+$stmt->bindParam(2, $admin);
+$stmt->bindParam(3, $nombre);
+$stmt->bindParam(4, $domicilio);
+$stmt->bindParam(5, $telefono);
+$stmt->bindParam(6, $correo);
+$stmt->bindParam(7, $status);
 
 // Array para la respuesta JSON
 $response = array();
