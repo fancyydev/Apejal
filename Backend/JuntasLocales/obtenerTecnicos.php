@@ -17,7 +17,7 @@ if ($conn->connect_error) {
 }
 
 // Consulta para obtener los datos del técnico, usuario, y junta local
-$sql = "SELECT t.id_tecnico, u.nombre AS nombre_usuario, u.correo, u.teléfono,t.carga_municipios,t.estatus, j.nombre AS nombre_junta
+$sql = "SELECT t.id_tecnico, u.nombre AS nombre_usuario, u.correo, u.teléfono, t.carga_municipios, t.estatus, j.nombre AS nombre_junta
         FROM tecnico t
         JOIN usuario u ON t.id_usuario = u.id_usuario
         JOIN juntaslocales j ON t.idjuntalocal = j.idjuntalocal";
