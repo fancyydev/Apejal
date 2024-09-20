@@ -211,7 +211,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                                 </button>
                             </td>
                             <td>${productor.nombre}</td>
-                            <td>${tecnico.nombre_junta}</td>
+                            <td>${productor.nombre_junta}</td>
                             <td>${productor.correo}</td>
                             <td>${productor.teléfono}</td>
                             <td>${productor.rfc}</td>
