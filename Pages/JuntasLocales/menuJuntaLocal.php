@@ -264,7 +264,6 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
             <th>Id Huerta</th>
             <th>Accion</th>
             <th>Nombre Productor</th>
-            <th>Nombre Junta Local</th>
             <th>Nombre Huerta</th>
             <th>Localidad</th>
             <th>Centroide</th>
@@ -313,7 +312,6 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                                 </button>
                             </td>
                             <td>${huerta.nombre_productor}</td>
-                            <td>${huerta.nombre_junta_local}</td>
                             <td>${huerta.nombre_huerta}</td>
                             <td>${huerta.localidad}</td>
                             <td>${huerta.centroide}</td>
