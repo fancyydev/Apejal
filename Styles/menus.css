@@ -1,5 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500&display=swap');
 
+
+
+
 :root {
     --color-barra-lateral: rgb(255,255,255);
     --color-texto: rgb(0,0,0);
@@ -15,6 +18,24 @@
     box-sizing: border-box;
     font-family: 'Outfit', sans-serif;
 }
+.logout-button {
+    background-color: #ff4c4c;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.logout-button:hover {
+    background-color: #e60000;
+}
+
 
 body {
     height: 100vh;
@@ -207,8 +228,8 @@ thead th {
 
 /*Boton de agregar*/
 #btnAdd {
-    background-color: #56e956; /* Pastel green color */
-    color: black; /* Text color */
+    background-color: #52672E; /* Pastel green color */
+    color: white; /* Text color */
     border: none; /* Removes the default border */
     border-radius: 5px; /* Rounded corners */
     padding: 10px 20px; /* Padding inside the button */
@@ -221,12 +242,12 @@ thead th {
 }
 
 #btnAdd:hover {
-    background-color: #66cc66; /* Slightly darker green on hover */
+    background-color: #52672E; /* Slightly darker green on hover */
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Increases shadow on hover */
 }
 
 #btnAdd:active {
-    background-color: #55bb55; /* Even darker green when clicked */
+    background-color: #52672E; /* Even darker green when clicked */
     box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2); /* Reduces shadow when clicked */
     transform: translateY(2px); /* Slightly moves the button down when clicked */
 }
@@ -327,3 +348,4 @@ table button {
 .ocultar-iconos {
     display: none;
 }
+

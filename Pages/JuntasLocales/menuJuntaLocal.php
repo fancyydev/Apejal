@@ -10,6 +10,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
 
 // Aquí podrías incluir lógica específica para el tipo de usuario 1
 
+
 ?>
 
 
@@ -22,6 +23,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
     <link rel="stylesheet" href="../../Styles/menus.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
+
 <body>
 
     <div class="barra-lateral">
@@ -59,12 +61,19 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
             <ion-icon id="key" name="key-outline"></ion-icon>
             <div class="info-usuario">
                 <div class="nombre-email">
-                    <span class="nombre">David Fregoso Leon</span>
-                    <span class="email">davidfregosoleon12@gmail.com</span>
+                    <span class="nombre" id="nombre"></span>
+                    <span class="email" id="email"></span>
                 </div>
                 <ion-icon id="settings" name="ellipsis-vertical-outline"></ion-icon>
             </div>
         </div>
+        <div>
+            <button id="btnLogout" class="logout-button" onclick="window.location.href='../../Backend/Login/logout.php'">
+            <ion-icon name="log-out-outline"></ion-icon>
+            Cerrar Sesión
+            </button>
+        </div>
+
     </div>
 
     <div class="contenido-principal">
@@ -425,5 +434,26 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <!-- Script of menu -->
     <script src="../../Components/JuntasLocales/menuDesplegable.js"></script>
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    // Realiza una solicitud para obtener los datos del usuario
+    fetch('../../Backend/Login/cargadatos.php')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data); // Verifica los datos aquí
+            if (!data.error && data.usuario) {
+                document.getElementById('nombre').textContent = data.usuario.nombre;
+                document.getElementById('email').textContent = data.usuario.correo;
+            } else {
+                console.error('Error al obtener los datos del usuario:', data.mensaje);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+});
+
+</script>
 </body>
+
 </html>
