@@ -13,6 +13,8 @@ $jl = $_POST['jl'] ?? '';
 $estatus = $_POST["status"] ?? '';
 $estatusT = $_POST["statusT"] ?? '';
 $jlT = $_POST['jlT'] ?? '';
+$municipiosSeleccionados = isset($_POST['municipio']) ? $_POST['municipio'] : [];
+$municipio = implode(',', $municipiosSeleccionados);
 
 // Validar campos obligatorios
 $errores = [];
