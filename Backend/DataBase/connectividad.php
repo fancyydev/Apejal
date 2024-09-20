@@ -15,7 +15,7 @@ class DB_Connect {
     {
         try {
             if ($this->debug) {
-                $this->table_schema = "recidenciacyj_apeajal";
+                $this->table_schema = "recidenciacyj_apeaja";
                 $this->connection = new PDO('mysql:host=mysql-recidenciacyj.alwaysdata.net;dbname=recidenciacyj_apeajal', '279932_jessica', 'BTS2103', [PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"]);
             } else {
                 $this->table_schema = "materiaseca_apeajal";

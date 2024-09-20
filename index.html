@@ -29,7 +29,12 @@
                                 <label class="form-label" for="username">Usuario</label>
                             </div>
                             <div class="form-outline form-white mb-4">
-                                <input type="password" id="password" class="form-control form-control-lg" />
+                                <div class="input-group">
+                                    <input type="password" id="password" class="form-control form-control-lg" />
+                                    <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
                                 <label class="form-label" for="password">Contraseña</label>
                             </div>
                             <button class="btn link btn-lg px-5" id="Iniciar">Inicio de sesión</button>
@@ -113,6 +118,21 @@
                     }
                 } else {
                     aux.alert("<h5>Inserte un Usuario</h5>", true, true);
+                }
+            });
+
+            // Función para mostrar/ocultar la contraseña
+            $('#togglePassword').click(function () {
+                const passwordField = $('#password');
+                const passwordFieldType = passwordField.attr('type');
+                const icon = $(this).find('i');
+
+                if (passwordFieldType === 'password') {
+                    passwordField.attr('type', 'text');
+                    icon.removeClass('bi-eye').addClass('bi-eye-slash');
+                } else {
+                    passwordField.attr('type', 'password');
+                    icon.removeClass('bi-eye-slash').addClass('bi-eye');
                 }
             });
         });
