@@ -15,9 +15,11 @@ if ($conn->errorCode() !== "00000") {
 }
 
 // Consulta para obtener los datos
-$sql = "SELECT p.id_productor, u.nombre, u.correo, u.teléfono, p.rfc, p.curp, p.estatus
+$sql = "SELECT p.id_productor, u.nombre, j.nombre AS nombre_junta, u.correo, u.teléfono, p.rfc, p.curp, p.estatus
         FROM productores p
-        JOIN usuario u ON p.id_usuario = u.id_usuario";
+        JOIN usuario u ON p.id_usuario = u.id_usuario
+        JOIN juntaslocales j ON t.idjuntalocal = j.idjuntalocal";
+
 $result = $conn->query($sql);
 
 $productores = array();

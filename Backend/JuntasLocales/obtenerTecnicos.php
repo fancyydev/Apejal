@@ -3,7 +3,6 @@ header('Content-Type: application/json'); // Asegúrate de que el tipo de conten
 
 require_once($_SERVER['DOCUMENT_ROOT']."/proyectoApeajal/APEJAL/Backend/DataBase/connectividad.php");
 
-
 // Crear conexión
 $conexion = new DB_Connect();
 $conn = $conexion->connect();
@@ -14,7 +13,6 @@ if ($conn->errorCode() !== "00000") {
     $errorInfo = $conn->errorInfo();
     die("Conexión fallida: " . implode(", ", $errorInfo));
 }
-
 
 // Consulta para obtener los datos del técnico, usuario, y junta local
 $sql = "SELECT t.id_tecnico, u.nombre AS nombre_usuario, u.correo, u.teléfono, t.carga_municipios, t.estatus, j.nombre AS nombre_junta
@@ -48,7 +46,6 @@ if ($result !== false && $result->rowCount() > 0) {
         // Agregar los nombres de los municipios a los datos del técnico
         $row['nombres_municipios'] = $municipios_nombres;
 
-
         $tecnicos[] = $row;
     }
 } else {
@@ -60,5 +57,5 @@ if ($result !== false && $result->rowCount() > 0) {
 echo json_encode($tecnicos);
 
 // Cerrar conexión
-$conn->close();
+$conn = null;
 ?>

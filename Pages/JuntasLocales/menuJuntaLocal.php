@@ -13,7 +13,6 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
 
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,7 +22,6 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
     <link rel="stylesheet" href="../../Styles/menus.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
-
 <body>
 
     <div class="barra-lateral">
@@ -61,26 +59,20 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
             <ion-icon id="key" name="key-outline"></ion-icon>
             <div class="info-usuario">
                 <div class="nombre-email">
-                    <span class="nombre" id="nombre"></span>
-                    <span class="email" id="email"></span>
+                    <span class="nombre">David Fregoso Leon</span>
+                    <span class="email">davidfregosoleon12@gmail.com</span>
                 </div>
                 <ion-icon id="settings" name="ellipsis-vertical-outline"></ion-icon>
             </div>
         </div>
-        <div>
-            <button id="btnLogout" class="logout-button" onclick="window.location.href='../../Backend/Login/logout.php'">
-            <ion-icon name="log-out-outline"></ion-icon>
-            Cerrar Sesión
-            </button>
-        </div>
-
     </div>
 
     <div class="contenido-principal">
         <div class="table">
             <section class="table-header">
-                <h1 id="title" >Productores</h1>
+                <h1 id="title" >Solicitudes</h1>
                 <input id="inputSearch" type="text">
+                <button id="btnSearch"> Buscar </button>
                 <button id="btnAdd"> Agregar </button>
             </section>
             
@@ -99,31 +91,88 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
     
     <script>
     $(document).ready(function() {
+        let currentContext = '';
 
-    $('button[data-content="productores"]').click(function() {
-        $('#title').text('Productores'); 
-        cargarProductores(); 
-    });
+        // Detectar contexto actual (Productores, Técnicos o Huertas)
+        $('button[data-content="productores"]').click(function() {
+            $('#title').text('Productores'); 
+            cargarProductores(); 
+            currentContext = 'productores';
+        });
 
-    $('button[data-content="solicitudes"]').click(function() {
-        $('#title').text('Solicitudes'); 
-        cargarSolicitudes(); 
-    });
+        $('button[data-content="huertas"]').click(function() {
+            $('#title').text('Huertas');
+            cargarHuertas(); 
+            currentContext = 'huertas';
+        });
 
-    $('button[data-content="huertas"]').click(function() {
-        $('#title').text('Huertas');
-        cargarHuertas(); 
-    });
+        $('button[data-content="tecnicos"]').click(function() {
+            $('#title').text('Técnicos'); 
+            cargarTecnicos(); 
+            currentContext = 'tecnicos';
+        });
+        
+        $('button[data-content="municipios"]').click(function() {
+            $('#title').text('Municipios');
+            cargarMunicipios(); 
+            currentContext = 'municipios';
+        });
 
-    $('button[data-content="tecnicos"]').click(function() {
-        $('#title').text('Técnicos'); 
-        cargarTecnicos(); 
-    });
+        // Evento de búsqueda (al hacer clic en el botón o presionar Enter)
+        $('#btnSearch').click(function() {
+            filtrarDatos(currentContext);
+        });
 
-    $('button[data-content="municipios"]').click(function() {
-        $('#title').text('Municipios');
-        cargarMunicipios(); 
-    });
+        $('#inputSearch').on('keypress', function(e) {
+            if (e.which === 13) { // Tecla Enter
+                filtrarDatos(currentContext);
+            }
+        });
+
+        // Función para filtrar los datos según el contexto
+    function filtrarDatos(context) {
+        const searchValue = $('#inputSearch').val().toLowerCase();
+
+        $('.table-body tbody tr').each(function() {
+            const row = $(this);
+            let showRow = false;
+
+            if (context === 'productores') {
+                const nombre = row.find('td:eq(2)').text().toLowerCase(); // Nombre Usuario
+                const correo = row.find('td:eq(3)').text().toLowerCase(); // Correo
+                if (nombre.includes(searchValue) || correo.includes(searchValue)) {
+                    showRow = true;
+                }
+            } else if (context === 'tecnicos') {
+                const nombre = row.find('td:eq(2)').text().toLowerCase(); // Nombre Usuario
+                const correo = row.find('td:eq(4)').text().toLowerCase(); // Correo
+                const junta = row.find('td:eq(3)').text().toLowerCase();  // Nombre Junta Local
+                if (nombre.includes(searchValue) || correo.includes(searchValue) || junta.includes(searchValue)) {
+                    showRow = true;
+                }
+            } else if (context === 'huertas') {
+                const productor = row.find('td:eq(2)').text().toLowerCase(); // Nombre Productor
+                const junta = row.find('td:eq(3)').text().toLowerCase();    // Nombre Junta Local
+                const huerta = row.find('td:eq(4)').text().toLowerCase();   // Nombre Huerta
+                const localidad = row.find('td:eq(5)').text().toLowerCase(); // Localidad
+                if (productor.includes(searchValue) || junta.includes(searchValue) || huerta.includes(searchValue) || localidad.includes(searchValue)) {
+                    showRow = true;
+                }
+            } else if (context === 'municipios') {
+                const nombre = row.find('td:eq(2)').text().toLowerCase(); // Nombre Productor
+                if (nombre.includes(searchValue)) {
+                    showRow = true;
+                }
+            }
+
+            // Mostrar o esconder la fila según el resultado del filtro
+            if (showRow) {
+                row.show();
+            } else {
+                row.hide();
+            }
+        });
+    }
 
     function cargarProductores() {
         // Cambiar los encabezados de la tabla
@@ -131,7 +180,8 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                 <tr>
                     <th>Id</th>
                     <th>Accion</th>
-                    <th>Nombre</th>
+                    <th>Nombre Usuario</th>
+                    <th>Junta Local</th>
                     <th>Correo</th>
                     <th>Telefono</th>
                     <th>RFC</th>
@@ -161,6 +211,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                                 </button>
                             </td>
                             <td>${productor.nombre}</td>
+                            <td>${tecnico.nombre_junta}</td>
                             <td>${productor.correo}</td>
                             <td>${productor.teléfono}</td>
                             <td>${productor.rfc}</td>
@@ -291,7 +342,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                 // Mostrar un mensaje si no hay huertas disponibles o hay un error
                 const row = `
                     <tr>
-                        <td colspan="23">No se encontraron huertas o ocurrió un error</td>
+                        <td colspan="23">No se encontraron huertas</td>
                     </tr>
                 `;
                 tableBody.append(row);
@@ -434,26 +485,5 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <!-- Script of menu -->
     <script src="../../Components/JuntasLocales/menuDesplegable.js"></script>
-
-
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-    // Realiza una solicitud para obtener los datos del usuario
-    fetch('../../Backend/Login/cargadatos.php')
-        .then(response => response.json())
-        .then(data => {
-            console.log(data); // Verifica los datos aquí
-            if (!data.error && data.usuario) {
-                document.getElementById('nombre').textContent = data.usuario.nombre;
-                document.getElementById('email').textContent = data.usuario.correo;
-            } else {
-                console.error('Error al obtener los datos del usuario:', data.mensaje);
-            }
-        })
-        .catch(error => console.error('Error:', error));
-});
-
-</script>
 </body>
-
 </html>

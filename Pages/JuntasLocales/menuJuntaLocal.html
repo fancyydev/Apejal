@@ -166,6 +166,7 @@
                     <th>Id</th>
                     <th>Accion</th>
                     <th>Nombre Usuario</th>
+                    <th>Junta Local</th>
                     <th>Correo</th>
                     <th>Telefono</th>
                     <th>RFC</th>
@@ -195,6 +196,7 @@
                                 </button>
                             </td>
                             <td>${productor.nombre}</td>
+                            <td>${tecnico.nombre_junta}</td>
                             <td>${productor.correo}</td>
                             <td>${productor.teléfono}</td>
                             <td>${productor.rfc}</td>
@@ -325,7 +327,7 @@
                 // Mostrar un mensaje si no hay huertas disponibles o hay un error
                 const row = `
                     <tr>
-                        <td colspan="23">No se encontraron huertas o ocurrió un error</td>
+                        <td colspan="23">No se encontraron huertas</td>
                     </tr>
                 `;
                 tableBody.append(row);
