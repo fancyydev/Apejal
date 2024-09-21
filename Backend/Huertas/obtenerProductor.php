@@ -12,7 +12,7 @@ if ($conn->errorCode() !== "00000") {
     die("Conexión fallida: " . implode(", ", $errorInfo));
 }
 
-$sql = "SELECT id_usuario, nombre FROM usuario WHERE id_tipo = 1";
+$sql = "SELECT p.id_productor, u.nombre FROM productores p JOIN usuario u ON p.id_usuario = u.id_usuario WHERE u.id_tipo = 1;";
 
 $result = $conn->query($sql);
 
@@ -21,12 +21,12 @@ if ($result !== false && $result->rowCount() > 0) {
     $options = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         $options[] = array(
-            'id_usuario' => $row['id_usuario'],
+            'id_productor' => $row['id_productor'],
             'nombre' => $row['nombre']
         );
     }
 } else {
-    $options = array('id_usuario' => '', 'nombre' => 'No hay productores disponibles');
+    $options = array('id_productor' => '', 'nombre' => 'No hay productores disponibles');
 }
 
 // Cerrar la conexión
