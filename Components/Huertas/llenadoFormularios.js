@@ -1,26 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     
-    const pronCosecha = [];
-    for (let i = 0; i <= 500; i += 1) {
-        pronCosecha.push(i);
-    }
-
-    const arbolesHec = [];
-    for (let i = 1; i <= 400; i += 1) {
-        arbolesHec.push(i);
-    }
-
-
     const aPlantacion = [];
     for (let i = 2000; i <= 2050; i += 1) {
         aPlantacion.push(i);
     }
-
-    const hectareas = [];
-    for (let i = 1; i <= 100; i += 1) {
-        hectareas.push(i);
-    }
-
 
     const ciudades = [
         "Acatic", "Acatlán de Juárez", "Ahualulco de Mercado", "Amacueca", "Amatitán", "Ameca",
@@ -51,11 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     const ciudadSelect = document.getElementById('ciudad');
-    const hectareaSelect = document.getElementById('hectareas');
-    const arbolesHSelect = document.getElementById('arbolH');
     const aPlantacionSelect = document.getElementById('aPlantacion');
-    const pronCosechaSelect = document.getElementById('proCosecha');
-
 
     //Llena el select de ciudades
     ciudades.forEach(city => {
@@ -65,20 +44,6 @@ document.addEventListener('DOMContentLoaded', function() {
         ciudadSelect.appendChild(option);
     });
 
-    hectareas.forEach(hectarea => {
-        const option = document.createElement('option');
-        option.value = hectarea;
-        option.textContent = hectarea;
-        hectareaSelect.appendChild(option);
-    });
-
-    arbolesHec.forEach(arbol => {
-        const option = document.createElement('option');
-        option.value = arbol;
-        option.textContent = arbol;
-        arbolesHSelect.appendChild(option);
-    });
-
     aPlantacion.forEach(anio => {
         const option = document.createElement('option');
         option.value = anio;
@@ -86,32 +51,5 @@ document.addEventListener('DOMContentLoaded', function() {
         aPlantacionSelect.appendChild(option);
     });
 
-    pronCosecha.forEach(pronostico => {
-        const option = document.createElement('option');
-        option.value = pronostico;
-        option.textContent = pronostico;
-        pronCosechaSelect.appendChild(option);
-    });
-
-    const totArbolesInput = document.getElementById('totArboles');
-
-    //calcular y actualizar el total de árboles
-    function calcularTotalArboles() {
-        const hectareas = parseFloat(hectareaSelect.value);
-        const arbolesPorHectarea = parseFloat(arbolesHSelect.value);
-
-        if (!isNaN(hectareas) && !isNaN(arbolesPorHectarea)) {
-            const totalArboles = hectareas * arbolesPorHectarea;
-            totArbolesInput.value = totalArboles;
-        } else {
-            totArbolesInput.value = '';
-        }
-    }
-
-    //Escuchar cambios en los selectores de hectáreas y árboles por hectárea
-    hectareaSelect.addEventListener('change', calcularTotalArboles);
-    arbolesHSelect.addEventListener('change', calcularTotalArboles);
-
-        
 });
 
