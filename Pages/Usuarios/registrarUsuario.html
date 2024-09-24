@@ -128,14 +128,14 @@
                         <!-- Campos para Municipios y Junta Local (Técnico) -->
                         <div class="row g-3 p-4" id="munJlFields" style="display: none;">
                             <div class="col-md-5">
-                                <label for="municipio" class="form-label">Municipios a cargo</label>
-                                <div id="municipio-checkboxes" class="form-control"></div>
-                            </div>
-                            <div class="col-md-5">
                                 <label for="staticEmail" class="form-label">Junta Local</label>
                                 <select class="form-control" name="jlT" id="jlT">
                                     <option value="">Seleccione Junta local</option>
                                 </select>
+                            </div>
+                            <div class="col-md-5">
+                                <label for="municipio" class="form-label">Municipios a cargo</label>
+                                <div id="municipio-checkboxes" class="form-control"></div>
                             </div>
                             <div class="col-md-5">
                                 <label for="status" class="form-label">Estatus</label>
@@ -197,7 +197,46 @@
     <script>
         const aux = new auxliar();
 
+        
+
         $(document).ready(function(){
+
+            $('#jlT').on('change', function(){
+                var idJuntaLocal = $(this).val(); // Obtener el ID de la junta local seleccionada
+
+                if(idJuntaLocal) {
+                    // Hacer una solicitud AJAX para obtener los municipios asociados
+                    $.ajax({
+                        url: '../../Backend/JuntasLocales/obtenerMunicipiosEsp.php', // Reemplaza con la ruta correcta
+                        type: 'POST',
+                        data: {idJuntaLocal: idJuntaLocal},
+                        dataType: 'json',
+                        success: function(response) {
+                            $('#municipio-checkboxes').empty(); // Limpiar los checkboxes anteriores
+                            if(response.length > 0) {
+                                // Crear un checkbox para cada municipio
+                                $.each(response, function(index, municipio){
+                                    $('#municipio-checkboxes').append(`
+                                        <label>
+                                            <input type="checkbox" name="municipio[]" value="${municipio.id_municipio}"> ${municipio.nombre}
+                                        </label>
+                                    `);
+                                });
+                            } else {
+                                $('#municipio-checkboxes').html('<p>No hay municipios asociados.</p>');
+                            }
+                        },
+                        error: function() {
+                            $('#municipio-checkboxes').html('<p>Error al obtener los municipios.</p>');
+                        }
+                    });
+                } else {
+                    // Si no hay junta local seleccionada, limpiar los checkboxes
+                    $('#municipio-checkboxes').empty();
+                }
+            });
+
+            /*
             // Cargar Municipios
             $.ajax({
                 url: '../../Backend/JuntasLocales/obtenerMunicipios.php',
@@ -216,6 +255,8 @@
                     aux.alert('<h5>Error</h5><br/><p>No se pudieron cargar los municipios</p>', true, true);
                 }
             });
+            */
+            
 
             // Cargar Juntas Locales
             $.ajax({
@@ -269,7 +310,7 @@
                             {"valor": document.getElementById("email").value, "typeOf": "string", "mensaje": "<p>Insertar email</p><br>"},
                             {"valor": document.getElementById("telefono").value, "typeOf": "string", "mensaje": "<p>Insertar telefono</p><br>"},
                             {"valor": document.getElementById("contra").value, "typeOf": "string", "mensaje": "<p>Insertar contraseña</p><br>"},
-                            {"valor": municipiosSeleccionados.length > 0 ? "1" : "", "typeOf": "string", "mensaje": "<p>Insertar municipios</p><br>"},
+                            {"valor": municipiosSeleccionados.length > 0 ? "1" : "", "typeOf": "string", "mensaje": "<p>Seleccionar municipios</p><br>"},
                             {"valor": document.getElementById("statusT").value, "typeOf": "string", "mensaje": "<p>Insertar estatus</p><br>"},
                             {"valor": document.getElementById("jlT").value, "typeOf": "string", "mensaje": "<p>Insertar junta local</p><br>"}
 

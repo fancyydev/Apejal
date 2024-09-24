@@ -28,17 +28,23 @@ if (!$data) {
     die('Error: No se recibieron datos correctamente.');
 }
 
+$archivo = 'datos_formulario.txt';
+
+// Abrir el archivo para escribir, si no existe, se creará
+$archivoTxt = fopen($archivo, 'a'); // 'a' para agregar datos sin borrar lo anterior
+
 // Obtener valores
 $nombre = $data->nombre;
 $domicilio = $data->domicilio;
 $telefono = $data->telefono;
 $correo = $data->correo;
-$municipio = $data->municipio;
+$municipios = implode(',', $data->municipios);
 $admin = $data->admin;
 $status = $data->status;
 
+
 // Preparar la consulta SQL
-$sql = "INSERT INTO juntaslocales (id_municipio, id_usuario, nombre, domicilio, teléfono, correo, estatus) VALUES (?, ?, ?, ?, ?, ?, ?)";
+$sql = "INSERT INTO juntaslocales (carga_municipios, id_usuario, nombre, domicilio, teléfono, correo, estatus) VALUES (?, ?, ?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
 
 // Verificar si la consulta se preparó correctamente
@@ -46,8 +52,10 @@ if (!$stmt) {
     die("Error en la preparación de la consulta: " . implode(", ", $conn->errorInfo()));
 }
 
-// Vincular parámetros
-$stmt->bindParam(1, $municipio);
+// Array para la respuesta JSON
+$response = array();
+
+$stmt->bindParam(1, $municipios);
 $stmt->bindParam(2, $admin);
 $stmt->bindParam(3, $nombre);
 $stmt->bindParam(4, $domicilio);
@@ -55,21 +63,28 @@ $stmt->bindParam(5, $telefono);
 $stmt->bindParam(6, $correo);
 $stmt->bindParam(7, $status);
 
-// Array para la respuesta JSON
-$response = array();
+// Ejecutar consulta para cada municipio
+if ($stmt->execute()) {
+    $response['status'] = 'success';
+    $response['message'] = 'Junta local registrada exitosamente';
+} else {
+    $response['status'] = 'error';
+    $response['message'] .= "Error al registrar la junta local";
+}
 
-// Ejecutar consulta
+
+/* Ejecutar consulta
 if ($stmt->execute()) {
     $response['status'] = 'success';
     $response['message'] = 'Junta local registrada exitosamente';
 } else {
     $response['status'] = 'error';
     $response['message'] = 'Error al registrar la junta local: ' . $stmt->error;
-}
+}*/
 
 // Cerrar consulta y conexión
-$stmt->close();
-$conn->close();
+$stmt = null;
+$conn = null;
 
 // Devolver respuesta en formato JSON
 header('Content-Type: application/json');
