@@ -1,9 +1,16 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+
 require_once($_SERVER['DOCUMENT_ROOT']."/proyectoApeajal/APEJAL/Backend/DataBase/connectividad.php");
+
+
 
 // Obtener datos del formulario
 $tipo = $_POST['tipo'] ?? '';
 $id_productor = $_POST['id_productor'] ?? '';
+$id_tecnico = $_POST['id_tecnico'] ?? '';
 $id_usuario = $_POST['id_usuario'] ?? '';
 $nombre = $_POST['nombre'] ?? '';
 $correo = $_POST['email'] ?? '';
@@ -14,7 +21,7 @@ $curp = $_POST['curp'] ?? '';
 $juntalocal = (int) ($_POST['jl'] ?? 0);
 $estatus = $_POST["status"] ?? '';
 $estatusT = $_POST["statusT"] ?? '';
-$jlT = $_POST['jlT'] ?? '';
+$jlT = (int) ($_POST['jlT'] ?? 0);
 $municipiosSeleccionados = isset($_POST['municipio']) ? $_POST['municipio'] : [];
 $municipio = implode(',', $municipiosSeleccionados);
 
@@ -45,7 +52,7 @@ if ($resultado_usuario === false) {
 
 // Actualizar tabla 'productores' si el tipo es productor
 if ($tipo == "productor") {
-    $sql_productor = "UPDATE productores SET 
+    $sql_productor = "UPDATE productor SET 
                         rfc = '$rfc', 
                         estatus = '$estatus', 
                         curp = '$curp', 
@@ -59,26 +66,17 @@ if ($tipo == "productor") {
         die("Error al actualizar productor: " . implode(", ", $errorInfo));
     }
 } else if ($tipo == "tecnico") {
-    // Insertar en la tabla 'tecnico'
-    $ultimo_id = $conn->lastInsertId(); // Último ID generado
-    $sql_tecnico = "INSERT INTO tecnico (id_usuario, idjuntaLocal, carga_municipios, estatus) VALUES (?, ?, ?, ?)";
-    $stmt_tecnico = $conn->prepare($sql_tecnico);
+    $sql_tecnico = "UPDATE tecnico SET
+                      idjuntaLocal = $jlT, 
+                      carga_municipios = '$municipio', 
+                      estatus = '$estatusT'
+                    WHERE id_tecnico = $id_tecnico";
     
-    if (!$stmt_tecnico) {
+    $resultado_tecnico = $conn->exec($sql_tecnico);
+    
+    if ($resultado_tecnico === false) {
         $errorInfo = $conn->errorInfo();
-        die("Error en la preparación de la consulta de técnico: " . implode(", ", $errorInfo));
-    }
-    
-    $stmt_tecnico->bindParam(1, $ultimo_id, PDO::PARAM_INT);
-    $stmt_tecnico->bindParam(2, $jlT, PDO::PARAM_INT);
-    $stmt_tecnico->bindParam(3, $municipio, PDO::PARAM_STR);
-    $stmt_tecnico->bindParam(4, $estatusT, PDO::PARAM_STR);
-
-    $resultado_tecnico = $stmt_tecnico->execute();
-    
-    if (!$resultado_tecnico) {
-        $errorInfo = $stmt_tecnico->errorInfo();
-        die("Error al insertar técnico: " . implode(", ", $errorInfo));
+        die("Error al actualizar tecnico " . implode(", ", $errorInfo));
     }
 }
 
