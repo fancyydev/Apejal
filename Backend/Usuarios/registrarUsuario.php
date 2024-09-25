@@ -12,7 +12,7 @@ $curp = $_POST['curp'] ?? '';
 $jl = $_POST['jl'] ?? '';
 $estatus = $_POST["status"] ?? '';
 $estatusT = $_POST["statusT"] ?? '';
-$statusLab = $_POST["statusLab"] ?? '';
+$estatusLab = $_POST["statusLab"] ?? '';
 $jlT = $_POST['jlT'] ?? '';
 $jlLab = $_POST['jlLab'] ?? '';
 $municipiosSeleccionados = isset($_POST['municipio']) ? $_POST['municipio'] : [];
@@ -119,7 +119,7 @@ if ($resultado) {
         $sql_tecnico = "INSERT INTO tecnico (id_usuario, idjuntaLocal, carga_municipios, estatus) VALUES (?, ?, ?, ?)";
         $stmt_tecnico = $conn->prepare($sql_tecnico);
         if (!$stmt_tecnico) {
-            die("Error en la preparación de la consulta de productor: " . implode(", ", $conn->errorInfo()));
+            die("Error en la preparación de la consulta de tecnico: " . implode(", ", $conn->errorInfo()));
         }
         $stmt_tecnico->bindParam(1, $ultimo_id, PDO::PARAM_INT);
         $stmt_tecnico->bindParam(2, $jlT, PDO::PARAM_INT);
@@ -131,17 +131,15 @@ if ($resultado) {
         //Ultimo id es el que se generá automaticamente con el auto increment en la tabla usurio
         //Esto con la finalidad de que cuando se vaya a la tabla tecnico ese id que se genero se asocie con id_usuario en la tabla
         $ultimo_id = $conn->lastInsertId();
-        $sql_tecnico = "INSERT INTO tecnico (id_usuario, idjuntaLocal, carga_municipios, estatus) VALUES (?, ?, ?, ?)";
-        $stmt_tecnico = $conn->prepare($sql_tecnico);
-        if (!$stmt_tecnico) {
-            die("Error en la preparación de la consulta de productor: " . implode(", ", $conn->errorInfo()));
+        $sql_laboratorio = "INSERT INTO laboratorio (id_usuario, idjuntaLocal, estatus) VALUES (?, ?, ?)";
+        $stmt_laboratorio = $conn->prepare($sql_laboratorio);
+        if (!$stmt_laboratorio) {
+            die("Error en la preparación de la consulta de laboratorio: " . implode(", ", $conn->errorInfo()));
         }
-        $stmt_tecnico->bindParam(1, $ultimo_id, PDO::PARAM_INT);
-        $stmt_tecnico->bindParam(2, $jlT, PDO::PARAM_INT);
-        $stmt_tecnico->bindParam(3, $municipio, PDO::PARAM_STR);
-        $stmt_tecnico->bindParam(4, $estatusT, PDO::PARAM_STR);
-
-        $resultado_tecnico = $stmt_tecnico->execute();
+        $stmt_laboratorio->bindParam(1, $ultimo_id, PDO::PARAM_INT);
+        $stmt_laboratorio->bindParam(2, $jlLab, PDO::PARAM_INT);
+        $stmt_laboratorio->bindParam(3, $estatusLab, PDO::PARAM_STR);
+        $resultado_laboratorio = $stmt_laboratorio->execute();
     }
 
     // Cerrar statement y conexión
