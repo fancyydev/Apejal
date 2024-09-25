@@ -148,6 +148,25 @@
                         </div>
                         <br>
 
+                        <!-- Campos para personal de personalLab -->
+                        <div class="row g-3 p-4" id="labFields" style="display: none;">
+                            <div class="col-md-5">
+                                <label for="staticEmail" class="form-label">Junta Local</label>
+                                <select class="form-control" name="jlLab" id="jlLab">
+                                    <option value="">Seleccione Junta local</option>
+                                </select>
+                            </div>
+                            <div class="col-md-5">
+                                <label for="status" class="form-label">Estatus</label>
+                                <select class="form-control" name="statusLab" id="statusLab">
+                                    <option value="">Seleccione el estatus</option>
+                                    <option value="activo">Activo</option>
+                                    <option value="inactivo">Inactivo</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br>
+
                         <!-- Campos generales para todos los usuarios -->
                         <div class="row g-3 p-4">
                             <div class="col-md-5">
@@ -293,6 +312,23 @@
                 }
             });
 
+            $.ajax({
+                url: '../../Backend/Huertas/obtenerJL.php',
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    $.each(response, function(index, jl) {
+                        $('#jlLab').append($('<option>', {
+                            value: jl.idjuntalocal,
+                            text: jl.nombre
+                        }));
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error al obtener juntas locales:', status, error);
+                }
+            });
+
             // Evento para registrar usuario
             $('#regristar').click(function() {
                 var tipoUsuario = document.getElementById("tipo").value;
@@ -322,7 +358,9 @@
                             {"valor": document.getElementById("nombre").value, "typeOf": "string", "mensaje": "<p>Insertar nombre</p><br>"},
                             {"valor": document.getElementById("email").value, "typeOf": "string", "mensaje": "<p>Insertar email</p><br>"},
                             {"valor": document.getElementById("telefono").value, "typeOf": "string", "mensaje": "<p>Insertar telefono</p><br>"},
-                            {"valor": document.getElementById("contra").value, "typeOf": "string", "mensaje": "<p>Insertar contraseña</p><br>"}
+                            {"valor": document.getElementById("contra").value, "typeOf": "string", "mensaje": "<p>Insertar contraseña</p><br>"},
+                            {"valor": document.getElementById("statusLab").value, "typeOf": "string", "mensaje": "<p>Insertar estatus</p><br>"},
+                            {"valor": document.getElementById("jlLab").value, "typeOf": "string", "mensaje": "<p>Insertar junta local</p><br>"}
                         ]);
                         break;
                     case "productor":
@@ -368,7 +406,9 @@
                             jl: document.getElementById("jl").value,
                             status: document.getElementById("status").value,
                             statusT: document.getElementById("statusT").value,
-                            jlT: document.getElementById("jlT").value
+                            statusLab: document.getElementById("statusLab").value,
+                            jlT: document.getElementById("jlT").value,
+                            jlLab: document.getElementById("jlLab").value
                         },
                         success: function(response) {
                             Swal.fire({
@@ -402,12 +442,22 @@
             if (tipoUsuario === "productor") {
                 rfcCurpFields.style.display = "flex";
                 munJlFields.style.display = "none";
+                labFields.style.display = "none";
+
             } else if (tipoUsuario === "tecnico") {
                 rfcCurpFields.style.display = "none";
                 munJlFields.style.display = "flex";
+                labFields.style.display = "none";
+
+            } else if (tipoUsuario === "personalLab") {
+                rfcCurpFields.style.display = "none";
+                munJlFields.style.display = "none";
+                labFields.style.display = "flex"
+            
             } else {
                 rfcCurpFields.style.display = "none";
                 munJlFields.style.display = "none";
+                labFields.style.display = "none";
             }
         }
 
