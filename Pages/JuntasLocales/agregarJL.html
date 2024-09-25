@@ -27,6 +27,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css">
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>   
         
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
     <!--Links para funciones auxliar-->
     <script src="../../Components/Auxiliar/auxliar.js" ></script>
     <script src="../../Components/Login/login.js"></script>
@@ -87,7 +89,9 @@
                                         <input class="form-control" type="text" name="nombre" id="nombre" />
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="staticEmail" class="form-label">Administrador junta local</label>
+                                        <label for="staticEmail" class="form-label">Administrador junta local
+                                            <i class="fas fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="Solo se muestran los administradores que no están asociados a una junta local."></i>
+                                        </label>
                                         <select class="form-control" name="admin" id="admin" >
                                             <option value="">Seleccione administrador</option>
                                         </select>
@@ -154,7 +158,10 @@
 <script>
         //const session = new login();
 
-        
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
         const aux = new auxliar();
 
         $(document).ready(function(){

@@ -12,7 +12,7 @@ if ($conn->errorCode() !== "00000") {
     die("Conexión fallida: " . implode(", ", $errorInfo));
 }
 
-$sql = "SELECT id_usuario, nombre FROM usuario WHERE id_tipo = 4";
+$sql = "SELECT id_usuario, nombre FROM usuario WHERE id_tipo = 4 AND id_usuario NOT IN (SELECT id_usuario FROM juntaslocales)";
 $stmt = $conn->query($sql);
 
 // Verificar si la consulta fue exitosa
