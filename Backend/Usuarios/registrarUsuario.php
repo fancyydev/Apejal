@@ -12,7 +12,9 @@ $curp = $_POST['curp'] ?? '';
 $jl = $_POST['jl'] ?? '';
 $estatus = $_POST["status"] ?? '';
 $estatusT = $_POST["statusT"] ?? '';
+$statusLab = $_POST["statusLab"] ?? '';
 $jlT = $_POST['jlT'] ?? '';
+$jlLab = $_POST['jlLab'] ?? '';
 $municipiosSeleccionados = isset($_POST['municipio']) ? $_POST['municipio'] : [];
 $municipio = implode(',', $municipiosSeleccionados);
 
@@ -114,6 +116,20 @@ if ($resultado) {
         //Ultimo id es el que se generá automaticamente con el auto increment en la tabla usurio
         //Esto con la finalidad de que cuando se vaya a la tabla tecnico ese id que se genero se asocie con id_usuario en la tabla
         $ultimo_id = $conn->lastInsertId();
+        $sql_tecnico = "INSERT INTO tecnico (id_usuario, idjuntaLocal, carga_municipios, estatus) VALUES (?, ?, ?, ?)";
+        $stmt_tecnico = $conn->prepare($sql_tecnico);
+        if (!$stmt_tecnico) {
+            die("Error en la preparación de la consulta de productor: " . implode(", ", $conn->errorInfo()));
+        }
+        $stmt_tecnico->bindParam(1, $ultimo_id, PDO::PARAM_INT);
+        $stmt_tecnico->bindParam(2, $jlT, PDO::PARAM_INT);
+        $stmt_tecnico->bindParam(3, $municipio, PDO::PARAM_STR);
+        $stmt_tecnico->bindParam(4, $estatusT, PDO::PARAM_STR);
+
+        $resultado_tecnico = $stmt_tecnico->execute();
+    } else if($tipo == "personalLab") {
+        //Ultimo id es el que se generá automaticamente con el auto increment en la tabla usurio
+        //Esto con la finalidad de que cuando se vaya a la tabla tecnico ese id que se genero se asocie con id_usuario en la tabla
         $ultimo_id = $conn->lastInsertId();
         $sql_tecnico = "INSERT INTO tecnico (id_usuario, idjuntaLocal, carga_municipios, estatus) VALUES (?, ?, ?, ?)";
         $stmt_tecnico = $conn->prepare($sql_tecnico);
