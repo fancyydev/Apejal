@@ -24,6 +24,7 @@ if (isset($_GET['id_productor'])) {
         WHERE p.id_productor = :id_productor
     ");
     
+    
     // Ejecutar la consulta
     if ($stmt->execute(['id_productor' => $id_productor])) {
         $productor = $stmt->fetch(PDO::FETCH_ASSOC);

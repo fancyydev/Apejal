@@ -144,9 +144,11 @@
                 }
             });
 
-            // Evento para registrar productor
+            
             $('#regristar').click(function() {
                 var tipoUsuario = id_tipo;
+                
+                // Validación de los campos
                 var resultado = aux.validateAll([
                     {"valor": document.getElementById("nombre").value, "typeOf": "string", "mensaje": "<p>Insertar nombre</p><br>"},
                     {"valor": document.getElementById("curp").value, "typeOf": "string", "mensaje": "<p>Insertar CURP</p><br>"},
@@ -157,7 +159,24 @@
                     {"valor": document.getElementById("contra").value, "typeOf": "string", "mensaje": "<p>Insertar contraseña</p><br>"},
                     {"valor": document.getElementById("jl").value, "typeOf": "string", "mensaje": "<p>Insertar junta local</p><br>"}
                 ]);
-                var jlEnt = parseInt(document.getElementById("jl").value, 10); // Convertir a entero
+                
+                // Obtén el valor del select sin convertirlo a entero
+                var jlValue = document.getElementById("jl").value;  // Esto será un string
+
+                console.log({
+                    tipo: tipoUsuario,
+                    nombre: document.getElementById("nombre").value,
+                    email: document.getElementById("email").value,
+                    telefono: document.getElementById("telefono").value,
+                    contra: document.getElementById("contra").value,
+                    rfc: document.getElementById("rfc").value,
+                    curp: document.getElementById("curp").value,
+                    jl: jlValue,  // Asegúrate de enviar jlValue como string
+                    status: document.getElementById("status").value,
+                    id_productor: id_productor,
+                    id_usuario: id_usuario
+                });
+
                 if (resultado.estado) {
                     $.ajax({
                         url: '../../Backend/JuntasLocales/actualizarUsuario.php',
@@ -170,11 +189,10 @@
                             contra: document.getElementById("contra").value,
                             rfc: document.getElementById("rfc").value,
                             curp: document.getElementById("curp").value,
-                            jl: jlEnt,
+                            jl: jlValue,  // Enviar jl como string
                             status: document.getElementById("status").value,
                             id_productor: id_productor,
-                            id_usuario: id_usuario,
-
+                            id_usuario: id_usuario
                         },
                         success: function(response) {
                             Swal.fire({
@@ -201,6 +219,7 @@
                     aux.alert(resultado.texto, true, true);
                 }
             });
+
 
             $('#Cancelar').click(function() {
                 window.location.href = "../login.html";

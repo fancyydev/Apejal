@@ -502,11 +502,15 @@ function cargarLaboratorio() {
 });
 
     function editRow(id_productor) {
+
+        console.log('ID de productor:', id_productor);
         $.ajax({
-            url: '../../Backend/JuntasLocales/envioDatosProductor.php?id_productor=${id_productor}',
+            url: '../../Backend/JuntasLocales/envioDatosProductor.php?id_productor=' + id_productor,
             type: 'GET',
             dataType: 'json',
             success: function(productor) {
+
+                console.log(productor); 
                 // Guarda los datos del productor en sessionStorage
                 sessionStorage.setItem('id_tipo', "productor");
                 sessionStorage.setItem('id_productor', id_productor);
