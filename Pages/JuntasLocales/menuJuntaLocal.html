@@ -206,7 +206,7 @@
                         <tr>
                             <td>${productor.id_productor}</td>
                             <td>
-                                <button id="btnEdit" onclick="editRow(this)">
+                                <button id="btnEdit" onclick="editRow(${productor.id_productor})">
                                     <ion-icon name="pencil-outline"></ion-icon>
                                 </button>
                                 <button id="btnDelete" onclick="deleteRow(this)">
@@ -389,7 +389,7 @@
                         <tr>
                             <td>${tecnico.id_tecnico}</td>
                             <td>
-                                <button id="btnEdit" onclick="editRow(this)">
+                                <button id="btnEdit" onclick="editRowT(${tecnico.id_tecnico})">
                                     <ion-icon name="pencil-outline"></ion-icon>
                                 </button>
                                 <button id="btnDelete" onclick="deleteRow(this)">
@@ -495,6 +495,71 @@ function cargarLaboratorio() {
         });
     }
 });
+
+function editRow(id_productor) {
+    //console.log('ID de productor:', id_productor);
+    $.ajax({
+        url: '../../Backend/JuntasLocales/envioDatosProductor.php?id_productor=' + id_productor,
+        type: 'GET',
+        dataType: 'json',
+        success: function(productor) {
+
+            //console.log(productor); 
+            // Guarda los datos del productor en sessionStorage
+            sessionStorage.setItem('id_tipo', "productor");
+            sessionStorage.setItem('id_productor', id_productor);
+            sessionStorage.setItem('id_usuario', productor.id_usuario);
+            sessionStorage.setItem('nombre', productor.nombre);
+            sessionStorage.setItem('rfc', productor.rfc);
+            sessionStorage.setItem('curp', productor.curp);
+            sessionStorage.setItem('correo', productor.correo);
+            sessionStorage.setItem('telefono', productor.teléfono);
+            sessionStorage.setItem('contraseña', productor.contraseña);
+            sessionStorage.setItem('status', productor.estatus);
+            sessionStorage.setItem('jl_id', productor.idjuntalocal); 
+            sessionStorage.setItem('jl', productor.nombre_junta);
+
+            // Redirigir a editarProducto.html
+            window.location.href = '../JuntasLocales/editarProductor.html';
+        },
+        error: function(xhr, status, error) {
+            console.error('Error al obtener el productor:', status, error);
+            console.error('Respuesta del servidor:', xhr.responseText);
+        }
+    });
+}
+    
+function editRowT(id_tecnico) {
+    $.ajax({
+        url: '../../Backend/JuntasLocales/envioDatosTecnico.php?id_tecnico=' + id_tecnico,
+        type: 'GET',
+        dataType: 'json',
+        success: function(tecnico) {
+
+            //console.log(tecnico); 
+            // Guarda los datos del productor en sessionStorage
+            sessionStorage.setItem('id_tipo', "tecnico");
+            sessionStorage.setItem('id_tecnico', id_tecnico);
+            sessionStorage.setItem('id_usuario', tecnico.id_usuario);
+            sessionStorage.setItem('nombre', tecnico.nombre);
+            sessionStorage.setItem('correo', tecnico.correo);
+            sessionStorage.setItem('telefono', tecnico.teléfono);
+            sessionStorage.setItem('contraseña', tecnico.contraseña);
+            sessionStorage.setItem('status', tecnico.estatus);
+            sessionStorage.setItem('jl_id', tecnico.idjuntalocal); 
+            sessionStorage.setItem('jl', tecnico.nombre_junta);
+            sessionStorage.setItem('carga_municipios', tecnico.carga_municipios)
+            sessionStorage.setItem('municipios', tecnico.municipios)
+
+            // Redirigir a editarTecnico.html
+            window.location.href = '../JuntasLocales/editarTecnico.html';
+        },
+        error: function(xhr, status, error) {
+            console.error('Error al obtener el tecnico:', status, error);
+            console.error('Respuesta del servidor:', xhr.responseText);
+        }
+    });
+}
 
     </script>
     <!-- Ionicons-->
