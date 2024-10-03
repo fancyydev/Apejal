@@ -16,21 +16,6 @@ if ($conn->errorCode() !== "00000") {
 if (isset($_GET['id_laboratorio'])) {
     $id_laboratorio = $_GET['id_laboratorio'];
 
-    $archivo = 'datos_formulario.txt';
-
-// Abrir el archivo para escribir, si no existe, se creará
-$archivoTxt = fopen($archivo, 'a'); // 'a' para agregar datos sin borrar lo anterior
-
-// Preparar los datos para escribir en el archivo
-$contenido = "ID Laboratorio: $id_laboratorio\n";
-
-// Escribir los datos en el archivo
-fwrite($archivoTxt, $contenido);
-
-// Cerrar el archivo
-fclose($archivoTxt);
-
-
     // Consulta a la base de datos
     $stmt = $conn->prepare("
         SELECT u.id_usuario,u.id_tipo, u.nombre, u.correo, u.teléfono, u.contraseña, l.estatus, l.idjuntalocal, jl.nombre AS nombre_junta  

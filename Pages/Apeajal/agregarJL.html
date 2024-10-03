@@ -266,6 +266,11 @@
                                 icon: 'success',
                                 showConfirmButton: true,
                                 allowOutsideClick: false
+                            }).then((result) => {
+                                // Redirigir a la página deseada cuando el usuario hace clic en "Aceptar"
+                                if (result.isConfirmed) {
+                                    window.location.href = "../Apeajal/menuApeajal.html";
+                                }
                             });
                     },
                     error: function() {
@@ -279,7 +284,7 @@
             });
 
             $('#Cancelar').click(function() {
-                //window.location.href = "../SistemaCliente/login.html";
+                window.location.href = "../Apeajal/menuApeajal.html";
             });
         });
 

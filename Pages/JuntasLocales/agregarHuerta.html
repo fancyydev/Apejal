@@ -518,6 +518,11 @@
                                         icon: 'success',
                                         showConfirmButton: true,
                                         allowOutsideClick: false
+                                    }).then((result) => {
+                                        // Redirigir a la página deseada cuando el usuario hace clic en "Aceptar"
+                                        if (result.isConfirmed) {
+                                            window.location.href = "../JuntasLocales/menuJuntaLocalVero.html";
+                                        }
                                     });
                                 } else if (response.error) {
                                     let errorMsg = response.messages ? response.messages.join('<br/>') : "Ocurrió un error desconocido.";
@@ -535,6 +540,11 @@
                                             icon: 'success',
                                             showConfirmButton: true,
                                             allowOutsideClick: false
+                                        }).then((result) => {
+                                            // Redirigir a la página deseada cuando el usuario hace clic en "Aceptar"
+                                            if (result.isConfirmed) {
+                                                window.location.href = "../JuntasLocales/menuJuntaLocalVero.html";
+                                            }
                                         });
                                     } else if (res.error) {
                                         let errorMsg = res.messages ? res.messages.join('<br/>') : "Ocurrió un error desconocido.";
@@ -562,7 +572,7 @@
 
         $('#Cancelar').click(function() {
             //Ver a donde redireccionar
-            //window.location.href = "../login.html";
+            window.location.href = "../JuntasLocales/menuJuntaLocalVero.html";
 
         });
     });
