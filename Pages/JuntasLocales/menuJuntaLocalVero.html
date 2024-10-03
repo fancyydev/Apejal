@@ -5,14 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu Junta Local</title>
     <link rel="stylesheet" href="../../Styles/menus.css">
-    <link href="../JuntasLocales/editarProductor.html">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
-
-    <form id="editForm" action="../JuntasLocales/editarProductor.html" method="POST" style="display:none;"></form>
-        <input type="hidden" name="id_productor" id="id_productor_input">
-    </form>
 
     <div class="barra-lateral">
         <div class="nombre-pagina">
@@ -130,6 +125,23 @@
             }
         });
 
+        $('#btnAdd').on('click', function() {
+            if (currentContext === 'solicitudes') {
+                window.location.href = '../JuntasLocales/agregarJL.html';
+            } else if (currentContext === 'huertas') {
+                window.location.href = '../JuntasLocales/agregarHuerta.html';
+            } else if (currentContext === 'tecnicos') {
+                console.log("Si entro al if pero no mando a agregar tecnicos");
+                window.location.href = '../JuntasLocales/agregarTecnico.html';
+            } else if (currentContext === 'productores') {
+                window.location.href = '../JuntasLocales/agregarProductor.html';
+            } else if (currentContext === 'laboratorio') {
+                window.location.href = '../JuntasLocales/agregarLaboratorio.html';
+            } else if (currentContext === 'municipios') {
+                window.location.href = '../JuntasLocales/edit.html';
+            }
+        });
+
         // Función para filtrar los datos según el contexto
     function filtrarDatos(context) {
         const searchValue = $('#inputSearch').val().toLowerCase();
@@ -199,7 +211,7 @@
             `);
 
         $.ajax({
-            url: '../../Backend/JuntasLocales/obtenerProductores.php',
+            url: '../../Backend/Apeajal/obtenerProductores.php',
             type: 'GET',
             dataType: 'json',
             success: function(data) {
@@ -239,7 +251,7 @@
 
     function cargarSolicitudes() {
         $.ajax({
-            url: '../../Backend/JuntasLocales/obtenerSolicitudes.php',
+            url: '../../Backend/Apeajal/obtenerSolicitudes.php',
             type: 'GET',
             dataType: 'json',
             success: function(data) {
@@ -297,7 +309,7 @@
 
     // Hacer la llamada AJAX para obtener las huertas
     $.ajax({
-        url: '../../Backend/JuntasLocales/obtenerHuertas.php', // La URL del archivo PHP
+        url: '../../Backend/Apeajal/obtenerHuertas.php', // La URL del archivo PHP
         type: 'GET',
         dataType: 'json',
         success: function(data) {
@@ -379,7 +391,7 @@
 
     // Hacer la llamada AJAX para obtener los técnicos
     $.ajax({
-        url: '../../Backend/JuntasLocales/obtenerTecnicos.php', // La URL del archivo PHP
+        url: '../../Backend/Apeajal/obtenerTecnicos.php', // La URL del archivo PHP
         type: 'GET',
         dataType: 'json',
         success: function(data) {
@@ -429,10 +441,10 @@
 }
 
 function cargarLaboratorio() {
-    // Cambiar los encabezados de la tabla
-    $('.table-body thead').html(`
+   // Cambiar los encabezados de la tabla
+   $('.table-body thead').html(`
         <tr>
-            <th>Id Personal Laboratorio</th>
+            <th>Id Personal Lab</th>
             <th>Accion</th>
             <th>Nombre Usuario</th>
             <th>Nombre Junta Local</th>
@@ -442,6 +454,54 @@ function cargarLaboratorio() {
         </tr>
     `);
 
+    // Hacer la llamada AJAX para obtener los técnicos
+    $.ajax({
+        url: '../../Backend/Apeajal/obtenerLaboratorio.php', // La URL del archivo PHP
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            const tableBody = $('.table-body tbody');
+            tableBody.empty(); // Limpiar el contenido anterior de la tabla
+
+            // Verificar si se recibieron técnicos
+            if (data.length > 0 && !data.error) {
+                // Recorrer los datos recibidos y agregarlos a la tabla
+                $.each(data, function(index, laboratorio) {
+                    const row = `
+                        <tr>
+                            <td>${laboratorio.id_laboratorio}</td>
+                            <td>
+                                <button id="btnEdit" onclick="editRow(this)">
+                                    <ion-icon name="pencil-outline"></ion-icon>
+                                </button>
+                                <button id="btnDelete" onclick="deleteRow(this)">
+                                    <ion-icon name="trash-outline"></ion-icon>
+                                </button>
+                            </td>
+                            <td>${laboratorio.nombre_usuario}</td>
+                            <td>${laboratorio.nombre_junta}</td>
+                            <td>${laboratorio.correo}</td>
+                            <td>${laboratorio.teléfono }</td>
+                            <td>${laboratorio.estatus}</td>
+                        </tr>
+                    `;
+                    tableBody.append(row); // Agregar la fila a la tabla
+                });
+            } else {
+                // Mostrar un mensaje si no hay técnicos disponibles o hay un error
+                const row = `
+                    <tr>
+                        <td colspan="5">No se encontraron personal de laboratorio disponibles o ocurrió un error</td>
+                    </tr>
+                `;
+                tableBody.append(row);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error al obtener los técnicos:', status, error);
+            console.error('Respuesta del servidor:', xhr.responseText);
+        }
+    });
 }
 
     function cargarMunicipios() {
@@ -456,7 +516,7 @@ function cargarLaboratorio() {
 
     // Hacer la llamada AJAX para obtener los municipios
     $.ajax({
-        url: '../../Backend/JuntasLocales/obtenerMunicipios.php', // La URL correcta para obtener los municipios
+        url: '../../Backend/Apeajal/obtenerMunicipios.php', // La URL correcta para obtener los municipios
         type: 'GET',
         dataType: 'json',
         success: function(data) {
@@ -501,76 +561,76 @@ function cargarLaboratorio() {
     }
 });
 
-    function editRow(id_productor) {
-        //console.log('ID de productor:', id_productor);
-        $.ajax({
-            url: '../../Backend/JuntasLocales/envioDatosProductor.php?id_productor=' + id_productor,
-            type: 'GET',
-            dataType: 'json',
-            success: function(productor) {
+function editRow(id_productor) {
+    //console.log('ID de productor:', id_productor);
+    $.ajax({
+        url: '../../Backend/JuntasLocales/envioDatosProductor.php?id_productor=' + id_productor,
+        type: 'GET',
+        dataType: 'json',
+        success: function(productor) {
 
-                //console.log(productor); 
-                // Guarda los datos del productor en sessionStorage
-                sessionStorage.setItem('id_tipo', "productor");
-                sessionStorage.setItem('id_productor', id_productor);
-                sessionStorage.setItem('id_usuario', productor.id_usuario);
-                sessionStorage.setItem('nombre', productor.nombre);
-                sessionStorage.setItem('rfc', productor.rfc);
-                sessionStorage.setItem('curp', productor.curp);
-                sessionStorage.setItem('correo', productor.correo);
-                sessionStorage.setItem('telefono', productor.teléfono);
-                sessionStorage.setItem('contraseña', productor.contraseña);
-                sessionStorage.setItem('status', productor.estatus);
-                sessionStorage.setItem('jl_id', productor.idjuntalocal); 
-                sessionStorage.setItem('jl', productor.nombre_junta);
-
-                // Redirigir a editarProducto.html
-                window.location.href = '../JuntasLocales/editarProductor.html';
-            },
-            error: function(xhr, status, error) {
-                console.error('Error al obtener el productor:', status, error);
-                console.error('Respuesta del servidor:', xhr.responseText);
-            }
-        });
-    }
+            //console.log(productor); 
+            
+            // Guarda los datos del productor en sessionStorage
+            sessionStorage.setItem('id_tipo', "productor");
+            sessionStorage.setItem('id_productor', id_productor);
+            sessionStorage.setItem('id_usuario', productor.id_usuario);
+            sessionStorage.setItem('nombre', productor.nombre);
+            sessionStorage.setItem('rfc', productor.rfc);
+            sessionStorage.setItem('curp', productor.curp);
+            sessionStorage.setItem('correo', productor.correo);
+            sessionStorage.setItem('telefono', productor.teléfono);
+            sessionStorage.setItem('contraseña', productor.contraseña);
+            sessionStorage.setItem('status', productor.estatus);
+            sessionStorage.setItem('jl_id', productor.idjuntalocal); 
+            sessionStorage.setItem('jl', productor.nombre_junta);
+            // Redirigir a editarProducto.html
+            window.location.href = '../JuntasLocales/editarProductor.html';
+        },
+        error: function(xhr, status, error) {
+            console.error('Error al obtener el productor:', status, error);
+            console.error('Respuesta del servidor:', xhr.responseText);
+        }
+    });
+}
     
-    function editRowT(id_tecnico) {
-        $.ajax({
-            url: '../../Backend/JuntasLocales/envioDatosTecnico.php?id_tecnico=' + id_tecnico,
-            type: 'GET',
-            dataType: 'json',
-            success: function(tecnico) {
+function editRowT(id_tecnico) {
+    $.ajax({
+        url: '../../Backend/JuntasLocales/envioDatosTecnico.php?id_tecnico=' + id_tecnico,
+        type: 'GET',
+        dataType: 'json',
+        success: function(tecnico) {
 
-                //console.log(tecnico); 
-                // Guarda los datos del productor en sessionStorage
-                sessionStorage.setItem('id_tipo', "tecnico");
-                sessionStorage.setItem('id_tecnico', id_tecnico);
-                sessionStorage.setItem('id_usuario', tecnico.id_usuario);
-                sessionStorage.setItem('nombre', tecnico.nombre);
-                sessionStorage.setItem('correo', tecnico.correo);
-                sessionStorage.setItem('telefono', tecnico.teléfono);
-                sessionStorage.setItem('contraseña', tecnico.contraseña);
-                sessionStorage.setItem('status', tecnico.estatus);
-                sessionStorage.setItem('jl_id', tecnico.idjuntalocal); 
-                sessionStorage.setItem('jl', tecnico.nombre_junta);
-                sessionStorage.setItem('carga_municipios', tecnico.carga_municipios)
-                sessionStorage.setItem('municipios', tecnico.municipios)
+            //console.log(tecnico); 
+            // Guarda los datos del productor en sessionStorage
+            sessionStorage.setItem('id_tipo', "tecnico");
+            sessionStorage.setItem('id_tecnico', id_tecnico);
+            sessionStorage.setItem('id_usuario', tecnico.id_usuario);
+            sessionStorage.setItem('nombre', tecnico.nombre);
+            sessionStorage.setItem('correo', tecnico.correo);
+            sessionStorage.setItem('telefono', tecnico.teléfono);
+            sessionStorage.setItem('contraseña', tecnico.contraseña);
+            sessionStorage.setItem('status', tecnico.estatus);
+            sessionStorage.setItem('jl_id', tecnico.idjuntalocal); 
+            sessionStorage.setItem('jl', tecnico.nombre_junta);
+            sessionStorage.setItem('carga_municipios', tecnico.carga_municipios)
+            sessionStorage.setItem('municipios', tecnico.municipios)
 
-                // Redirigir a editarTecnico.html
-                window.location.href = '../JuntasLocales/editarTecnico.html';
-            },
-            error: function(xhr, status, error) {
-                console.error('Error al obtener el tecnico:', status, error);
-                console.error('Respuesta del servidor:', xhr.responseText);
-            }
-        });
-    }
+            // Redirigir a editarTecnico.html
+            window.location.href = '../JuntasLocales/editarTecnico.html';
+        },
+        error: function(xhr, status, error) {
+            console.error('Error al obtener el tecnico:', status, error);
+            console.error('Respuesta del servidor:', xhr.responseText);
+        }
+    });
+}
 
     </script>
     <!-- Ionicons-->
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <!-- Script of menu -->
-    <script src="../../Components/JuntasLocales/menuDesplegable.js"></script>
+    <script src="../../Components/Apeajal/menuDesplegable.js"></script>
 </body>
 </html>

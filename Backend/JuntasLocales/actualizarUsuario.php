@@ -52,7 +52,7 @@ if ($resultado_usuario === false) {
 
 // Actualizar tabla 'productores' si el tipo es productor
 if ($tipo == "productor") {
-    $sql_productor = "UPDATE productor SET 
+    $sql_productor = "UPDATE productores SET 
                         rfc = '$rfc', 
                         estatus = '$estatus', 
                         curp = '$curp', 
