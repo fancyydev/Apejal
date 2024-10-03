@@ -11,6 +11,7 @@ require_once($_SERVER['DOCUMENT_ROOT']."/proyectoApeajal/APEJAL/Backend/DataBase
 $tipo = $_POST['tipo'] ?? '';
 $id_productor = $_POST['id_productor'] ?? '';
 $id_tecnico = $_POST['id_tecnico'] ?? '';
+$id_laboratorio = $_POST['id_laboratorio'] ?? '';
 $id_usuario = $_POST['id_usuario'] ?? '';
 $nombre = $_POST['nombre'] ?? '';
 $correo = $_POST['email'] ?? '';
@@ -22,6 +23,8 @@ $juntalocal = (int) ($_POST['jl'] ?? 0);
 $estatus = $_POST["status"] ?? '';
 $estatusT = $_POST["statusT"] ?? '';
 $jlT = (int) ($_POST['jlT'] ?? 0);
+$estatusLab = $_POST["statusLab"] ?? '';
+$jlLab= (int) ($_POST['jlLab'] ?? 0);
 $municipiosSeleccionados = isset($_POST['municipio']) ? $_POST['municipio'] : [];
 $municipio = implode(',', $municipiosSeleccionados);
 
@@ -77,6 +80,18 @@ if ($tipo == "productor") {
     if ($resultado_tecnico === false) {
         $errorInfo = $conn->errorInfo();
         die("Error al actualizar tecnico " . implode(", ", $errorInfo));
+    }
+} else if ($tipo == "laboratorio") {
+    $sql_laboratorio = "UPDATE laboratorio SET
+                      idjuntaLocal = $jlLab, 
+                      estatus = '$estatusLab'
+                    WHERE id_laboratorio = $id_laboratorio";
+    
+    $resultado_laboratorio = $conn->exec($sql_laboratorio);
+    
+    if ($resultado_laboratorio === false) {
+        $errorInfo = $conn->errorInfo();
+        die("Error al actualizar perosnal de laboratorio " . implode(", ", $errorInfo));
     }
 }
 

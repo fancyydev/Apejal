@@ -1,0 +1,24 @@
+ID Laboratorio: 4
+ID Usuario: 34
+ID Laboratorio: 4
+Nombre: Laboratorio 56
+Tipo: laboratorio
+email: david.fregoso.leon@gmail.com
+telefono: 3751197174
+contra: contraseña
+jlLab: 2
+status: activo
+ID Laboratorio: 4
+ID Usuario: 34
+ID Laboratorio: 4
+Nombre: Laboratorio 56
+Tipo: laboratorio
+email: david.fregoso.leon@gmail.com
+telefono: 3751197174
+contra: contraseña
+jlLab: 2
+status: inactivo
+ID Laboratorio: 6
+ID Laboratorio: 6
+ID Laboratorio: 4
+ID Laboratorio: 5

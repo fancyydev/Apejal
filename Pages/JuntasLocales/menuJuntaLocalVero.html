@@ -223,7 +223,7 @@
                         <tr>
                             <td>${productor.id_productor}</td>
                             <td>
-                                <button id="btnEdit" onclick="editRow(${productor.id_productor})">
+                                <button id="btnEdit" onclick="editRow(${productor.id_productor}, 'productor')">
                                     <ion-icon name="pencil-outline"></ion-icon>
                                 </button>
                                 <button id="btnDelete" onclick="deleteRow(this)">
@@ -406,7 +406,7 @@
                         <tr>
                             <td>${tecnico.id_tecnico}</td>
                             <td>
-                                <button id="btnEdit" onclick="editRowT(${tecnico.id_tecnico})">
+                                <button id="btnEdit" onclick="editRow(${tecnico.id_tecnico}, 'tecnico')">
                                     <ion-icon name="pencil-outline"></ion-icon>
                                 </button>
                                 <button id="btnDelete" onclick="deleteRow(this)">
@@ -471,7 +471,7 @@ function cargarLaboratorio() {
                         <tr>
                             <td>${laboratorio.id_laboratorio}</td>
                             <td>
-                                <button id="btnEdit" onclick="editRow(this)">
+                                <button id="btnEdit" onclick="editRow(${laboratorio.id_laboratorio}, 'laboratorio')">
                                     <ion-icon name="pencil-outline"></ion-icon>
                                 </button>
                                 <button id="btnDelete" onclick="deleteRow(this)">
@@ -561,6 +561,78 @@ function cargarLaboratorio() {
     }
 });
 
+function editRow(id, tipo) {
+    
+    let url = '';
+    if (tipo === 'productor') {
+        url = '../../Backend/JuntasLocales/envioDatosProductor.php?id_productor=' + id;
+    } else if (tipo === 'tecnico') {
+        url = '../../Backend/JuntasLocales/envioDatosTecnico.php?id_tecnico=' + id;
+    } else if(tipo == 'laboratorio') {
+        url = '../../Backend/JuntasLocales/envioDatosPLaboratorio.php?id_laboratorio=' + id;
+    } else {
+        console.error('Tipo desconocido:', tipo);
+        return;
+    }
+
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            // Guarda los datos en sessionStorage
+            sessionStorage.setItem('id_tipo', tipo);
+            if (tipo === 'productor') {
+                sessionStorage.setItem('id_productor', id);
+                sessionStorage.setItem('id_usuario', data.id_usuario);
+                sessionStorage.setItem('nombre', data.nombre);
+                sessionStorage.setItem('rfc', data.rfc);
+                sessionStorage.setItem('curp', data.curp);
+                sessionStorage.setItem('correo', data.correo);
+                sessionStorage.setItem('telefono', data.teléfono);
+                sessionStorage.setItem('contraseña', data.contraseña);
+                sessionStorage.setItem('status', data.estatus);
+                sessionStorage.setItem('jl_id', data.idjuntalocal); 
+                sessionStorage.setItem('jl', data.nombre_junta);
+                // Redirigir a editarProductor.html
+                window.location.href = '../JuntasLocales/editarProductor.html';
+
+            } else if (tipo === 'tecnico') {
+                sessionStorage.setItem('id_tecnico', id);
+                sessionStorage.setItem('id_usuario', data.id_usuario);
+                sessionStorage.setItem('nombre', data.nombre);
+                sessionStorage.setItem('correo', data.correo);
+                sessionStorage.setItem('telefono', data.teléfono);
+                sessionStorage.setItem('contraseña', data.contraseña);
+                sessionStorage.setItem('status', data.estatus);
+                sessionStorage.setItem('jl_id', data.idjuntalocal); 
+                sessionStorage.setItem('jl', data.nombre_junta);
+                sessionStorage.setItem('carga_municipios', data.carga_municipios);
+                sessionStorage.setItem('municipios', data.municipios);
+                // Redirigir a editarTecnico.html
+                window.location.href = '../JuntasLocales/editarTecnico.html';
+            } else if (tipo == 'laboratorio') {
+                sessionStorage.setItem('id_laboratorio', id);
+                sessionStorage.setItem('id_usuario', data.id_usuario);
+                sessionStorage.setItem('nombre', data.nombre);
+                sessionStorage.setItem('correo', data.correo);
+                sessionStorage.setItem('telefono', data.teléfono);
+                sessionStorage.setItem('contraseña', data.contraseña);
+                sessionStorage.setItem('status', data.estatus);
+                sessionStorage.setItem('jl_id', data.idjuntalocal); 
+                sessionStorage.setItem('jl', data.nombre_junta);
+                window.location.href = '../JuntasLocales/editarLaboratorio.html';
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error al obtener los datos:', status, error);
+            console.error('Respuesta del servidor:', xhr.responseText);
+        }
+    });
+}
+
+/*
+
 function editRow(id_productor) {
     //console.log('ID de productor:', id_productor);
     $.ajax({
@@ -624,7 +696,7 @@ function editRowT(id_tecnico) {
             console.error('Respuesta del servidor:', xhr.responseText);
         }
     });
-}
+}*/
 
     </script>
     <!-- Ionicons-->
