@@ -89,7 +89,7 @@
                                     <option value="" disabled selected>Seleccione un tipo de usuario</option>
                                     <option value="tecnico">Técnico</option>
                                     <option value="productor">Productor</option>
-                                    <option value="personalLab">Personal personalLab</option>
+                                    <option value="personalLab">Personal Laboratorio</option>
                                     <option value="adminJL">Administrador de Junta Local</option>
                                 </select>
                             </div>
@@ -100,11 +100,11 @@
                         <div class="row g-3" id="rfcCurpFields" style="display: none;">
                             <div class="col-md-5">
                                 <label for="rfc" class="form-label">RFC</label>
-                                <input class="form-control" type="text" name="rfc" id="rfc" />
+                                <input class="form-control" type="text" name="rfc" id="rfc" maxlength="13"/>
                             </div>
                             <div class="col-md-5">
                                 <label for="curp" class="form-label">CURP</label>
-                                <input class="form-control" type="text" name="curp" id="curp" />
+                                <input class="form-control" type="text" name="curp" id="curp" maxlength="18"/>
                             </div>
                             <div class="col-md-5">
                                 <label for="status" class="form-label">Estatus</label>
@@ -171,7 +171,7 @@
                         <div class="row g-3 p-4">
                             <div class="col-md-5">
                                 <label for="staticEmail" class="form-label">Nombre</label>
-                                <input class="form-control" type="text" name="nombre" id="nombre" />
+                                <input class="form-control" type="text" name="nombre" id="nombre" maxlength="50"/>
                             </div>
                         </div>
                         <br>
@@ -179,15 +179,15 @@
                         <div class="row g-3 p-4">
                             <div class="col-md-4">
                                 <label for="correo" class="form-label">Correo</label>
-                                <input class="form-control" type="text" name="email" id="email" />
+                                <input class="form-control" type="text" name="email" id="email" maxlength="50"/>
                             </div>
                             <div class="col-md-4">
                                 <label for="telefono" class="form-label">Teléfono</label>
-                                <input class="form-control" type="text" name="telefono" id="telefono" />
+                                <input class="form-control" type="text" name="telefono" id="telefono" maxlength="15" />
                             </div>
                             <div class="col-md-4">
                                 <label for="contra" class="form-label">Contraseña</label>
-                                <input class="form-control" type="text" name="contra" id="contra" />
+                                <input class="form-control" type="text" name="contra" id="contra" maxlength="30"/>
                             </div>
                         </div>
                         <br>
