@@ -521,7 +521,7 @@
                                     }).then((result) => {
                                         // Redirigir a la página deseada cuando el usuario hace clic en "Aceptar"
                                         if (result.isConfirmed) {
-                                            window.location.href = "../JuntasLocales/menuJuntaLocalVero.html";
+                                            window.location.href = "../JuntasLocales/menuJuntaLocal.php";
                                         }
                                     });
                                 } else if (response.error) {
@@ -543,7 +543,7 @@
                                         }).then((result) => {
                                             // Redirigir a la página deseada cuando el usuario hace clic en "Aceptar"
                                             if (result.isConfirmed) {
-                                                window.location.href = "../JuntasLocales/menuJuntaLocalVero.html";
+                                                window.location.href = "../JuntasLocales/menuJuntaLocal.php";
                                             }
                                         });
                                     } else if (res.error) {
@@ -572,7 +572,7 @@
 
         $('#Cancelar').click(function() {
             //Ver a donde redireccionar
-            window.location.href = "../JuntasLocales/menuJuntaLocalVero.html";
+            window.location.href = "../JuntasLocales/menuJuntaLocal.php";
 
         });
     });

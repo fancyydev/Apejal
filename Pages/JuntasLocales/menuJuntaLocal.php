@@ -50,6 +50,11 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
             <span>Productores</span>
         </button>
 
+        <button class="boton" data-content="laboratorio">
+            <ion-icon name="location-outline"></ion-icon>
+            <span>Laboratorio</span>
+        </button>
+
         <button class="boton" data-content="municipios">
             <ion-icon name="location-outline"></ion-icon>
             <span>Municipios</span>
@@ -117,6 +122,12 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
             cargarTecnicos(); 
             currentContext = 'tecnicos';
         });
+
+        $('button[data-content="laboratorio"]').click(function() {
+            $('#title').text('Laboratorio'); 
+            cargarLaboratorio(); 
+            currentContext = 'laboratorio';
+        });
         
         $('button[data-content="municipios"]').click(function() {
             $('#title').text('Municipios');
@@ -135,6 +146,23 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
             }
         });
 
+        $('#btnAdd').on('click', function() {
+            if (currentContext === 'solicitudes') {
+                window.location.href = '../JuntasLocales/agregarJL.html';
+            } else if (currentContext === 'huertas') {
+                window.location.href = '../JuntasLocales/agregarHuerta.html';
+            } else if (currentContext === 'tecnicos') {
+                console.log("Si entro al if pero no mando a agregar tecnicos");
+                window.location.href = '../JuntasLocales/agregarTecnico.html';
+            } else if (currentContext === 'productores') {
+                window.location.href = '../JuntasLocales/agregarProductor.html';
+            } else if (currentContext === 'laboratorio') {
+                window.location.href = '../JuntasLocales/agregarLaboratorio.html';
+            } else if (currentContext === 'municipios') {
+                window.location.href = '../JuntasLocales/edit.html';
+            }
+        });
+
         // Función para filtrar los datos según el contexto
     function filtrarDatos(context) {
         const searchValue = $('#inputSearch').val().toLowerCase();
@@ -150,6 +178,13 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                     showRow = true;
                 }
             } else if (context === 'tecnicos') {
+                const nombre = row.find('td:eq(2)').text().toLowerCase(); // Nombre Usuario
+                const correo = row.find('td:eq(4)').text().toLowerCase(); // Correo
+                const junta = row.find('td:eq(3)').text().toLowerCase();  // Nombre Junta Local
+                if (nombre.includes(searchValue) || correo.includes(searchValue) || junta.includes(searchValue)) {
+                    showRow = true;
+                }
+            } else if (context === 'laboratorio') {
                 const nombre = row.find('td:eq(2)').text().toLowerCase(); // Nombre Usuario
                 const correo = row.find('td:eq(4)').text().toLowerCase(); // Correo
                 const junta = row.find('td:eq(3)').text().toLowerCase();  // Nombre Junta Local
@@ -209,7 +244,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                         <tr>
                             <td>${productor.id_productor}</td>
                             <td>
-                                <button id="btnEdit" onclick="editRow(this)">
+                                <button id="btnEdit" onclick="editRow(${productor.id_productor}, 'productor')">
                                     <ion-icon name="pencil-outline"></ion-icon>
                                 </button>
                                 <button id="btnDelete" onclick="deleteRow(this)">
@@ -392,7 +427,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                         <tr>
                             <td>${tecnico.id_tecnico}</td>
                             <td>
-                                <button id="btnEdit" onclick="editRow(this)">
+                                <button id="btnEdit" onclick="editRow(${tecnico.id_tecnico}, 'tecnico')">
                                     <ion-icon name="pencil-outline"></ion-icon>
                                 </button>
                                 <button id="btnDelete" onclick="deleteRow(this)">
@@ -414,6 +449,70 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                 const row = `
                     <tr>
                         <td colspan="5">No se encontraron técnicos o ocurrió un error</td>
+                    </tr>
+                `;
+                tableBody.append(row);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error al obtener los técnicos:', status, error);
+            console.error('Respuesta del servidor:', xhr.responseText);
+        }
+    });
+}
+
+function cargarLaboratorio() {
+   // Cambiar los encabezados de la tabla
+   $('.table-body thead').html(`
+        <tr>
+            <th>Id Personal Lab</th>
+            <th>Accion</th>
+            <th>Nombre Usuario</th>
+            <th>Nombre Junta Local</th>
+            <th>Correo</th>
+            <th>Teléfono</th>
+            <th>Estatus</th>
+        </tr>
+    `);
+
+    // Hacer la llamada AJAX para obtener los técnicos
+    $.ajax({
+        url: '../../Backend/Apeajal/obtenerLaboratorio.php', // La URL del archivo PHP
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            const tableBody = $('.table-body tbody');
+            tableBody.empty(); // Limpiar el contenido anterior de la tabla
+
+            // Verificar si se recibieron técnicos
+            if (data.length > 0 && !data.error) {
+                // Recorrer los datos recibidos y agregarlos a la tabla
+                $.each(data, function(index, laboratorio) {
+                    const row = `
+                        <tr>
+                            <td>${laboratorio.id_laboratorio}</td>
+                            <td>
+                                <button id="btnEdit" onclick="editRow(${laboratorio.id_laboratorio}, 'laboratorio')">
+                                    <ion-icon name="pencil-outline"></ion-icon>
+                                </button>
+                                <button id="btnDelete" onclick="deleteRow(this)">
+                                    <ion-icon name="trash-outline"></ion-icon>
+                                </button>
+                            </td>
+                            <td>${laboratorio.nombre_usuario}</td>
+                            <td>${laboratorio.nombre_junta}</td>
+                            <td>${laboratorio.correo}</td>
+                            <td>${laboratorio.teléfono }</td>
+                            <td>${laboratorio.estatus}</td>
+                        </tr>
+                    `;
+                    tableBody.append(row); // Agregar la fila a la tabla
+                });
+            } else {
+                // Mostrar un mensaje si no hay técnicos disponibles o hay un error
+                const row = `
+                    <tr>
+                        <td colspan="5">No se encontraron personal de laboratorio disponibles o ocurrió un error</td>
                     </tr>
                 `;
                 tableBody.append(row);
@@ -482,6 +581,77 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
         });
     }
 });
+
+function editRow(id, tipo) {
+    
+    let url = '';
+    if (tipo === 'productor') {
+        url = '../../Backend/JuntasLocales/envioDatosProductor.php?id_productor=' + id;
+    } else if (tipo === 'tecnico') {
+        url = '../../Backend/JuntasLocales/envioDatosTecnico.php?id_tecnico=' + id;
+    } else if(tipo == 'laboratorio') {
+        url = '../../Backend/JuntasLocales/envioDatosPLaboratorio.php?id_laboratorio=' + id;
+    } else {
+        console.error('Tipo desconocido:', tipo);
+        return;
+    }
+
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            // Guarda los datos en sessionStorage
+            sessionStorage.setItem('id_tipo', tipo);
+            if (tipo === 'productor') {
+                sessionStorage.setItem('id_productor', id);
+                sessionStorage.setItem('id_usuario', data.id_usuario);
+                sessionStorage.setItem('nombre', data.nombre);
+                sessionStorage.setItem('rfc', data.rfc);
+                sessionStorage.setItem('curp', data.curp);
+                sessionStorage.setItem('correo', data.correo);
+                sessionStorage.setItem('telefono', data.teléfono);
+                sessionStorage.setItem('contraseña', data.contraseña);
+                sessionStorage.setItem('status', data.estatus);
+                sessionStorage.setItem('jl_id', data.idjuntalocal); 
+                sessionStorage.setItem('jl', data.nombre_junta);
+                // Redirigir a editarProductor.html
+                window.location.href = '../JuntasLocales/editarProductor.html';
+
+            } else if (tipo === 'tecnico') {
+                sessionStorage.setItem('id_tecnico', id);
+                sessionStorage.setItem('id_usuario', data.id_usuario);
+                sessionStorage.setItem('nombre', data.nombre);
+                sessionStorage.setItem('correo', data.correo);
+                sessionStorage.setItem('telefono', data.teléfono);
+                sessionStorage.setItem('contraseña', data.contraseña);
+                sessionStorage.setItem('status', data.estatus);
+                sessionStorage.setItem('jl_id', data.idjuntalocal); 
+                sessionStorage.setItem('jl', data.nombre_junta);
+                sessionStorage.setItem('carga_municipios', data.carga_municipios);
+                sessionStorage.setItem('municipios', data.municipios);
+                // Redirigir a editarTecnico.html
+                window.location.href = '../JuntasLocales/editarTecnico.html';
+            } else if (tipo == 'laboratorio') {
+                sessionStorage.setItem('id_laboratorio', id);
+                sessionStorage.setItem('id_usuario', data.id_usuario);
+                sessionStorage.setItem('nombre', data.nombre);
+                sessionStorage.setItem('correo', data.correo);
+                sessionStorage.setItem('telefono', data.teléfono);
+                sessionStorage.setItem('contraseña', data.contraseña);
+                sessionStorage.setItem('status', data.estatus);
+                sessionStorage.setItem('jl_id', data.idjuntalocal); 
+                sessionStorage.setItem('jl', data.nombre_junta);
+                window.location.href = '../JuntasLocales/editarLaboratorio.html';
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error al obtener los datos:', status, error);
+            console.error('Respuesta del servidor:', xhr.responseText);
+        }
+    });
+}
+
 
 </script>
 
