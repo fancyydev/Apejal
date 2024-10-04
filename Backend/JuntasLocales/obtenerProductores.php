@@ -23,11 +23,15 @@ if (!isset($_SESSION["id"])) {
 
 // Consulta para obtener los datos filtrados por el ID de usuario
 $id = $_SESSION["id"];
-$sql = "SELECT p.id_productor, u.nombre, j.nombre AS nombre_junta, u.correo, u.teléfono, p.rfc, p.curp, p.estatus
-        FROM productores p
-        JOIN usuario u ON p.id_usuario = u.id_usuario
-        JOIN juntaslocales j ON p.idjuntalocal = j.idjuntalocal
-        WHERE u.id_usuario = :id"; // Uso de parámetro nombrado
+$sql = "SELECT p.id_productor, u.nombre AS nombre, u.correo, u.teléfono, p.rfc, p.curp, p.estatus, j.nombre AS nombre_junta
+FROM productores p
+JOIN juntaslocales j ON p.idjuntalocal = j.idjuntalocal
+JOIN usuario u ON p.id_usuario = u.id_usuario
+WHERE j.idjuntalocal = (
+    SELECT j2.idjuntalocal 
+    FROM juntaslocales j2
+    WHERE j2.id_usuario = :id
+);"; // Uso de parámetro nombrado
 
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':id', $id, PDO::PARAM_INT); // Asignar el ID a la consulta

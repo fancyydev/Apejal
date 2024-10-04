@@ -24,11 +24,17 @@ if ($conn->errorCode() !== "00000") {
 }
 
 // Consulta para obtener los datos del técnico filtrado por el ID del usuario
-$sql = "SELECT t.id_tecnico, u.nombre AS nombre_usuario, u.correo, u.teléfono, t.carga_municipios, t.estatus, j.nombre AS nombre_junta
-        FROM tecnico t
-        JOIN juntaslocales j ON t.idjuntalocal = j.idjuntalocal
-        JOIN usuario u ON j.id_usuario = u.id_usuario
-        WHERE u.id_usuario = :id_usuario"; // Usamos un parámetro para la consulta
+$sql = "SELECT DISTINCT t.id_tecnico, u.nombre AS nombre_usuario, u.correo, u.teléfono, 
+                t.carga_municipios, t.estatus, j.nombre AS nombre_junta
+FROM tecnico t
+JOIN juntaslocales j ON t.idjuntalocal = j.idjuntalocal
+JOIN usuario u ON t.id_usuario = u.id_usuario -- Relación del técnico con el usuario para obtener nombre, correo y teléfono
+WHERE j.idjuntalocal = (
+    SELECT j2.idjuntalocal 
+    FROM juntaslocales j2
+    WHERE j2.id_usuario = :id_usuario
+);
+"; // Usamos un parámetro para la consulta
 
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT); // Vinculamos el parámetro
