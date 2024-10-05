@@ -36,8 +36,6 @@
     <!--Links para funciones auxliar-->
     <script src="../../Components/Auxiliar/auxliar.js" ></script>
     <script src="../../Components/Login/login.js"></script>
-    <script src="../../Components/Huertas/llenadoFormularios.js"></script>
-
 </head>
 <body onload="onload()">
     <div>
@@ -140,31 +138,27 @@
                                 </div>
                                 <br>
                                 <div class="row g-3">
-                                    <!--
                                     <div class="col-md-4">
                                         <label for="staticEmail" class="form-label">Junta Local</label>
                                         <select class="form-control" name="jl" id="jl" >
                                             <option value="">Seleccione Junta local</option>
                                         </select>
                                     </div>  
-                                    -->
                                     <div class="col-md-4">
-                                        <label for="staticEmail" class="form-label">Ciudad</label>
-                                        <select class="form-control" name="ciudad" id="ciudad">
-                                            <option value="">Seleccione ciudad</option>
-                                        </select>
+                                        <label for="staticEmail" class="form-label">Municipio</label>
+                                        <select id="municipios" class="form-control"></select>
                                     </div>                                      
                                     <div class="col-md-4">
                                         <label for="staticEmail" class="form-label">Hectareas</label>
                                         <input class="form-control decimal-input" type="number" name="hectareas" id="hectareas" step="0.001" min="0">
                                     </div>
+                                </div>
+                                <br>
+                                <div class="row g-3">
                                     <div class="col-md-4">
                                         <label for="staticEmail" class="form-label">Pronostico de cosecha</label>
                                         <input class="form-control decimal-input" type="number" name="proCosecha" id="proCosecha" >
                                     </div>
-                                </div>
-                                <br>
-                                <div class="row g-3">
                                     <div class="col-md-4">
                                         <label for="staticEmail" class="form-label">Variedad</label>
                                         <select class="form-control" name="variedad" id="variedad">
@@ -178,13 +172,14 @@
                                         <label for="staticEmail" class="form-label">Árboles por hectarea</label>
                                         <input class="form-control entero-input" type="number" name="arbolH" id="arbolH" min="0" step="1" >
                                     </div>
+                                    
+                                </div>
+                                <br>
+                                <div class="row g-3">
                                     <div class="col-md-4">
                                         <label for="staticEmail" class="form-label">Total árboles</label>
                                         <input class="form-control entero-input" type="number" name="totalArboles" id="totalArboles" min="0" step="1"/>
                                     </div>
-                                </div>
-                                <br>
-                                <div class="row g-3">
                                     <div class="col-md-4">
                                         <label for="staticEmail" class="form-label">Año plantación</label>
                                         <select class="form-control" name="aPlantacion" id="aPlantacion" >
@@ -195,13 +190,14 @@
                                         <label for="staticEmail" class="form-label">Etapa fenologica</label>
                                         <input class="form-control" type="text" name="etaFenologica" id="etaFenologica" maxlength="50"/>
                                     </div>
+                                    
+                                </div>
+                                <br>
+                                <div class="row g-3">
                                     <div class="col-md-4">
                                         <label for="staticEmail" class="form-label">Fecha SV-01</label>
                                         <input class="form-control" type="text" name="fechaSV1" id="fechaSV1" />
                                     </div>
-                                </div>
-                                <br>
-                                <div class="row g-3">
                                     <div class="col-md-4">
                                         <label for="staticEmail" class="form-label">Fecha SV-02</label>
                                         <input class="form-control" type="text" name="fechaSV2" id="fechaSV2" />
@@ -210,13 +206,14 @@
                                         <label for="staticEmail" class="form-label">Centroide</label>
                                         <input class="form-control" type="text" name="centroide" id="centroide" maxlength="20"/>
                                     </div>                                    
-                                    <div class="col-md-4">
-                                        <label for="staticEmail" class="form-label">Longitud</label>
-                                        <input class="form-control" type="text" name="longitud" id="longitud" />
-                                    </div>                                    
+                                                                     
                                 </div>
                                 <br>
                                 <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label for="staticEmail" class="form-label">Longitud</label>
+                                        <input class="form-control" type="text" name="longitud" id="longitud" />
+                                    </div>   
                                     <div class="col-md-4">
                                         <label for="staticEmail" class="form-label">Altitud</label>
                                         <input class="form-control" type="text" name="altitud" id="altitud" />
@@ -225,10 +222,14 @@
                                         <label for="staticEmail" class="form-label">Altura nivel del mar</label>
                                         <input class="form-control" type="text" name="altNivMar" id="altNivMar" />
                                     </div>   
+                                                          
+                                </div>
+                                <br>
+                                <div class="row g-3">
                                     <div class="col-md-4">
                                         <label for="staticEmail" class="form-label">Fecha de registro</label>
                                         <input class="form-control" type="text" name="fechaReg" id="fechaReg" />
-                                    </div>                         
+                                    </div>                  
                                 </div>
                                 <br>
                                 <div class="row g-3">
@@ -262,9 +263,20 @@
             </div>
         </div>
 <br>
-<script>
 
+
+<script>
+    
     document.addEventListener('DOMContentLoaded', function() {
+        const aPlantacionSelect = document.getElementById('aPlantacion');
+
+        for (let year = 2000; year <= 2050; year++) {
+            const option = document.createElement('option');
+            option.value = year; 
+            option.textContent = year;
+            aPlantacionSelect.appendChild(option);
+        }
+
         var elementosOcultar = document.querySelectorAll('.ocultar');
 
         elementosOcultar.forEach(function(elemento) {
@@ -375,7 +387,7 @@
         }
     });
 
-    /*
+    
     $.ajax({
         url: '../../Backend/Huertas/obtenerJL.php',
         type: 'GET',
@@ -393,7 +405,34 @@
             console.error('Error al obtener juntas locales:', status, error);
         }
     });
-    */
+    
+    // Cargar Municipios según Junta Local seleccionada
+    $('#jl').on('change', function() {
+        var idJuntaLocal = $(this).val();
+        if (idJuntaLocal) {
+            $.ajax({
+                url: '../../Backend/JuntasLocales/obtenerMunicipiosEsp.php',
+                type: 'POST',
+                data: {idJuntaLocal: idJuntaLocal},
+                dataType: 'json',
+                success: function(response) {
+                    $('#municipios').empty();
+                    $.each(response, function(index, municipio) {
+                        $('#municipios').append($('<option>', {
+                            value: municipio.id_municipio,
+                            text: municipio.nombre
+                        }));
+                    });
+                },
+                error: function() {
+                    $('#municipios').html('<p>Error al obtener los municipios.</p>');
+                }
+            });
+        } else {
+            $('#municipios').empty();
+        }
+    });
+
     
 
         const aux = new auxliar();
@@ -447,8 +486,8 @@
                         {"valor": document.getElementById("nomEmpresa").value, "typeOf": "string", "mensaje": "<p>Insertar nombre de empresa</p><br>"},
                         {"valor": document.getElementById("encEmpresa").value, "typeOf": "string", "mensaje": "<p>Insertar nombre de encargado de empresa</p><br>"},
                         {"valor": document.getElementById("supHue").value, "typeOf": "string", "mensaje": "<p>Insertar supervisor</p><br>"},
-                        {"valor":document.getElementById("ciudad").value,"typeOf":"string","mensaje":"<p>Insertar ciudad</p><br>"},
-                        //{"valor": document.getElementById("jl").value, "typeOf": "string", "mensaje": "<p>Insertar junta local</p><br>"},
+                        {"valor":document.getElementById("municipios").value,"typeOf":"string","mensaje":"<p>Seleccionar municipios</p><br>"},
+                        {"valor": document.getElementById("jl").value, "typeOf": "string", "mensaje": "<p>Insertar junta local</p><br>"},
                         {"valor": document.getElementById("hectareas").value, "typeOf": "int", "mensaje": "<p>Insertar hectareas</p><br>"},
                         {"valor": document.getElementById("proCosecha").value, "typeOf": "int", "mensaje": "<p>Insertar pronostico de cosecha</p><br>"},
                         {"valor": document.getElementById("variedad").value, "typeOf": "string", "mensaje": "<p>Insertar variedad</p><br>"},
@@ -484,8 +523,8 @@
                     formData.append('nomEmpresa', document.getElementById('nomEmpresa').value);
                     formData.append('encEmpresa', document.getElementById('encEmpresa').value);
                     formData.append('supHue', document.getElementById('supHue').value);
-                    formData.append('ciudad', document.getElementById('ciudad').value);
-                    //formData.append('jl', document.getElementById('jl').value);
+                    formData.append('municipios', document.getElementById('municipios').value);
+                    formData.append('jl', document.getElementById('jl').value);
                     formData.append('hectareas', document.getElementById('hectareas').value);
                     formData.append('proCosecha', document.getElementById('proCosecha').value);
                     formData.append('variedad', document.getElementById('variedad').value);
