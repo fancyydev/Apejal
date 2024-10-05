@@ -120,7 +120,7 @@
                                     </div>
                                 </div>
                                 <br>
-                                <div class="row g-3"></div>
+                                <div class="row g-3">
                                     <div class="col-md-5">
                                         <label for="status" class="form-label">Estatus</label>
                                         <select class="form-control" name="status" id="status">
@@ -129,6 +129,13 @@
                                             <option value="inactivo">Inactivo</option>
                                         </select>
                                     </div>                                                   
+                                </div>
+                                <br>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="staticEmail" class="form-label">Imagen Junta Local</label>
+                                        <input class="form-control" type="file" name="img" id="img" accept="image/*"  />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -203,7 +210,7 @@
                     console.error('Error al obtener los administradores:', status, error);
                 }
             });
-
+            /*
             $.ajax({
                 url: '../../Backend/JuntasLocales/obtenerMunicipios.php',
                 method: 'GET',
@@ -216,14 +223,32 @@
                 error: function() {
                     aux.alert('<h5>Error</h5><br/><p>No se pudieron cargar los municipios</p>', true, true);
                 }
+            });*/
+
+            $('#img').on('change', function() {
+                var fileInput = document.getElementById('img');
+                var filePath = fileInput.value;
+                var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i; // Expresión regular para aceptar solo imágenes
+                if (!allowedExtensions.exec(filePath)) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Archivo no válido',
+                        text: 'Por favor, seleccione una imagen válida.',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Entendido'
+                    });
+                    //Borrar el archivo seleccionado
+                    fileInput.value = '';
+                }
             });
+
 
             $('#registrar').click(function() {
                 var municipiosSeleccionados = [];
                 $('input[name="municipio[]"]:checked').each(function() {
                     municipiosSeleccionados.push($(this).val());
                 });
-                
+            
             var resultado = aux.validateAll(
                     [
                         {"valor":document.getElementById("nombre").value,"typeOf":"string","mensaje":"<p>Insertar nombre</p><br>"},
@@ -233,11 +258,14 @@
                         {"valor": municipiosSeleccionados.length > 0 ? "1" : "", "typeOf": "string", "mensaje": "<p>Seleccionar municipios</p><br>"},
                         {"valor":document.getElementById("admin").value,"typeOf":"int","mensaje":"<p>Seleccionar administrador</p><br>"},
                         {"valor":document.getElementById("status").value,"typeOf":"int","mensaje":"<p>Seleccionar estatus</p><br>"},
-                     ]
+                        {"valor": $('#img')[0].files.length > 0, "typeOf": "file", "mensaje": "<p>Insertar una imagen</p><br>"}               
+                    ]
                 );
-            console.log(resultado)
-            if(resultado.estado){
+            console.log(municipiosSeleccionados)
+
+            if (resultado.estado) {
                 const formData = new FormData();
+                formData.append("file", document.querySelector("#img").files[0]);
                 formData.append("nombre", document.getElementById("nombre").value);
                 formData.append("domicilio", document.getElementById("domicilio").value);
                 formData.append("telefono", document.getElementById("telefono").value);
@@ -247,31 +275,23 @@
                 formData.append("status", document.getElementById("status").value);
 
                 $.ajax({
-                    url: '../../Backend/JuntasLocales/registrarJuntaLocal.php',
+                    url: '../../Backend/Apeajal/registrarJuntaLocal.php',
                     method: 'POST',
-                    data: JSON.stringify({
-                        "nombre":document.getElementById("nombre").value,
-                        "domicilio":document.getElementById("domicilio").value,
-                        "telefono":document.getElementById("telefono").value,
-                        "correo":document.getElementById("correo").value,
-                        "municipios": municipiosSeleccionados,
-                        "admin":document.getElementById("admin").value,
-                        "status":document.getElementById("status").value
-                    }),
-                    contentType: 'application/json',
-                    success: function(respuesta){
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(respuesta) {
                         Swal.fire({
-                                title: 'Listo',
-                                html: '<p>Guardado correctamente</p>',
-                                icon: 'success',
-                                showConfirmButton: true,
-                                allowOutsideClick: false
-                            }).then((result) => {
-                                // Redirigir a la página deseada cuando el usuario hace clic en "Aceptar"
-                                if (result.isConfirmed) {
-                                    window.location.href = "../Apeajal/menuApeajal.html";
-                                }
-                            });
+                            title: 'Listo',
+                            html: '<p>Guardado correctamente</p>',
+                            icon: 'success',
+                            showConfirmButton: true,
+                            allowOutsideClick: false
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                //window.location.href = "../Apeajal/menuApeajal.html"; // Redirigir a la página deseada
+                            }
+                        });
                     },
                     error: function() {
                         aux.cerrar();
@@ -280,8 +300,8 @@
                 });
             } else {
                 aux.alert(resultado.texto, true, true);
-            }
-            });
+            }            
+        });
 
             $('#Cancelar').click(function() {
                 window.location.href = "../Apeajal/menuApeajal.html";

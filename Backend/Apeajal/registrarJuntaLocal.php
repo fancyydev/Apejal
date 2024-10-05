@@ -1,77 +1,108 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
 
 require_once($_SERVER['DOCUMENT_ROOT']."/proyectoApeajal/APEJAL/Backend/DataBase/connectividad.php");
 
+$nombre = $_POST['nombre'];
+$domicilio = $_POST['domicilio'];
+$telefono = $_POST['telefono'];
+$correo = $_POST['correo'];
+$municipiosSeleccionados = isset($_POST['municipios']) ? $_POST['municipios'] : '';
+$municipio = $municipiosSeleccionados;
+$admin = $_POST['admin'];
+$status = $_POST['status'];
+//$carpetaDestinoBase = "../imagenesJuntaLocal/";
+$carpetaDestinoBase = $_SERVER['DOCUMENT_ROOT'] . "/proyectoApeajal/APEJAL/Assets/Img/imagenesJuntasLocales/";
 
-// Conexión a la base de datos
-$conexion = new DB_Connect();
-$conn = $conexion->connect();
+$rutaIMG = '';
 
-// Verificar la conexión a la base de datos
-if ($conn->errorCode() !== "00000") {
-    // Manejo del error de conexión aquí
-    $errorInfo = $conn->errorInfo();
-    die("Conexión fallida: " . implode(", ", $errorInfo));
+try {
+    $conexion = new DB_Connect();
+    $conn = $conexion->connect();
+
+} catch (PDOException $e) {
+    echo json_encode(["error" => true, "messages" => ["Error en la base de datos : " . $e->getMessage()]]);
+    exit();
 }
 
-// Obtener datos enviados por POST (JSON)
-$data = json_decode(file_get_contents("php://input"));
+if (isset($_FILES["file"])) {
+    $nombreArchivo = $_FILES["file"]["name"];
+    $origen = $_FILES["file"]["tmp_name"];
 
-// Verificar si los datos se reciben correctamente
-if (!$data) {
-    die('Error: No se recibieron datos correctamente.');
+    // Crear la carpeta base  si no existe
+    if (!file_exists($carpetaDestinoBase)) {
+        if (!mkdir($carpetaDestinoBase, 0777, true)) {
+            echo json_encode(["error" => true, "messages" => ["Error al crear la carpeta base: $carpetaDestinoBase"]]);
+            exit(); 
+        }
+    }
+
+    // Crear la carpeta específica para la huerta si no existe
+    $carpetaDestinoIMG = $carpetaDestinoBase . $nombre . '/';
+    if (!file_exists($carpetaDestinoIMG)) {
+        if (!mkdir($carpetaDestinoIMG, 0777, true)) {
+            echo json_encode(["error" => true, "messages" => ["Error al crear la carpeta de la imagen: $carpetaDestinoIMG"]]);
+            exit(); 
+        }
+    }
+
+    // Establecer la zona horaria
+    date_default_timezone_set('America/Mexico_City');
+
+    // Obtener la fecha y hora actual
+    $fecha = date("d-m-y"); // Formato: 20-09-24
+    $hora = date("H-i");    // Formato: 19-10
+
+    // Crear la carpeta con formato nombre_F-fecha_H-hora
+    $carpetaDestinoFechaHora = $carpetaDestinoIMG . $nombre . "_F-$fecha" . "_H-$hora/";
+    if (!file_exists($carpetaDestinoFechaHora)) {
+        if (!mkdir($carpetaDestinoFechaHora, 0777, true)) {
+            echo json_encode(["error" => true, "messages" => ["Error al crear la carpeta con fecha y hora: $carpetaDestinoFechaHora"]]);
+            exit();
+        }
+    }
+
+    // Mover el archivo KML a la carpeta destino
+    $destino = $carpetaDestinoFechaHora . $nombreArchivo;
+    if (!move_uploaded_file($origen, $destino)) {
+        echo json_encode(["error" => true, "messages" => ["Error al mover el archivo KML a: $destino"]]);
+        exit(); 
+    } else {
+        $rutaIMG = $destino;
+    }
+} else {
+    echo json_encode(["error" => true, "messages" => ["No se ha recibido un archivo KML."]]);
+    exit();
 }
-
-// Obtener valores
-$nombre = $data->nombre;
-$domicilio = $data->domicilio;
-$telefono = $data->telefono;
-$correo = $data->correo;
-$municipio = $data->municipio;
-$admin = $data->admin;
-$status = $data->status;
 
 // Preparar la consulta SQL
-$sql = "INSERT INTO juntaslocales (id_municipio, id_usuario, nombre, domicilio, teléfono, correo, estatus) VALUES (?, ?, ?, ?, ?, ?, ?)";
-$stmt = $conn->prepare($sql);
+$sql = "INSERT INTO juntaslocales (carga_municipios, id_usuario, nombre, domicilio, teléfono, correo, estatus, ruta_img) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-// Verificar si la consulta se preparó correctamente
-if (!$stmt) {
-    die("Error en la preparación de la consulta: " . implode(", ", $conn->errorInfo()));
-}
 
-// Vincular parámetros
-$stmt->bindParam(1, $municipio);
-$stmt->bindParam(2, $admin);
-$stmt->bindParam(3, $nombre);
-$stmt->bindParam(4, $domicilio);
-$stmt->bindParam(5, $telefono);
-$stmt->bindParam(6, $correo);
-$stmt->bindParam(7, $status);
+try {
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $municipio, PDO::PARAM_STR);
+    $stmt->bindParam(2, $admin, PDO::PARAM_INT);
+    $stmt->bindParam(3, $nombre, PDO::PARAM_STR);
+    $stmt->bindParam(4, $domicilio, PDO::PARAM_STR);
+    $stmt->bindParam(5, $telefono, PDO::PARAM_STR);
+    $stmt->bindParam(6, $correo, PDO::PARAM_STR);
+    $stmt->bindParam(7, $status, PDO::PARAM_STR);
+    $stmt->bindParam(8, $rutaIMG, PDO::PARAM_STR);
+    
+    $resultado = $stmt->execute();
 
-// Array para la respuesta JSON
-$response = array();
+    if ($resultado) {
+        echo json_encode(["success" => true]);
+    } else {
+        echo json_encode(["error" => true, "messages" => ["Error al insertar los datos en la base de datos: " . implode(", ", $stmt_huertas->errorInfo())]]);
+    }
 
-// Ejecutar consulta
-if ($stmt->execute()) {
-    $response['status'] = 'success';
-    $response['message'] = 'Junta local registrada exitosamente';
-} else {
-    $response['status'] = 'error';
-    $response['message'] = 'Error al registrar la junta local: ' . $stmt->error;
+} catch (PDOException $e) {
+    echo json_encode(["error" => true, "messages" => ["Error en la base de datos: " . $e->getMessage()]]);
 }
 
 // Cerrar consulta y conexión
-$stmt->close();
-$conn->close();
+$stmt->null;
+$conn->null;
 
-// Devolver respuesta en formato JSON
-header('Content-Type: application/json');
-echo json_encode($response);
 ?>
