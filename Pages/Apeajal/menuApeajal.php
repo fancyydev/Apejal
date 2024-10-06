@@ -139,7 +139,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
 
         $('#btnAdd').on('click', function() {
         if (currentContext === 'juntalocal') {
-             window.location.href = '../Productores/agregarJL.php';
+             window.location.href = '../Apeajal/agregarJL.html';
         } 
     });
 
