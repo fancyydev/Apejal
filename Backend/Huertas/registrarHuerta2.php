@@ -24,7 +24,10 @@ $fechasv_01 = $_POST['fechaSV1'];
 $fechasv_02 = $_POST['fechaSV2'];
 $fechaReg = $_POST['fechaReg'];
 
-$carpetaDestinoBase = "../kmls/";
+//$carpetaDestinoBase = "../kmls/";
+$carpetaDestinoBase = $_SERVER['DOCUMENT_ROOT'] . "/proyectoApeajal/APEJAL/Assets/KMLS/";
+
+
 $rutaKML = '';
 
 
