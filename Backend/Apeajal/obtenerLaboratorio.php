@@ -14,18 +14,39 @@ if ($conn->errorCode() !== "00000") {
     die("Conexión fallida: " . implode(", ", $errorInfo));
 }
 
-$sql = "SELECT l.id_laboratorio, u.nombre AS nombre_usuario, u.correo, u.teléfono, l.estatus, j.nombre AS nombre_junta
+// Obtener el ID del usuario de la sesión
+session_start();
+$id_usuario = $_SESSION["id"]; // Suponiendo que el ID de usuario está en la sesión
+
+// Verifica que el ID del usuario esté establecido
+if (!isset($id_usuario)) {
+    echo json_encode(['error' => 'ID de usuario no encontrado en la sesión']);
+    exit();
+}
+
+
+$sql = "SELECT DISTINCT l.id_laboratorio, u.nombre AS nombre_usuario, u.correo, u.teléfono, 
+                l.estatus, j.nombre AS nombre_junta
         FROM laboratorio l
-        JOIN usuario u ON l.id_usuario = u.id_usuario
-        JOIN juntaslocales j ON l.idjuntalocal = j.idjuntalocal";
+        JOIN usuario u ON l.id_usuario = u.id_usuario 
+        JOIN juntaslocales j ON l.idjuntalocal = j.idjuntalocal
+        WHERE j.idjuntalocal = (
+            SELECT j2.idjuntalocal 
+            FROM juntaslocales j2
+            WHERE j2.id_usuario = :id_usuario
+        )";
 
-$result = $conn->query($sql);
+$stmt = $conn->prepare($sql);
+$stmt->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT); // Vincular el parámetro
 
+// Ejecutar la consulta
+$stmt->execute();
 $personalLaboratorio = array();
 
-if ($result !== false && $result->rowCount() > 0) {
+// Verificar si hay resultados
+if ($stmt !== false && $stmt->rowCount() > 0) {
     // Convertir los datos en un array asociativo
-    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $personalLaboratorio[] = $row;
     }
 } else {
@@ -35,9 +56,9 @@ if ($result !== false && $result->rowCount() > 0) {
 
 // Cerrar la conexión
 $conn = null;
-$result = null;
+$stmt = null;
 
 // Devolver datos en formato JSON
 echo json_encode($personalLaboratorio);
-
+    
 ?>
