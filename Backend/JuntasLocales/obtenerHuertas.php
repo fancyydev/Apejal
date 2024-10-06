@@ -31,10 +31,9 @@ $sql = "SELECT h.id_hue, u.nombre AS nombre_productor, h.nombre AS nombre_huerta
                h.arbolesporhectareas, h.totalarboles, h.etapafenologica, h.fechasv_01, h.fechasv_02, 
                h.rutaKML, h.fechaRegistro 
         FROM huertas h
-        JOIN productores p ON h.id_productor = p.id_productor
-        JOIN juntaslocales jl ON p.idjuntaLocal = jl.idjuntaLocal
+        JOIN juntaslocales jl ON h.idjuntaLocal = jl.idjuntaLocal
         JOIN usuario u ON jl.id_usuario = u.id_usuario
-        WHERE u.id_usuario = :id_usuario"; // Agregar el filtro para el ID del usuario
+        WHERE u.id_usuario = :id_usuario;"; // Agregar el filtro para el ID del usuario
 
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT); // Vincular el parámetro
