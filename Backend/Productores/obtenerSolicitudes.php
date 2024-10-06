@@ -18,18 +18,15 @@ $conexion = new DB_Connect();
 $conn = $conexion->connect();
 
 // Consulta SQL para obtener las solicitudes del productor
-$sql = "SELECT s.id_solicitud, s.status, up.nombre AS nombre_productor, h.nombre AS nombre_huerta, s.fecha_programada, ut.nombre AS nombre_tecnico
+$sql = "SELECT s.id_solicitud, s.status, h.nombre AS nombre_huerta, s.fecha_programada, u.nombre AS nombre_tecnico
         FROM solicitudes s
         JOIN huertas h ON s.id_hue = h.id_hue
-        JOIN juntaslocales jl ON jl.idjuntalocal = h.idjuntalocal 
         LEFT JOIN tecnico t ON t.id_tecnico = s.id_tecnico
-        LEFT JOIN usuario ut ON ut.id_usuario = t.id_usuario
-        JOIN productores p ON p.id_productor = h.id_productor
-        JOIN usuario up ON up.id_usuario = p.id_usuario
-        WHERE h.idjuntalocal = (
-            SELECT jl2.idjuntalocal
-            FROM juntaslocales jl2
-            WHERE jl2.id_usuario = :id_usuario
+        LEFT JOIN usuario u ON u.id_usuario = t.id_usuario
+        WHERE h.id_productor = (
+            SELECT p2.id_productor
+            FROM productores p2
+            WHERE p2.id_usuario = :id_usuario
         )";
 
 // Preparar la consulta
@@ -52,7 +49,7 @@ if ($stmt->rowCount() > 0) {
     echo json_encode(['solicitudes' => $solicitudes]);
 } else {
     // No se encontraron solicitudes
-    echo json_encode(['solicitudes' => [], 'message' => 'No se encontraron solicitudes para esta junta local.']);
+    echo json_encode(['solicitudes' => [], 'message' => 'No se encontraron solicitudes para este productor.']);
 }
 
 // Cerrar la conexión

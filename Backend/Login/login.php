@@ -46,6 +46,9 @@ class Login {
                                 case 4:
                                     echo json_encode(['estado' => true, 'tipo' => 'tipo4']);
                                     break;
+                                case 5:
+                                    echo json_encode(['estado' => true, 'tipo' => 'tipo5']);
+                                    break;
                                 default:
                                     echo json_encode(['estado' => false, 'error' => 'Tipo de usuario desconocido']);
                                     break;

@@ -15,18 +15,18 @@ if ($conn->errorCode() !== "00000") {
 }
 
 // Consulta para obtener los datos
-$sql = "SELECT p.id_productor, u.nombre, u.correo, u.teléfono, p.rfc, p.curp, p.estatus
-        FROM productores p
-        JOIN usuario u ON p.id_usuario = u.id_usuario";
+$sql = "SELECT jl.idjuntalocal, jl.nombre, u.nombre as nombre_admin, jl.correo, jl.teléfono, jl.domicilio, jl.carga_municipios, jl.estatus, jl.ruta_img 
+        FROM juntaslocales jl
+        JOIN usuario u ON u.id_usuario = jl.id_usuario";
 
 $result = $conn->query($sql);
 
-$productores = array();
+$juntalocal = array();
 
 if ($result !== false && $result->rowCount() > 0) {
     // Convertir los datos en un array asociativo
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-        $productores[] = $row;
+        $juntalocal[] = $row;
     }
 } else {
     echo json_encode(['error' => 'No se encontraron datos']);
@@ -38,6 +38,6 @@ $conn = null;
 $result = null;
 
 // Devolver datos en formato JSON
-echo json_encode($productores);
+echo json_encode($juntalocal);
 
 ?>

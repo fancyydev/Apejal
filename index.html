@@ -89,7 +89,7 @@
                                 // Redirigir según el tipo de usuario
                                 switch (respuesta.tipo) {
                                     case 'tipo1':
-                                        window.location.href = 'pagina_tipo_1.php';
+                                        window.location.href = './pages/Productores/menuProductor.php';
                                         break;
                                     case 'tipo2':
                                         window.location.href = 'pagina_tipo_2.php';
@@ -99,6 +99,9 @@
                                         break;
                                     case 'tipo4':
                                         window.location.href = './pages/JuntasLocales/menuJuntaLocal.php';
+                                        break;
+                                    case 'tipo5':
+                                        window.location.href = './pages/Apeajal/menuApeajal.php';
                                         break;
                                     default:
                                         aux.alert("Tipo de usuario desconocido", true, true);

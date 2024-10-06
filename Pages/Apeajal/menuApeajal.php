@@ -1,3 +1,14 @@
+<?php
+session_start();
+
+// Verifica que el usuario ha iniciado sesión y tiene el tipo correcto
+if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] != 5) {
+    // Redirige al usuario a la página de inicio de sesión si no tiene permiso
+    header('Location: ../../index.html');
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,6 +30,12 @@
             <ion-icon name="archive-outline"></ion-icon>
             <span>Solicitudes</span>
         </button>
+
+        <button class="boton" data-content="juntalocal">
+            <ion-icon name="archive-outline"></ion-icon>
+            <span>Junta Local</span>
+        </button>
+
 
         <button class="boton" data-content="huertas">
             <ion-icon name="flower-outline"></ion-icon>
@@ -79,28 +96,34 @@
         let currentContext = '';
 
         // Detectar contexto actual (Productores, Técnicos o Huertas)
+        $('button[data-content="juntalocal"]').click(function() {
+            $('#title').text('Junta Local'); 
+            currentContext = 'juntalocal';
+            cargarJuntaLocal(); 
+        });
+
         $('button[data-content="productores"]').click(function() {
             $('#title').text('Productores'); 
-            cargarProductores(); 
             currentContext = 'productores';
+            cargarProductores(); 
         });
 
         $('button[data-content="huertas"]').click(function() {
             $('#title').text('Huertas');
-            cargarHuertas(); 
             currentContext = 'huertas';
+            cargarHuertas(); 
         });
 
         $('button[data-content="tecnicos"]').click(function() {
             $('#title').text('Técnicos'); 
-            cargarTecnicos(); 
             currentContext = 'tecnicos';
+            cargarTecnicos(); 
         });
         
         $('button[data-content="municipios"]').click(function() {
             $('#title').text('Municipios');
-            cargarMunicipios(); 
             currentContext = 'municipios';
+            cargarMunicipios(); 
         });
 
         // Evento de búsqueda (al hacer clic en el botón o presionar Enter)
@@ -113,6 +136,12 @@
                 filtrarDatos(currentContext);
             }
         });
+
+        $('#btnAdd').on('click', function() {
+        if (currentContext === 'juntalocal') {
+             window.location.href = '../Productores/agregarJL.php';
+        } 
+    });
 
         // Función para filtrar los datos según el contexto
     function filtrarDatos(context) {
@@ -158,6 +187,76 @@
             }
         });
     }
+
+    function cargarJuntaLocal() {
+    // Cambiar los encabezados de la tabla
+    $('.table-body thead').html(`
+        <tr>
+            <th>Id Junta Local</th>
+            <th>Accion</th>
+            <th>Nombre</th>
+            <th>Administrador</th>
+            <th>Correo</th>
+            <th>Teléfono</th>
+            <th>Domicilio</th>
+            <th>Carga municipios</th>
+            <th>Estatus</th>
+            <th>Ruta</th>
+        </tr>
+    `);
+
+    // Hacer la llamada AJAX para obtener los técnicos
+    $.ajax({
+        url: '../../Backend/Apeajal/obtenerJuntaLocal.php', // La URL del archivo PHP
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            const tableBody = $('.table-body tbody');
+            tableBody.empty(); // Limpiar el contenido anterior de la tabla
+
+            // Verificar si se recibieron técnicos
+            if (data.length > 0 && !data.error) {
+                // Recorrer los datos recibidos y agregarlos a la tabla
+                $.each(data, function(index, juntalocal) {
+                    const row = `
+                        <tr>
+                            <td>${juntalocal.idjuntalocal}</td>
+                            <td>
+                                <button id="btnEdit" onclick="editRow(this)">
+                                    <ion-icon name="pencil-outline"></ion-icon>
+                                </button>
+                                <button id="btnDelete" onclick="deleteRow(this)">
+                                    <ion-icon name="trash-outline"></ion-icon>
+                                </button>
+                            </td>
+                            <td>${juntalocal.nombre}</td>
+                            <td>${juntalocal.nombre_admin}</td>
+                            <td>${juntalocal.correo}</td>
+                            <td>${juntalocal.teléfono }</td>
+                            <td>${juntalocal.domicilio }</td>
+                            <td>${juntalocal.carga_municipios}</td> 
+                            <td>${juntalocal.estatus}</td>
+                            <td>${juntalocal.ruta_img}</td>
+                        </tr>
+                    `;
+                    tableBody.append(row); // Agregar la fila a la tabla
+                });
+            } else {
+                // Mostrar un mensaje si no hay técnicos disponibles o hay un error
+                const row = `
+                    <tr>
+                        <td colspan="5">No se encontraron técnicos o ocurrió un error</td>
+                    </tr>
+                `;
+                tableBody.append(row);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error al obtener los técnicos:', status, error);
+            console.error('Respuesta del servidor:', xhr.responseText);
+        }
+    });
+}
 
     function cargarProductores() {
         // Cambiar los encabezados de la tabla

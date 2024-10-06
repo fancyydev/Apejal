@@ -21,6 +21,12 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
     <title>Menu Junta Local</title>
     <link rel="stylesheet" href="../../Styles/menus.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- CSS de Bootstrap -->
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script> -->
+  </head>
+<body>
+    <!-- Contenido de tu página -->
 </head>
 <body>
 
@@ -104,35 +110,41 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
     $(document).ready(function() {
         let currentContext = '';
 
+        $('button[data-content="solicitudes"]').click(function() {
+            $('#title').text('Solicitudes'); 
+            currentContext = 'solicitudes';
+            cargarSolicitudes(); 
+        });
+
         // Detectar contexto actual (Productores, Técnicos o Huertas)
         $('button[data-content="productores"]').click(function() {
             $('#title').text('Productores'); 
-            cargarProductores(); 
             currentContext = 'productores';
+            cargarProductores(); 
         });
 
         $('button[data-content="huertas"]').click(function() {
             $('#title').text('Huertas');
-            cargarHuertas(); 
             currentContext = 'huertas';
+            cargarHuertas(); 
         });
 
         $('button[data-content="tecnicos"]').click(function() {
             $('#title').text('Técnicos'); 
-            cargarTecnicos(); 
             currentContext = 'tecnicos';
+            cargarTecnicos(); 
         });
 
         $('button[data-content="laboratorio"]').click(function() {
             $('#title').text('Laboratorio'); 
-            cargarLaboratorio(); 
             currentContext = 'laboratorio';
+            cargarLaboratorio(); 
         });
         
         $('button[data-content="municipios"]').click(function() {
             $('#title').text('Municipios');
-            cargarMunicipios(); 
             currentContext = 'municipios';
+            cargarMunicipios(); 
         });
 
         // Evento de búsqueda (al hacer clic en el botón o presionar Enter)
@@ -270,33 +282,120 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
         });
     }
 
-    function cargarSolicitudes() {
-        $.ajax({
-            url: '../../Backend/JuntasLocales/obtenerSolicitudes.php',
-            type: 'GET',
-            dataType: 'json',
-            success: function(data) {
-                const tableBody = $('.table-body tbody');
-                tableBody.empty();
+    // function cargarSolicitudes() {
+    //     $('.table-body thead').html(`
+    //         <tr>
+    //             <th>Id</th>
+    //             <th>Accion</th>
+    //             <th>Status</th>
+    //             <th>Productor</th>
+    //             <th>Huerta</th>
+    //             <th>Fecha</th>
+    //             <th>Tecnico</th>
+    //         </tr>
+    //     `);
 
-                $.each(data, function(index, solicitud) {
+    //     $.ajax({
+    //         url: '../../Backend/JuntasLocales/obtenerSolicitudes.php',
+    //         type: 'GET',
+    //         dataType: 'json',
+    //         success: function(data) {
+    //             const tableBody = $('.table-body tbody');
+    //             tableBody.empty();
+
+    //             $.each(data, function(index, solicitud) {
+    //                 const row = `
+    //                     <tr>
+    //                         <td>${solicitud.id_solicitud}</td>
+    //                         <td>
+    //                             <button id="btnEdit" onclick="">
+    //                                 <ion-icon name="pencil-outline"></ion-icon>
+    //                             </button>
+    //                             <button id="btnDelete" onclick="deleteRow(this)">
+    //                                 <ion-icon name="trash-outline"></ion-icon>
+    //                             </button>
+    //                         </td>
+    //                         <td>${solicitud.status}</td>
+    //                         <td>${solicitud.nombre_productor}</td>
+    //                         <td>${solicitud.nombre_huerta}</td>
+    //                         <td>${solicitud.fecha_programada}</td>
+    //                         <td>${solicitud.nombre_tecnico}</td>
+    //                     </tr>
+    //                 `;
+    //                 tableBody.append(row);
+    //             });
+    //         },
+    //         error: function(xhr, status, error) {
+    //             console.error('Error al obtener las solicitudes:', status, error);
+    //             console.error('Respuesta del servidor:', xhr.responseText);
+    //         }
+    //     });
+    // }
+
+    function cargarSolicitudes() {
+    $('.table-body thead').html(`
+        <tr>
+            <th>Id</th>
+            <th>Accion</th>
+            <th>Status</th>
+            <th>Productor</th>
+            <th>Huerta</th>
+            <th>Fecha</th>
+            <th>Tecnico</th>
+        </tr>
+    `);
+
+    $.ajax({
+        url: '../../Backend/JuntasLocales/obtenerSolicitudes.php',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            const tableBody = $('.table-body tbody');
+            console.log(data);
+
+            tableBody.empty();
+
+            if (data.solicitudes.length > 0) {
+                $.each(data.solicitudes, function(index, solicitud) {
+                    console.log(solicitud);
+
                     const row = `
                         <tr>
                             <td>${solicitud.id_solicitud}</td>
-                            <td>${solicitud.nombre_solicitud}</td>
-                            <td>${solicitud.fecha}</td>
-                            <td>${solicitud.estatus}</td>
+                            <td>
+                                <button id="btnAssign" class="btnAssign" onclick="editRow(${solicitud.id_solicitud}, 'solicitud')">
+                                    <ion-icon name="checkmark-outline"></ion-icon> Asignar
+                                </button>
+                            </td>
+                            <td>${solicitud.status}</td>
+                            <td>${solicitud.nombre_productor}</td>
+                            <td>${solicitud.nombre_huerta}</td>
+                            <td>${solicitud.fecha_programada}</td>
+                            <td>${solicitud.nombre_tecnico}</td>
                         </tr>
                     `;
+                    
                     tableBody.append(row);
                 });
-            },
-            error: function(xhr, status, error) {
-                console.error('Error al obtener las solicitudes:', status, error);
-                console.error('Respuesta del servidor:', xhr.responseText);
+            } else {
+                // Si no hay solicitudes, mostrar un mensaje
+                const messageRow = `
+                    <tr>
+                        <td colspan="6" style="text-align: center;">${data.message}</td>
+                    </tr>
+                `;
+                tableBody.append(messageRow);
             }
-        });
-    }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error al obtener las solicitudes:', status, error);
+            console.error('Respuesta del servidor:', xhr.responseText);
+        }
+    });
+}
+
+
+
 
     function cargarHuertas() {
     // Cambiar los encabezados de la tabla
@@ -591,6 +690,8 @@ function editRow(id, tipo) {
         url = '../../Backend/JuntasLocales/envioDatosTecnico.php?id_tecnico=' + id;
     } else if(tipo == 'laboratorio') {
         url = '../../Backend/JuntasLocales/envioDatosPLaboratorio.php?id_laboratorio=' + id;
+    } else if(tipo == 'solicitud') {
+        url = '../../Backend/JuntasLocales/envioDatosSolicitud.php?id_solicitud=' + id;
     } else {
         console.error('Tipo desconocido:', tipo);
         return;
@@ -643,6 +744,15 @@ function editRow(id, tipo) {
                 sessionStorage.setItem('jl_id', data.idjuntalocal); 
                 sessionStorage.setItem('jl', data.nombre_junta);
                 window.location.href = '../JuntasLocales/editarLaboratorio.html';
+            } else if (tipo == 'solicitud') {
+                sessionStorage.setItem('id_laboratorio', id);
+                sessionStorage.setItem('id_usuario', data.id_solicitud);
+                sessionStorage.setItem('nombre', data.status);
+                sessionStorage.setItem('correo', data.nombre_productor);
+                sessionStorage.setItem('telefono', data.nombre_huerta);
+                sessionStorage.setItem('contraseña', data.fecha_programada);
+                sessionStorage.setItem('status', data.nombre_tecnico);
+                window.location.href = '../JuntasLocales/asignarSolicitudes.php';
             }
         },
         error: function(xhr, status, error) {
@@ -655,14 +765,14 @@ function editRow(id, tipo) {
 
 </script>
 
-    <!-- Ionicons-->
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    <!-- Script of menu -->
-    <script src="../../Components/JuntasLocales/menuDesplegable.js"></script>
+<!-- Ionicons-->
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+<!-- Script of menu -->
+<script src="../../Components/JuntasLocales/menuDesplegable.js"></script>
 
 
-    <script>
+<script>
     document.addEventListener('DOMContentLoaded', function () {
     // Realiza una solicitud para obtener los datos del usuario
     fetch('../../Backend/Login/cargadatos.php')
@@ -677,8 +787,8 @@ function editRow(id, tipo) {
             }
         })
         .catch(error => console.error('Error:', error));
-});
-
+    });
 </script>
+
 </body>
 </html>

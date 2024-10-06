@@ -349,3 +349,19 @@ table button {
     display: none;
 }
 
+.btnAssign {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+.btnAssign:hover {
+    background-color: #0056b3; /* Un azul más oscuro en hover */
+    cursor: pointer; /* Cambia a la manita */
+}
