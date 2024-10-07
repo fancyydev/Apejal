@@ -265,7 +265,6 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                     <th>Id</th>
                     <th>Accion</th>
                     <th>Nombre Usuario</th>
-                    <th>Junta Local</th>
                     <th>Correo</th>
                     <th>Telefono</th>
                     <th>RFC</th>
@@ -295,7 +294,6 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                                 </button>
                             </td>
                             <td>${productor.nombre}</td>
-                            <td>${productor.nombre_junta}</td>
                             <td>${productor.correo}</td>
                             <td>${productor.teléfono}</td>
                             <td>${productor.rfc}</td>
