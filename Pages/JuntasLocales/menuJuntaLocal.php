@@ -65,6 +65,13 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
             <ion-icon name="location-outline"></ion-icon>
             <span>Municipios</span>
         </button>
+        <form action="../../Backend/JuntasLocales/generadorReporteExcel.php" method="POST">
+            <button class="boton" type="submit">Descargar Reporte General (Excel)</button>
+        </form>
+        <form action="../../Backend/JuntasLocales/generadorReportesPdf.php" method="POST">
+            <button class="boton" type="submit">Descargar Reporte General (PDF)</button>
+        </form>
+
 
         <div class="usuario">
             <ion-icon id="key" name="key-outline"></ion-icon>
@@ -91,6 +98,8 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                 <input id="inputSearch" type="text">
                 <button id="btnSearch"> Buscar </button>
                 <button id="btnAdd"> Agregar </button>
+                <button id="btnReport"> Reporte </button>
+                
             </section>
             
             <section class="table-body">
@@ -175,6 +184,73 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                 window.location.href = '../JuntasLocales/edit.html';
             }
         });
+        $('#btnReport').on('click', function() {
+    const crearModalReporte = (pdfRoute, excelRoute) => {
+        const dropdownHtml = `
+            <div id="reportModal">
+                <label for="tipoReporte">Selecciona el tipo de reporte:</label>
+                <select id="tipoReporte">
+                    <option value="">-- Selecciona --</option>
+                    <option value="pdf">PDF</option>
+                    <option value="excel">Excel</option>
+                </select>
+                <button id="generarReporteBtn">Generar Reporte</button>
+                <button id="cancelarBtn">Cancelar</button>
+            </div>
+        `;
+        $('body').append(dropdownHtml);
+
+        $('#generarReporteBtn').on('click', function() {
+            const tipo = $('#tipoReporte').val();
+            if (tipo === 'pdf') {
+                window.location.href = pdfRoute;
+            } else if (tipo === 'excel') {
+                window.location.href = excelRoute;
+            } else {
+                alert('Por favor, selecciona un tipo de reporte.');
+            }
+            $('#reportModal').remove();
+        });
+
+        $('#cancelarBtn').on('click', function() {
+            $('#reportModal').remove();
+        });
+    };
+
+    if (currentContext === 'solicitudes') {
+        crearModalReporte(
+            '../../Backend/JuntasLocales/generadorReporteSolicitudPdf.php',
+            '../../Backend/JuntasLocales/generadorReporteSolicitudExcel.php'
+        );
+    } else if (currentContext === 'huertas') {
+        crearModalReporte(
+            '../../Backend/JuntasLocales/generadorReporteHuertaPdf.php',
+            '../../Backend/JuntasLocales/generadorReporteExcel.php'
+        );
+    } else if (currentContext === 'tecnicos') {
+        crearModalReporte(
+            '../../Backend/JuntasLocales/generadorReporteTecnicoPdf.php',
+            '../../Backend/JuntasLocales/generadorReporteTecnicoExcel.php'
+        );
+    } else if (currentContext === 'productores') {
+        crearModalReporte(
+            '../../Backend/JuntasLocales/generadorReporteProductorPdf.php',
+            '../../Backend/JuntasLocales/generadorReporteProductorExcel.php'
+        );
+    } else if (currentContext === 'laboratorio') {
+        crearModalReporte(
+            '../../Backend/JuntasLocales/generadorReporteLaboratorioPdf.php',
+            '../../Backend/JuntasLocales/generadorReporteLaboratorioExcel.php'
+        );
+    } else if (currentContext === 'municipios') {
+        crearModalReporte(
+            '../../Backend/JuntasLocales/generadorReporteMunicipiosPdf.php',
+            '../../Backend/JuntasLocales/generadorReporteMunicipiosExcel.php'
+        );
+    }
+});
+
+
 
         // Función para filtrar los datos según el contexto
     function filtrarDatos(context) {
@@ -241,7 +317,8 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                     <th>RFC</th>
                     <th>Curp</th>
                     <th>Estatus</th>
-                </tr>
+                </tr>}
+                
             `);
 
         $.ajax({
@@ -426,6 +503,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
             <th>Ruta KML</th>
             <th>Fecha de Registro</th>
         </tr>
+        
     `);
 
     // Hacer la llamada AJAX para obtener las huertas
