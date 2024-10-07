@@ -91,6 +91,7 @@
                                     <option value="productor">Productor</option>
                                     <option value="personalLab">Personal Laboratorio</option>
                                     <option value="adminJL">Administrador de Junta Local</option>
+                                    <option value="adminGen">Administrador General</option>
                                 </select>
                             </div>
                         </div>
@@ -377,6 +378,15 @@
                         ]);
                         break;
                     case "adminJL":
+                        resultado = aux.validateAll([
+                            {"valor": document.getElementById("tipo").value, "typeOf": "string", "mensaje": "<p>Seleccione tipo de usuario</p><br>"},
+                            {"valor": document.getElementById("nombre").value, "typeOf": "string", "mensaje": "<p>Insertar nombre</p><br>"},
+                            {"valor": document.getElementById("email").value, "typeOf": "string", "mensaje": "<p>Insertar email</p><br>"},
+                            {"valor": document.getElementById("telefono").value, "typeOf": "string", "mensaje": "<p>Insertar telefono</p><br>"},
+                            {"valor": document.getElementById("contra").value, "typeOf": "string", "mensaje": "<p>Insertar contraseña</p><br>"}
+                        ]);
+                        break;
+                    case "adminGen":
                         resultado = aux.validateAll([
                             {"valor": document.getElementById("tipo").value, "typeOf": "string", "mensaje": "<p>Seleccione tipo de usuario</p><br>"},
                             {"valor": document.getElementById("nombre").value, "typeOf": "string", "mensaje": "<p>Insertar nombre</p><br>"},
