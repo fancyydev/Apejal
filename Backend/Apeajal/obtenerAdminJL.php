@@ -12,8 +12,20 @@ if ($conn->errorCode() !== "00000") {
     die("Conexión fallida: " . implode(", ", $errorInfo));
 }
 
-$sql = "SELECT id_usuario, nombre FROM usuario WHERE id_tipo = 4";
-$stmt = $conn->query($sql);
+// Obtener el ID del administrador desde los parámetros GET
+$idAdminActual = isset($_GET['idAdminActual']) ? $_GET['idAdminActual'] : null;
+
+// Modificar la consulta SQL para incluir al administrador seleccionado
+$sql = "SELECT id_usuario, nombre FROM usuario WHERE id_tipo = 4 AND (id_usuario NOT IN (SELECT id_usuario FROM juntaslocales) OR id_usuario = :idAdminActual)";
+$stmt = $conn->prepare($sql);
+
+// Vincular el parámetro solo si se ha proporcionado un ID de administrador
+if ($idAdminActual) {
+    $stmt->bindParam(':idAdminActual', $idAdminActual, PDO::PARAM_INT);
+}
+
+// Ejecutar la consulta
+$stmt->execute();
 
 // Verificar si la consulta fue exitosa
 if ($stmt !== false) {
