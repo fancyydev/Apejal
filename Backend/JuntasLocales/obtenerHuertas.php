@@ -27,7 +27,7 @@ if (!isset($id_usuario)) {
 // Consulta para obtener los datos de la huerta, productor y junta local filtrados por el ID del usuario
 $sql = "SELECT h.id_hue, u.nombre AS nombre_productor, h.nombre AS nombre_huerta, h.localidad, h.centroide, 
                h.hectareas, h.pronostico_de_cosecha, h.longitud, h.altitud, h.altura_nivel_del_mar, 
-               h.variedad, h.nomempresa, h.encargadoempresa, h.supervisorhuerta, h.añoplantacion, 
+               h.variedad, h.nomempresa, h.encargadoempresa, h.supervisorhuerta, h.anoplantacion, 
                h.arbolesporhectareas, h.totalarboles, h.etapafenologica, h.fechasv_01, h.fechasv_02, 
                h.rutaKML, h.fechaRegistro 
         FROM huertas h
