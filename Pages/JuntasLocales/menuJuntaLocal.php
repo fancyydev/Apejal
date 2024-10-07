@@ -68,7 +68,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
         <form action="../../Backend/JuntasLocales/generadorReporteExcel.php" method="POST">
             <button class="boton" type="submit">Descargar Reporte General (Excel)</button>
         </form>
-        <form action="../../Backend/JuntasLocales/generadorReportesPdf.php" method="POST">
+        <form action="../../Backend/JuntasLocales/generadorReportePdf.php" method="POST">
             <button class="boton" type="submit">Descargar Reporte General (PDF)</button>
         </form>
 
@@ -225,7 +225,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
     } else if (currentContext === 'huertas') {
         crearModalReporte(
             '../../Backend/JuntasLocales/generadorReporteHuertaPdf.php',
-            '../../Backend/JuntasLocales/generadorReporteExcel.php'
+            '../../Backend/JuntasLocales/generadorReporteHuertaExcel.php'
         );
     } else if (currentContext === 'tecnicos') {
         crearModalReporte(
