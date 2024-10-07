@@ -15,6 +15,7 @@ print_r($_POST);
 echo "</pre>";
 // Obtiene los datos de la solicitud POST
 $id_hue = $_POST['id_hue'] ?? null;
+$idjuntalocal = $_POST['idjuntalocal'] ?? null;
 $nombre = $_POST['nombre'] ?? '';
 $localidad = $_POST['localidad'] ?? '';
 $centroide = $_POST['centroide'] ?? '';
@@ -45,6 +46,7 @@ if ($id_hue === null) {
 echo "<pre>";
 echo "Valores recibidos: \n";
 echo "ID Huerta: $id_hue\n";
+echo "ID jl: $idjuntalocal\n";
 echo "Nombre: $nombre\n";
 echo "Localidad: $localidad\n";
 echo "Centroide: $centroide\n";
@@ -69,6 +71,7 @@ echo "</pre>";
 // Consulta para actualizar los datos de la huerta
 $sql = "UPDATE huertas SET
     nombre = :nombre,
+    idjuntalocal = :idjuntalocal,
     localidad = :localidad,
     centroide = :centroide,
     hectareas = :hectareas,
@@ -94,6 +97,7 @@ try {
 
     // Asigna los valores a los parámetros con bindValue
     $stmt->bindValue(':nombre', $nombre);
+    $stmt->bindValue(':idjuntalocal', $idjuntalocal);
     $stmt->bindValue(':localidad', $localidad);
     $stmt->bindValue(':centroide', $centroide);
     $stmt->bindValue(':hectareas', $hectareas);
