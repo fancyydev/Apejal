@@ -20,7 +20,7 @@ if (isset($_GET['id_hue'])) {
         SELECT h.id_hue, h.id_productor, h.nombre, h.localidad, h.centroide, h.hectareas, 
                h.pronostico_de_cosecha, h.longitud, h.altitud, h.altura_nivel_del_mar, 
                h.variedad, h.nomempresa, h.encargadoempresa, h.supervisorhuerta, 
-               h.añoplantacion, h.arbolesporhectareas, h.totalarboles, h.etapafenologica, 
+               h.anoplantacion, h.arbolesporhectareas, h.totalarboles, h.etapafenologica, 
                h.fechasv_01, h.fechasv_02, h.rutaKML, h.fechaRegistro, h.idjuntalocal
         FROM huertas h
         WHERE h.id_hue = :id_hue
