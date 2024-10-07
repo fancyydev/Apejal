@@ -24,7 +24,6 @@ if (!isset($id_usuario)) {
     exit();
 }
 
-// Consulta para obtener los datos de la huerta, productor y junta local filtrados por el ID del usuario
 $sql = "SELECT h.id_hue, u.nombre AS nombre_productor, h.nombre AS nombre_huerta, h.localidad, h.centroide, 
                h.hectareas, h.pronostico_de_cosecha, h.longitud, h.altitud, h.altura_nivel_del_mar, 
                h.variedad, h.nomempresa, h.encargadoempresa, h.supervisorhuerta, h.anoplantacion, 
@@ -32,8 +31,9 @@ $sql = "SELECT h.id_hue, u.nombre AS nombre_productor, h.nombre AS nombre_huerta
                h.rutaKML, h.fechaRegistro 
         FROM huertas h
         JOIN juntaslocales jl ON h.idjuntaLocal = jl.idjuntaLocal
-        JOIN usuario u ON jl.id_usuario = u.id_usuario
-        WHERE u.id_usuario = :id_usuario;"; // Agregar el filtro para el ID del usuario
+        JOIN productores p ON h.id_productor = p.id_productor
+        JOIN usuario u ON p.id_usuario = u.id_usuario
+        WHERE jl.id_usuario = :id_usuario;";
 
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT); // Vincular el parámetro
