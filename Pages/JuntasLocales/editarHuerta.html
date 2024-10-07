@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agregar Huerta</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Editar Huerta</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -15,18 +15,13 @@
     <link href="../../Styles/checkboxes.css" rel="stylesheet">
 </head>
 <body>
-
+    
     <div>
         <nav class="navbar logo">
             <a class="navbar-brand">
-                <img src="../../Assets/Img/Imagenes/Logo.jpeg" width="50VW" height="50VH" class="d-inline-block align-top" alt="Logo">
+                <img src="../../Assets/Img/Imagenes/Logo.jpeg" width="50VW" height="50VH" class="d-inline-block align-top" alt="">
             </a>
             <ul class="nav justify-content-end">
-                <li class="nav-item">
-                    <a id="logout">
-                        <img class="img-responsive" src="../../Assets/Img/Imagenes/salida.png" width="50VW" height="50VH" alt="Logout">
-                    </a>                
-                </li>
             </ul>
         </nav>
         <nav class="navbar navbar-expand-lg">
@@ -35,58 +30,86 @@
     </div>
 
     <div class="container">
-        <h3 class="text-center">Nueva Huerta</h3>
+        <h3 class="text-center">Editar Huerta</h3>
         <div class="card">
             <div class="card-header">Detalles de la Huerta</div>
             <div class="card-body">
                 <div class="row g-3">
-                    <div class="col-md-5">
-                        <label for="id_hue" class="form-label">ID de la Huerta</label>
-                        <input class="form-control" type="text" name="id_hue" id="id_hue" maxlength="30" />
+                    <div class="col-md-5" id="nombreField">
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <input class="form-control" type="text" name="nombre" id="nombre" maxlength="50"/>
                     </div>
-                    <div class="col-md-5">
-                        <label for="id_productor" class="form-label">ID del Productor</label>
-                        <input class="form-control" type="text" name="id_productor" id="id_productor" />
-                    </div>
-                    <div class="col-md-5">
-                        <label for="nombre_huerta" class="form-label">Nombre de la Huerta</label>
-                        <input class="form-control" type="text" name="nombre_huerta" id="nombre_huerta" maxlength="50" />
-                    </div>
-                    <div class="col-md-5">
+                    <div class="col-md-5" id="localidadField">
                         <label for="localidad" class="form-label">Localidad</label>
-                        <input class="form-control" type="text" name="localidad" id="localidad" maxlength="50" />
+                        <input class="form-control" type="text" name="localidad" id="localidad" maxlength="50"/>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="centroide" class="form-label">Centroide</label>
+                        <input class="form-control" type="text" name="centroide" id="centroide"/>
                     </div>
                     <div class="col-md-5">
                         <label for="hectareas" class="form-label">Hectáreas</label>
-                        <input class="form-control" type="number" name="hectareas" id="hectareas" />
+                        <input class="form-control" type="number" name="hectareas" id="hectareas"/>
                     </div>
                     <div class="col-md-5">
                         <label for="pronostico_de_cosecha" class="form-label">Pronóstico de Cosecha</label>
-                        <input class="form-control" type="number" name="pronostico_de_cosecha" id="pronostico_de_cosecha" />
+                        <input class="form-control" type="text" name="pronostico_de_cosecha" id="pronostico_de_cosecha"/>
                     </div>
                     <div class="col-md-5">
                         <label for="longitud" class="form-label">Longitud</label>
-                        <input class="form-control" type="number" name="longitud" id="longitud" />
+                        <input class="form-control" type="text" name="longitud" id="longitud"/>
                     </div>
                     <div class="col-md-5">
                         <label for="altitud" class="form-label">Altitud</label>
-                        <input class="form-control" type="number" name="altitud" id="altitud" />
+                        <input class="form-control" type="text" name="altitud" id="altitud"/>
                     </div>
                     <div class="col-md-5">
-                        <label for="altura_nivel_del_mar" class="form-label">Altura sobre el Nivel del Mar</label>
-                        <input class="form-control" type="number" name="altura_nivel_del_mar" id="altura_nivel_del_mar" />
+                        <label for="altura_nivel_del_mar" class="form-label">Altura Nivel del Mar</label>
+                        <input class="form-control" type="text" name="altura_nivel_del_mar" id="altura_nivel_del_mar"/>
                     </div>
                     <div class="col-md-5">
                         <label for="variedad" class="form-label">Variedad</label>
-                        <input class="form-control" type="text" name="variedad" id="variedad" maxlength="20" />
+                        <input class="form-control" type="text" name="variedad" id="variedad"/>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="nomempresa" class="form-label">Nombre de Empresa</label>
+                        <input class="form-control" type="text" name="nomempresa" id="nomempresa"/>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="encargadoempresa" class="form-label">Encargado de Empresa</label>
+                        <input class="form-control" type="text" name="encargadoempresa" id="encargadoempresa"/>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="supervisorhuerta" class="form-label">Supervisor de Huerta</label>
+                        <input class="form-control" type="text" name="supervisorhuerta" id="supervisorhuerta"/>
                     </div>
                     <div class="col-md-5">
                         <label for="añoplantacion" class="form-label">Año de Plantación</label>
-                        <input class="form-control" type="number" name="añoplantacion" id="añoplantacion" />
+                        <input class="form-control" type="number" name="añoplantacion" id="añoplantacion"/>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="arbolesporhectareas" class="form-label">Árboles por Hectáreas</label>
+                        <input class="form-control" type="number" name="arbolesporhectareas" id="arbolesporhectareas"/>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="totalarboles" class="form-label">Total de Árboles</label>
+                        <input class="form-control" type="number" name="totalarboles" id="totalarboles"/>
                     </div>
                     <div class="col-md-5">
                         <label for="etapafenologica" class="form-label">Etapa Fenológica</label>
-                        <input class="form-control" type="text" name="etapafenologica" id="etapafenologica" maxlength="50" />
+                        <input class="form-control" type="text" name="etapafenologica" id="etapafenologica"/>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="fechasv_01" class="form-label">Fecha de Siembra 01</label>
+                        <input class="form-control" type="date" name="fechasv_01" id="fechasv_01"/>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="fechasv_02" class="form-label">Fecha de Siembra 02</label>
+                        <input class="form-control" type="date" name="fechasv_02" id="fechasv_02"/>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="rutaKML" class="form-label">Ruta KML</label>
+                        <input class="form-control" type="text" name="rutaKML" id="rutaKML"/>
                     </div>
                 </div>
             </div>
@@ -96,10 +119,10 @@
         <div class="row">
             <div class="col-lg-3"></div>
             <div class="col-lg-3">
-                <button type="button" id="regristar" class="btn btn-primary btn-block">Guardar Huerta</button>
+                <button type="button" id="guardarHuerta" class="btn btn-primary btn-block">Guardar Huerta</button>
             </div>
             <div class="col-lg-3">
-                <button type="button" id="Cancelar" class="btn btn-secondary btn-block">Cancelar</button>
+                <button type="button" id="cancelar" class="btn btn-secondary btn-block">Cancelar</button>
             </div>
             <div class="col-lg-3"></div>
         </div>
@@ -107,84 +130,109 @@
     </div>
 
     <script>
+        const aux = new auxliar();
+
         $(document).ready(function() {
-            // Código para manejar la lógica de huerta
-            $('#regristar').click(function() {
-                var huertaData = {
-                    id_hue: $('#id_hue').val(),
-                    id_productor: $('#id_productor').val(),
-                    nombre_huerta: $('#nombre_huerta').val(),
+            // Recupera los datos de la huerta desde sessionStorage
+            const id_hue = sessionStorage.getItem('id_hue');
+            const nombre = sessionStorage.getItem('nombre_huerta');
+            const localidad = sessionStorage.getItem('localidad');
+            const centroide = sessionStorage.getItem('centroide');
+            const hectareas = sessionStorage.getItem('hectareas');
+            const pronostico_de_cosecha = sessionStorage.getItem('pronostico_de_cosecha');
+            const longitud = sessionStorage.getItem('longitud');
+            const altitud = sessionStorage.getItem('altitud');
+            const altura_nivel_del_mar = sessionStorage.getItem('altura_nivel_del_mar');
+            const variedad = sessionStorage.getItem('variedad');
+            const nomempresa = sessionStorage.getItem('nomempresa');
+            const encargadoempresa = sessionStorage.getItem('encargadoempresa');
+            const supervisorhuerta = sessionStorage.getItem('supervisorhuerta');
+            const añoplantacion = sessionStorage.getItem('añoplantacion');
+            const arbolesporhectareas = sessionStorage.getItem('arbolesporhectareas');
+            const totalarboles = sessionStorage.getItem('totalarboles');
+            const etapafenologica = sessionStorage.getItem('etapafenologica');
+            const fechasv_01 = sessionStorage.getItem('fechasv_01');
+            const fechasv_02 = sessionStorage.getItem('fechasv_02');
+            const rutaKML = sessionStorage.getItem('rutaKML');
+
+            // Asigna los valores a los campos del formulario
+            $('#nombre').val(nombre);
+            $('#localidad').val(localidad);
+            $('#centroide').val(centroide);
+            $('#hectareas').val(hectareas);
+            $('#pronostico_de_cosecha').val(pronostico_de_cosecha);
+            $('#longitud').val(longitud);
+            $('#altitud').val(altitud);
+            $('#altura_nivel_del_mar').val(altura_nivel_del_mar);
+            $('#variedad').val(variedad);
+            $('#nomempresa').val(nomempresa);
+            $('#encargadoempresa').val(encargadoempresa);
+            $('#supervisorhuerta').val(supervisorhuerta);
+            $('#añoplantacion').val(añoplantacion);
+            $('#arbolesporhectareas').val(arbolesporhectareas);
+            $('#totalarboles').val(totalarboles);
+            $('#etapafenologica').val(etapafenologica);
+            $('#fechasv_01').val(fechasv_01);
+            $('#fechasv_02').val(fechasv_02);
+            $('#rutaKML').val(rutaKML);
+
+            // Manejo del evento para guardar la huerta
+            $('#guardarHuerta').click(function() {
+                // Obtiene los valores de los campos del formulario
+                const updatedData = {
+                    id_hue: id_hue,
+                    nombre: $('#nombre').val(),
                     localidad: $('#localidad').val(),
+                    centroide: $('#centroide').val(),
                     hectareas: $('#hectareas').val(),
                     pronostico_de_cosecha: $('#pronostico_de_cosecha').val(),
-                    añoplantacion: $('#añoplantacion').val()
+                    longitud: $('#longitud').val(),
+                    altitud: $('#altitud').val(),
+                    altura_nivel_del_mar: $('#altura_nivel_del_mar').val(),
+                    variedad: $('#variedad').val(),
+                    nomempresa: $('#nomempresa').val(),
+                    encargadoempresa: $('#encargadoempresa').val(),
+                    supervisorhuerta: $('#supervisorhuerta').val(),
+                    añoplantacion: $('#añoplantacion').val(),
+                    arbolesporhectareas: $('#arbolesporhectareas').val(),
+                    totalarboles: $('#totalarboles').val(),
+                    etapafenologica: $('#etapafenologica').val(),
+                    fechasv_01: $('#fechasv_01').val(),
+                    fechasv_02: $('#fechasv_02').val(),
+                    rutaKML: $('#rutaKML').val(),
                 };
 
-                // Llamada AJAX para enviar los datos al backend (agrega tus rutas)
+                // Realiza la petición AJAX para guardar los cambios
                 $.ajax({
-                    url: '../../Backend/Huertas/guardarHuerta.php',
+                    url: '../../Backend/Huertas/guardar_huerta.php', // Asegúrate de que esta URL sea correcta
                     type: 'POST',
-                    data: huertaData,
+                    data: updatedData,
                     success: function(response) {
-                        Swal.fire('Éxito', 'Huerta guardada correctamente', 'success');
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Huerta actualizada!',
+                            text: 'Los detalles de la huerta han sido actualizados con éxito.',
+                        });
+                        // Redirigir a otra página o realizar otra acción si es necesario
+                        
                     },
-                    error: function() {
-                        Swal.fire('Error', 'Hubo un error al guardar los datos', 'error');
+                    error: function(xhr, status, error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Ocurrió un error al actualizar la huerta. Intenta de nuevo.',
+                        });
                     }
                 });
             });
-        });
-    </script>
 
-    <!-- Sección para mostrar la tabla de huertas -->
-    <div class="container mt-5">
-        <h3 class="text-center">Huertas</h3>
-        <table id="huertas-table" class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>ID Huerta</th>
-                    <th>Nombre</th>
-                    <th>Localidad</th>
-                    <th>Hectáreas</th>
-                    <th>Pronóstico Cosecha</th>
-                    <th>Supervisor</th>
-                    <th>Año Plantación</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-
-    <script>
-        $(document).ready(function() {
-            // Cargar las huertas al cargar la página
-            $.ajax({
-                url: '../../Backend/Huertas/obtenerHuertas.php',
-                type: 'GET',
-                dataType: 'json',
-                success: function(response) {
-                    let huertasTableBody = $('#huertas-table tbody');
-                    huertasTableBody.empty();
-
-                    response.forEach(function(huerta) {
-                        huertasTableBody.append(`
-                            <tr>
-                                <td>${huerta.id_hue}</td>
-                                <td>${huerta.nombre}</td>
-                                <td>${huerta.localidad}</td>
-                                <td>${huerta.hectareas}</td>
-                                <td>${huerta.pronostico_de_cosecha}</td>
-                                <td>${huerta.supervisorhuerta}</td>
-                                <td>${huerta.añoplantacion}</td>
-                            </tr>
-                        `);
-                    });
-                },
-                error: function() {
-                    console.error('Error al obtener las huertas');
-                }
+            // Manejo del evento para cancelar
+            $('#cancelar').click(function() {
+                
+                window.location.href = '../JuntasLocales/menuJuntaLocal.php'; 
             });
         });
     </script>
+
 </body>
 </html>

@@ -146,6 +146,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
             currentContext = 'municipios';
             cargarMunicipios(); 
         });
+        
 
         // Evento de búsqueda (al hacer clic en el botón o presionar Enter)
         $('#btnSearch').click(function() {
@@ -444,7 +445,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                         <tr>
                             <td>${huerta.id_hue}</td>
                             <td>
-                                <button id="btnEdit" onclick="editRow(this)">
+                                <button id="btnEdit" onclick="editRow('${huerta.id_hue}','huerta')">
                                     <ion-icon name="pencil-outline"></ion-icon>
                                 </button>
                                 <button id="btnDelete" onclick="deleteRow(this)">
@@ -687,11 +688,14 @@ function editRow(id, tipo) {
     if (tipo === 'productor') {
         url = '../../Backend/JuntasLocales/envioDatosProductor.php?id_productor=' + id;
     } else if (tipo === 'tecnico') {
-        url = '../../Backend/JuntasLocales/envioDatosTecnico.php?id_tecnico=' + id;
+        url = '../../Backend/JuntasLocales/envioDatosTecnico.php?id_tecnico=' + id; 
     } else if(tipo == 'laboratorio') {
         url = '../../Backend/JuntasLocales/envioDatosPLaboratorio.php?id_laboratorio=' + id;
     } else if(tipo == 'solicitud') {
-        url = '../../Backend/JuntasLocales/envioDatosSolicitud.php?id_solicitud=' + id;
+        url = '../../Backend/JuntasLocales/envioDatosSolicitud.php?id_solicitud=' + id;     
+    } else if(tipo == 'huerta') {
+        url = '../../Backend/JuntasLocales/envioDatosHuerta.php?id_hue=' + id;
+        console.log('Entrando a huerta con ID:', id);
     } else {
         console.error('Tipo desconocido:', tipo);
         return;
@@ -749,10 +753,33 @@ function editRow(id, tipo) {
                 sessionStorage.setItem('id_usuario', data.id_solicitud);
                 sessionStorage.setItem('nombre', data.status);
                 sessionStorage.setItem('correo', data.nombre_productor);
-                sessionStorage.setItem('telefono', data.nombre_huerta);
+                sessionStorage.setItem('telefono', data.teléfono);
                 sessionStorage.setItem('contraseña', data.fecha_programada);
                 sessionStorage.setItem('status', data.nombre_tecnico);
                 window.location.href = '../JuntasLocales/asignarSolicitudes.php';
+            } else if (tipo == 'huerta') {
+                sessionStorage.setItem('id_hue', id);
+                sessionStorage.setItem('nombre_huerta', data.nombre);
+                sessionStorage.setItem('localidad', data.localidad);
+                sessionStorage.setItem('centroide', data.centroide);
+                sessionStorage.setItem('hectareas', data.hectareas);
+                sessionStorage.setItem('pronostico_de_cosecha', data.pronostico_de_cosecha);
+                sessionStorage.setItem('longitud', data.longitud);
+                sessionStorage.setItem('altitud', data.altitud);
+                sessionStorage.setItem('altura_nivel_del_mar', data.altura_nivel_del_mar);
+                sessionStorage.setItem('variedad', data.variedad); 
+                sessionStorage.setItem('nomempresa', data.nomempresa); 
+                sessionStorage.setItem('encargadoempresa', data.encargadoempresa); 
+                sessionStorage.setItem('supervisorhuerta', data.supervisorhuerta); 
+                sessionStorage.setItem('añoplantacion', data.añoplantacion); 
+                sessionStorage.setItem('arbolesporhectareas', data.arbolesporhectareas);
+                sessionStorage.setItem('totalarboles', data.totalarboles); 
+                sessionStorage.setItem('etapafenologica', data.etapafenologica);
+                sessionStorage.setItem('fechasv_01', data.fechasv_01); 
+                sessionStorage.setItem('fechasv_02', data.fechasv_02);
+                sessionStorage.setItem('rutaKML', data.rutaKML); 
+                sessionStorage.setItem('fechaRegistro', data.fechaRegistro);
+                window.location.href = '../JuntasLocales/editarHuerta.html';
             }
         },
         error: function(xhr, status, error) {
