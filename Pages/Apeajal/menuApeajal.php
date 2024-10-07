@@ -222,7 +222,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                         <tr>
                             <td>${juntalocal.idjuntalocal}</td>
                             <td>
-                                <button id="btnEdit" onclick="editRow(this)">
+                                <button id="btnEdit" onclick="editRow(${juntalocal.idjuntalocal}, 'juntaLocal')">
                                     <ion-icon name="pencil-outline"></ion-icon>
                                 </button>
                                 <button id="btnDelete" onclick="deleteRow(this)">
@@ -560,6 +560,44 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
         });
     }
 });
+
+function editRow(id, tipo) {
+    let url = '';
+    if(tipo == 'juntaLocal') {
+        url = '../../Backend/Apeajal/envioDatosJL.php?idjuntalocal=' + id;
+    } else {
+        console.error('Tipo desconocido:', tipo);
+        return;
+    }
+
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            // Guarda los datos en sessionStorage
+            sessionStorage.setItem('id_tipo', tipo);
+            if(tipo == 'juntaLocal') {
+                sessionStorage.setItem('idjuntalocal', id);
+                sessionStorage.setItem('nombre', data.nombre);
+                sessionStorage.setItem('nomAdmin', data.nombre_admin);
+                sessionStorage.setItem('idAdmin', data.id_usuario);
+                sessionStorage.setItem('correo', data.correo);
+                sessionStorage.setItem('telefono', data.teléfono);
+                sessionStorage.setItem('domicilio', data.domicilio);
+                sessionStorage.setItem('carga_municipios', data.carga_municipios);
+                sessionStorage.setItem('estatus', data.estatus);
+                sessionStorage.setItem('ruta_img', data.ruta_img);
+                sessionStorage.setItem('municipios', data.municipios);
+                window.location.href = '../Apeajal/editarJL.html';
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error al obtener los datos:', status, error);
+            console.error('Respuesta del servidor:', xhr.responseText);
+        }
+    });
+}
 
     </script>
     <!-- Ionicons-->

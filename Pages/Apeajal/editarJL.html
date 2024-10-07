@@ -62,7 +62,7 @@
                         <div class="col-md-3">
                         </div>
                         <div class="col-md-6">
-                            <h3 class="text-center">NUEVA JUNTA LOCAL</h3>
+                            <h3 class="text-center">EDITAR JUNTA LOCAL</h3>
                         </div>
                         <div class="col-md-3">
                             <label for="staticEmail" class="form-label">Fecha</label>
@@ -128,13 +128,20 @@
                                             <option value="activo">Activo</option>
                                             <option value="inactivo">Inactivo</option>
                                         </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="editar-foto" class="form-label">¿Editar foto junta local?</label>
+                                        <select class="form-control" name="editar_foto" id="editar-foto">
+                                            <option value="no">No</option>
+                                            <option value="si">Sí</option>
+                                        </select>
                                     </div>                                                   
                                 </div>
                                 <br>
-                                <div class="row g-3">
+                                <div class="row g-3" id="imagen-container" style="display: none;">
                                     <div class="col-md-6">
                                         <label for="staticEmail" class="form-label">Imagen Junta Local</label>
-                                        <input class="form-control" type="file" name="img" id="img" accept="image/*"  />
+                                        <input class="form-control" type="file" name="img" id="img" accept="image/*" />
                                     </div>
                                 </div>
                             </div>
@@ -172,18 +179,51 @@
         const aux = new auxliar();
 
         $(document).ready(function(){
+
+            // Recupera los datos del productor desde sessionStorage
+            const idjuntalocal = sessionStorage.getItem('idjuntalocal');
+            const idAdminSeleccionado = sessionStorage.getItem('idAdmin');
+            const nom_admin = sessionStorage.getItem('nomAdmin');
+            const nombre = sessionStorage.getItem('nombre');
+            const correo = sessionStorage.getItem('correo');
+            const telefono = sessionStorage.getItem('telefono');
+            const domicilio = sessionStorage.getItem('domicilio');
+            const cargaM = sessionStorage.getItem('carga_municipios'); //Recibo carga_municipios
+            const status = sessionStorage.getItem('estatus');
+            const rutaIMG = sessionStorage.getItem('ruta_img');
+            const municipiosNombres = sessionStorage.getItem('municipios'); //Recibo los nombres de los municipios
+            const municipiosSeleccionados = sessionStorage.getItem('carga_municipios') ? sessionStorage.getItem('carga_municipios').split(',') : [];
+
+            $('#nombre').val(nombre);
+            $('#correo').val(correo);
+            $('#telefono').val(telefono);
+            $('#status').val(status);
+            $('#domicilio').val(domicilio);
+
             //session.confirmarlogin("No-Clientes");
+            
+
+            $('#editar-foto').change(function() {
+                const selectedValue = $(this).val();
+                if (selectedValue === 'si') {
+                    $('#imagen-container').show();  
+                } else {
+                    $('#imagen-container').hide();
+                    $('#img').val('');               
+                }
+            });
 
             // Cargar Municipios
             $.ajax({
-                url: '../../Backend/JuntasLocales/obtenerMunicipios.php',
+                url: '../../Backend/Apeajal/obtenerMunicipios.php',
                 method: 'GET',
                 dataType: 'json',
                 success: function(data) {
                     data.forEach(function(municipio) {
+                        const isChecked = municipiosSeleccionados.includes(municipio.id_municipio.toString()) ? 'checked' : '';
                         $('#municipio-checkboxes').append(`
                             <label>
-                                <input type="checkbox" name="municipio[]" value="${municipio.id_municipio}"> ${municipio.nombre}
+                                <input type="checkbox" name="municipio[]" value="${municipio.id_municipio}" ${isChecked}> ${municipio.nombre}
                             </label>
                         `);
                     });
@@ -193,17 +233,25 @@
                 }
             });
 
+            $('#admin').empty();
             $.ajax({
-                url: '../../Backend/JuntasLocales/obtenerAdminJL.php',
+                url: '../../Backend/Apeajal/obtenerAdminJL.php',
                 type: 'GET',
+                data: {
+                    idAdminActual: idAdminSeleccionado
+                },
                 dataType: 'json',
                 success: function(response) {
-                    //Itera sobre el array de respuesta y agrega lo que encuentra en la base de datos
                     $.each(response, function(index, user) {
-                        $('#admin').append($('<option>', {
+                        const option = $('<option>', {
                             value: user.id_usuario,
                             text: user.nombre
-                        }));
+                        });
+
+                        if (user.id_usuario === idAdminSeleccionado) {
+                            option.prop('selected', true);
+                        }
+                        $('#admin').append(option);
                     });
                 },
                 error: function(xhr, status, error) {
@@ -248,6 +296,8 @@
                 $('input[name="municipio[]"]:checked').each(function() {
                     municipiosSeleccionados.push($(this).val());
                 });
+                const editarFoto = $('#editar-foto').val();
+                
             
             var resultado = aux.validateAll(
                     [
@@ -257,15 +307,25 @@
                         {"valor":document.getElementById("correo").value,"typeOf":"string","mensaje":"<p>Insertar correo</p><br>"},
                         {"valor": municipiosSeleccionados.length > 0 ? "1" : "", "typeOf": "string", "mensaje": "<p>Seleccionar municipios</p><br>"},
                         {"valor":document.getElementById("admin").value,"typeOf":"int","mensaje":"<p>Seleccionar administrador</p><br>"},
-                        {"valor":document.getElementById("status").value,"typeOf":"int","mensaje":"<p>Seleccionar estatus</p><br>"},
-                        {"valor": $('#img')[0].files.length > 0, "typeOf": "file", "mensaje": "<p>Insertar una imagen</p><br>"}               
+                        {"valor":document.getElementById("status").value,"typeOf":"int","mensaje":"<p>Seleccionar estatus</p><br>"}             
                     ]
                 );
-            console.log(municipiosSeleccionados)
 
+                if (editarFoto === 'si') {
+                    if ($('#img')[0].files.length === 0) {
+                        resultado.estado = false;
+                        resultado.texto += "<p>Insertar una imagen</p><br>";
+                    }
+                }
+            
             if (resultado.estado) {
                 const formData = new FormData();
-                formData.append("file", document.querySelector("#img").files[0]);
+                if (editarFoto === 'si') {
+                    formData.append("file", document.querySelector("#img").files[0]);
+                } else {
+                    formData.append("archivo", rutaIMG);
+                }
+                formData.append("idjuntalocal", idjuntalocal);
                 formData.append("nombre", document.getElementById("nombre").value);
                 formData.append("domicilio", document.getElementById("domicilio").value);
                 formData.append("telefono", document.getElementById("telefono").value);
@@ -273,9 +333,17 @@
                 formData.append("municipios", municipiosSeleccionados.join(','));
                 formData.append("admin", document.getElementById("admin").value);
                 formData.append("status", document.getElementById("status").value);
+                formData.append("editarFoto", editarFoto);
+
+
+                // Loguear los datos del FormData
+                for (let pair of formData.entries()) {
+                    console.log(pair[0]+ ': ' + pair[1]);
+                }
 
                 $.ajax({
-                    url: '../../Backend/Apeajal/registrarJuntaLocal.php',
+                    //
+                    url: '../../Backend/Apeajal/actualizarJuntaLocal.php',
                     method: 'POST',
                     data: formData,
                     contentType: false,
