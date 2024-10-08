@@ -745,13 +745,13 @@ function editRow(id, tipo) {
                 sessionStorage.setItem('jl', data.nombre_junta);
                 window.location.href = '../JuntasLocales/editarLaboratorio.html';
             } else if (tipo == 'solicitud') {
-                sessionStorage.setItem('id_laboratorio', id);
-                sessionStorage.setItem('id_usuario', data.id_solicitud);
-                sessionStorage.setItem('nombre', data.status);
-                sessionStorage.setItem('correo', data.nombre_productor);
-                sessionStorage.setItem('telefono', data.nombre_huerta);
-                sessionStorage.setItem('contraseña', data.fecha_programada);
-                sessionStorage.setItem('status', data.nombre_tecnico);
+                sessionStorage.setItem('id_solicitud', id);
+                sessionStorage.setItem('status', data.status);
+                sessionStorage.setItem('nombre_productor', data.nombre_productor);
+                sessionStorage.setItem('nombre_huerta', data.nombre_huerta);
+                sessionStorage.setItem('fecha_programada', data.fecha_programada);
+                sessionStorage.setItem('nombre_tecnico', data.nombre_tecnico);
+                sessionStorage.setItem('id_tecnico', data.id_tecnico);
                 window.location.href = '../JuntasLocales/asignarSolicitudes.php';
             }
         },

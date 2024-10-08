@@ -30,7 +30,13 @@ $sql = "SELECT s.id_solicitud, s.status, up.nombre AS nombre_productor, h.nombre
             SELECT jl2.idjuntalocal
             FROM juntaslocales jl2
             WHERE jl2.id_usuario = :id_usuario
-        )";
+        )
+        ORDER BY 
+            CASE 
+                WHEN s.status = 'pendiente' THEN 1 
+                ELSE 2 
+            END";
+
 
 // Preparar la consulta
 $stmt = $conn->prepare($sql);
