@@ -17,10 +17,9 @@ if (isset($_GET['id_productor'])) {
 
     // Consulta a la base de datos
     $stmt = $conn->prepare("
-        SELECT u.id_usuario,u.id_tipo, u.nombre, u.correo, u.teléfono, u.contraseña, p.rfc, p.curp, p.estatus, p.idjuntalocal, jl.nombre AS nombre_junta  
+        SELECT u.id_usuario,u.id_tipo, u.nombre, u.correo, u.teléfono, u.contraseña, p.rfc, p.curp, p.estatus  
         FROM productores p
         JOIN usuario u ON p.id_usuario = u.id_usuario 
-        LEFT JOIN juntaslocales jl ON p.idjuntalocal = jl.idjuntalocal
         WHERE p.id_productor = :id_productor
     ");
     

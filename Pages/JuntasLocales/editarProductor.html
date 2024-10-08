@@ -54,12 +54,7 @@
                             <option value="inactivo">Inactivo</option>
                         </select>
                     </div>
-                    <div class="col-md-5">
-                        <label for="jl" class="form-label">Junta Local</label>
-                        <select class="form-control" name="jl" id="jl">
-                            <option value="">Seleccione Junta local</option>
-                        </select>
-                    </div>
+                
                     <div class="col-md-5">
                         <label for="nombre" class="form-label">Nombre</label>
                         <input class="form-control" type="text" name="nombre" id="nombre" maxlength="50"/>
@@ -108,8 +103,6 @@
             const correo = sessionStorage.getItem('correo');
             const telefono = sessionStorage.getItem('telefono');
             const status = sessionStorage.getItem('status');
-            const jl_id = sessionStorage.getItem('jl_id');
-            const jl = sessionStorage.getItem('jl');
             const contra = sessionStorage.getItem('contraseña')
             const id_tipo = sessionStorage.getItem('id_tipo')
 
@@ -121,29 +114,6 @@
             $('#telefono').val(telefono);
             $('#status').val(status);
             $('#contra').val(contra)
-
-            // Cargar Juntas Locales
-            $.ajax({
-                url: '../../Backend/Huertas/obtenerJL.php',
-                type: 'GET',
-                dataType: 'json',
-                success: function(response) {
-                    $.each(response, function(index, jl) {
-                        $('#jl').append($('<option>', {
-                            value: jl.idjuntalocal,
-                            text: jl.nombre
-                        }));
-                    });
-                    
-                    if (jl_id) {
-                         $('#jl').val(jl_id); // Asegúrate de usar el ID correcto
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error al obtener juntas locales:', status, error);
-                }
-            });
-
             
             $('#regristar').click(function() {
                 var tipoUsuario = id_tipo;
@@ -157,12 +127,8 @@
                     {"valor": document.getElementById("telefono").value, "typeOf": "string", "mensaje": "<p>Insertar telefono</p><br>"},
                     {"valor": document.getElementById("status").value, "typeOf": "string", "mensaje": "<p>Insertar estatus</p><br>"},
                     {"valor": document.getElementById("contra").value, "typeOf": "string", "mensaje": "<p>Insertar contraseña</p><br>"},
-                    {"valor": document.getElementById("jl").value, "typeOf": "string", "mensaje": "<p>Insertar junta local</p><br>"}
                 ]);
                 
-                // Obtén el valor del select sin convertirlo a entero
-                var jlValue = document.getElementById("jl").value;  // Esto será un string
-                /*
                 console.log({
                     tipo: tipoUsuario,
                     nombre: document.getElementById("nombre").value,
@@ -171,12 +137,11 @@
                     contra: document.getElementById("contra").value,
                     rfc: document.getElementById("rfc").value,
                     curp: document.getElementById("curp").value,
-                    jl: jlValue,  // Asegúrate de enviar jlValue como string
                     status: document.getElementById("status").value,
                     id_productor: id_productor,
                     id_usuario: id_usuario
                 });
-                */
+                
                 if (resultado.estado) {
                     $.ajax({
                         url: '../../Backend/JuntasLocales/actualizarUsuario.php',
@@ -189,7 +154,6 @@
                             contra: document.getElementById("contra").value,
                             rfc: document.getElementById("rfc").value,
                             curp: document.getElementById("curp").value,
-                            jl: jlValue,  // Enviar jl como string
                             status: document.getElementById("status").value,
                             id_productor: id_productor,
                             id_usuario: id_usuario

@@ -24,47 +24,51 @@ if (!isset($id_usuario)) {
     exit();
 }
 
-$sql = "SELECT h.id_hue, u.nombre AS nombre_productor, h.nombre AS nombre_huerta, m.nombre AS localidad, 
-               h.centroide, h.hectareas, h.pronostico_de_cosecha, h.longitud, h.altitud, 
-               h.altura_nivel_del_mar, h.variedad, h.nomempresa, h.encargadoempresa, 
-               h.supervisorhuerta, h.anoplantacion, h.arbolesporhectareas, h.totalarboles, 
-               h.etapafenologica, h.fechasv_01, h.fechasv_02, h.rutaKML, h.fechaRegistro 
+$sql = "SELECT h.id_hue, u.nombre AS nombre_productor, jl.nombre AS nombre_junta_local, h.nombre AS nombre_huerta, h.localidad, h.centroide, 
+               h.hectareas, h.pronostico_de_cosecha, h.longitud, h.altitud, h.altura_nivel_del_mar, 
+               h.variedad, h.nomempresa, h.encargadoempresa, h.supervisorhuerta, h.anoplantacion, 
+               h.arbolesporhectareas, h.totalarboles, h.etapafenologica, h.fechasv_01, h.fechasv_02, 
+               h.rutaKML, h.fechaRegistro 
         FROM huertas h
-        JOIN juntaslocales jl ON h.idjuntaLocal = jl.idjuntaLocal
-        JOIN productores p ON h.id_productor = p.id_productor
-        JOIN usuario u ON p.id_usuario = u.id_usuario
-        JOIN municipio m ON h.localidad = m.id_municipio
-        WHERE jl.id_usuario = :id_usuario;";
+        JOIN juntaslocales jl ON jl.idjuntaLocal = h.idjuntaLocal
+        JOIN productores p ON p.id_productor = h.id_productor
+        JOIN usuario u ON u.id_usuario = p.id_usuario
+        WHERE jl.idjuntalocal = (
+            SELECT j2.idjuntalocal 
+            FROM juntaslocales j2
+            WHERE j2.id_usuario = :id_usuario
+        )"; // Cerrar la consulta correctamente
 
-
+// Preparar la consulta
 $stmt = $conn->prepare($sql);
-$stmt->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT); // Vincular el parámetro
+
+// Vincular el parámetro correctamente
+$stmt->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT); 
 
 // Ejecutar la consulta
-$stmt->execute();
-$huertas = array();
+if ($stmt->execute()) {
+    $huertas = array();
 
-// Verificar si hay resultados
-if ($stmt !== false && $stmt->rowCount() > 0) {
-    // Convertir los datos en un array asociativo
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $huertas[] = $row;
+    // Verificar si hay resultados
+    if ($stmt->rowCount() > 0) {
+        // Convertir los datos en un array asociativo
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $huertas[] = $row;
+        }
+        // Devolver datos en formato JSON
+        echo json_encode($huertas);
+    } else {
+        echo json_encode(['error' => 'No se encontraron datos']);
     }
 } else {
-    echo json_encode(['error' => 'No se encontraron datos']);
-    exit();
+    // Manejar errores si la consulta no se ejecuta correctamente
+    $errorInfo = $stmt->errorInfo();
+    echo json_encode(['error' => 'Error en la consulta: ' . implode(", ", $errorInfo)]);
 }
 
 // Cerrar la conexión
 $conn = null;
 $stmt = null;
 
-// Devolver datos en formato JSON
-echo json_encode($huertas);
-
 ?>
-
-
-
-
 

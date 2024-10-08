@@ -285,7 +285,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                             <td>${huerta.nomempresa}</td>
                             <td>${huerta.encargadoempresa}</td>
                             <td>${huerta.supervisorhuerta}</td>
-                            <td>${huerta.añoplantacion}</td>
+                            <td>${huerta.anoplantacion}</td>
                             <td>${huerta.arbolesporhectareas}</td>
                             <td>${huerta.totalarboles}</td>
                             <td>${huerta.etapafenologica}</td>

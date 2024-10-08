@@ -19,7 +19,6 @@ $telefono = $_POST['telefono'] ?? '';
 $contra = $_POST['contra'] ?? '';
 $rfc = $_POST['rfc'] ?? '';
 $curp = $_POST['curp'] ?? '';
-$juntalocal = (int) ($_POST['jl'] ?? 0);
 $estatus = $_POST["status"] ?? '';
 $estatusT = $_POST["statusT"] ?? '';
 $jlT = (int) ($_POST['jlT'] ?? 0);
@@ -58,8 +57,7 @@ if ($tipo == "productor") {
     $sql_productor = "UPDATE productores SET 
                         rfc = '$rfc', 
                         estatus = '$estatus', 
-                        curp = '$curp', 
-                        idjuntalocal = $juntalocal 
+                        curp = '$curp'
                     WHERE id_productor = $id_productor";
     
     $resultado_productor = $conn->exec($sql_productor);

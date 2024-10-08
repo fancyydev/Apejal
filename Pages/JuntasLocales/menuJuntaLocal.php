@@ -483,6 +483,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
             <th>Accion</th>
             <th>Nombre Productor</th>
             <th>Nombre Huerta</th>
+            <th>Junta Local</th>
             <th>Localidad</th>
             <th>Centroide</th>
             <th>Hectáreas</th>
@@ -532,6 +533,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                             </td>
                             <td>${huerta.nombre_productor}</td>
                             <td>${huerta.nombre_huerta}</td>
+                            <td>${huerta.nombre_junta_local}</td>
                             <td>${huerta.localidad}</td>
                             <td>${huerta.centroide}</td>
                             <td>${huerta.hectareas}</td>
@@ -796,8 +798,7 @@ function editRow(id, tipo) {
                 sessionStorage.setItem('telefono', data.teléfono);
                 sessionStorage.setItem('contraseña', data.contraseña);
                 sessionStorage.setItem('status', data.estatus);
-                sessionStorage.setItem('jl_id', data.idjuntalocal); 
-                sessionStorage.setItem('jl', data.nombre_junta);
+            
                 // Redirigir a editarProductor.html
                 window.location.href = '../JuntasLocales/editarProductor.html';
 
@@ -827,7 +828,6 @@ function editRow(id, tipo) {
                 sessionStorage.setItem('jl', data.nombre_junta);
                 window.location.href = '../JuntasLocales/editarLaboratorio.html';
             } else if (tipo == 'solicitud') {
-<<<<<<< HEAD
                 sessionStorage.setItem('id_solicitud', id);
                 sessionStorage.setItem('status', data.status);
                 sessionStorage.setItem('nombre_productor', data.nombre_productor);
@@ -835,15 +835,6 @@ function editRow(id, tipo) {
                 sessionStorage.setItem('fecha_programada', data.fecha_programada);
                 sessionStorage.setItem('nombre_tecnico', data.nombre_tecnico);
                 sessionStorage.setItem('id_tecnico', data.id_tecnico);
-=======
-                sessionStorage.setItem('id_laboratorio', id);
-                sessionStorage.setItem('id_usuario', data.id_solicitud);
-                sessionStorage.setItem('nombre', data.status);
-                sessionStorage.setItem('correo', data.nombre_productor);
-                sessionStorage.setItem('telefono', data.teléfono);
-                sessionStorage.setItem('contraseña', data.fecha_programada);
-                sessionStorage.setItem('status', data.nombre_tecnico);
->>>>>>> 58ca94e3334f4d6e80954689a9fb77ea3dd3bfd3
                 window.location.href = '../JuntasLocales/asignarSolicitudes.php';
             } else if (tipo == 'huerta') {
                 sessionStorage.setItem('id_hue', id);

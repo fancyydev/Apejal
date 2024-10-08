@@ -102,7 +102,7 @@ if ($resultado) {
         //Esto con la finalidad de que cuando se vaya a la tabla productor ese id que se genero se asocie con id_usuario en la tabla
         $ultimo_id = $conn->lastInsertId();
 
-        $sql_productor = "INSERT INTO productores (id_usuario, rfc, estatus, curp, idjuntalocal) VALUES (?, ?, ?, ?, ?)";
+        $sql_productor = "INSERT INTO productores (id_usuario, rfc, estatus, curp) VALUES (?, ?, ?, ?)";
         $stmt_productor = $conn->prepare($sql_productor);
         if (!$stmt_productor) {
             die("Error en la preparación de la consulta de productor: " . implode(", ", $conn->errorInfo()));
@@ -112,7 +112,6 @@ if ($resultado) {
         $stmt_productor->bindParam(2, $rfc, PDO::PARAM_STR);
         $stmt_productor->bindParam(3, $estatus, PDO::PARAM_STR);
         $stmt_productor->bindParam(4, $curp, PDO::PARAM_STR);
-        $stmt_productor->bindParam(5, $jl, PDO::PARAM_INT);
         
         $resultado_productor = $stmt_productor->execute();
     } else if($tipo == "tecnico") {
