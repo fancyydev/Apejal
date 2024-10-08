@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Productores</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../../Components/Auxiliar/auxliar.js"></script>
+    <link href="../../Styles/navbar.css" rel="stylesheet">
+    <link href="../../Styles/movimientos.css" rel="stylesheet">
+    <link href="../../Styles/checkboxes.css" rel="stylesheet">
+    
+</head>
+<body>
+    
+    <div>
+        <nav class="navbar logo">
+            <a class="navbar-brand">
+                <img src="../../Assets/Img/Imagenes/Logo.jpeg" width="50VW" height="50VH" class="d-inline-block align-top" alt="">
+            </a>
+            <ul class="nav justify-content-end">
+            </ul>
+        </nav>
+        <nav class="navbar navbar-expand-lg">
+            <div class="linea"></div>
+        </nav>
+    </div>
+
+    <div class="container">
+        <h3 class="text-center">Editar Productor</h3>
+        <div class="card">
+            <div class="card-header">Detalles del Productor</div>
+            <div class="card-body">
+                <div class="row g-3">
+                    
+                    <div class="col-md-5" id="rfcField" >
+                        <label for="rfc" class="form-label">RFC</label>
+                        <input class="form-control" type="text" name="rfc" id="rfc" maxlength="13"/>
+                    </div>
+                    <div class="col-md-5" id="curpField" >
+                        <label for="curp" class="form-label">CURP</label>
+                        <input class="form-control" type="text" name="curp" id="curp" maxlength="18"/>
+                    </div>
+                    
+                    <div class="col-md-5">
+                        <label for="status" class="form-label">Estatus</label>
+                        <select class="form-control" name="status" id="status">
+                            <option value="">Seleccione el estatus</option>
+                            <option value="activo">Activo</option>
+                            <option value="inactivo">Inactivo</option>
+                        </select>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="jl" class="form-label">Junta Local</label>
+                        <select class="form-control" name="jl" id="jl">
+                            <option value="">Seleccione Junta local</option>
+                        </select>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <input class="form-control" type="text" name="nombre" id="nombre" maxlength="50"/>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="email" class="form-label">Correo</label>
+                        <input class="form-control" type="text" name="email" id="email" maxlength="50"/>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="telefono" class="form-label">Teléfono</label>
+                        <input class="form-control" type="text" name="telefono" id="telefono" maxlength="15"/>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="contra" class="form-label">Contraseña</label>
+                        <input class="form-control" type="text" name="contra" id="contra" maxlength="30"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <div class="row">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-3">
+                <button type="button" id="regristar" class="btn btn-primary btn-block">Guardar productor</button>
+            </div>
+            <div class="col-lg-3">
+                <button type="button" id="Cancelar" class="btn btn-secondary btn-block">Cancelar</button>
+            </div>
+            <div class="col-lg-3"></div>
+        </div>
+        <br>
+    </div>
+
+    <script>
+        const aux = new auxliar();
+
+        $(document).ready(function() {
+
+            // Recupera los datos del productor desde sessionStorage
+            const id_productor = sessionStorage.getItem('id_productor');
+            const id_usuario = sessionStorage.getItem('id_usuario')
+            const nombre = sessionStorage.getItem('nombre');
+            const rfc = sessionStorage.getItem('rfc');
+            const curp = sessionStorage.getItem('curp');
+            const correo = sessionStorage.getItem('correo');
+            const telefono = sessionStorage.getItem('telefono');
+            const status = sessionStorage.getItem('status');
+            const jl_id = sessionStorage.getItem('jl_id');
+            const jl = sessionStorage.getItem('jl');
+            const contra = sessionStorage.getItem('contraseña')
+            const id_tipo = sessionStorage.getItem('id_tipo')
+
+            // Rellena los campos del formulario
+            $('#nombre').val(nombre);
+            $('#rfc').val(rfc);
+            $('#curp').val(curp);
+            $('#email').val(correo);
+            $('#telefono').val(telefono);
+            $('#status').val(status);
+            $('#contra').val(contra)
+
+            // Cargar Juntas Locales
+            $.ajax({
+                url: '../../Backend/Huertas/obtenerJL.php',
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    $.each(response, function(index, jl) {
+                        $('#jl').append($('<option>', {
+                            value: jl.idjuntalocal,
+                            text: jl.nombre
+                        }));
+                    });
+                    
+                    if (jl_id) {
+                         $('#jl').val(jl_id); // Asegúrate de usar el ID correcto
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error al obtener juntas locales:', status, error);
+                }
+            });
+
+            
+            $('#regristar').click(function() {
+                var tipoUsuario = id_tipo;
+                
+                // Validación de los campos
+                var resultado = aux.validateAll([
+                    {"valor": document.getElementById("nombre").value, "typeOf": "string", "mensaje": "<p>Insertar nombre</p><br>"},
+                    {"valor": document.getElementById("curp").value, "typeOf": "string", "mensaje": "<p>Insertar CURP</p><br>"},
+                    {"valor": document.getElementById("rfc").value, "typeOf": "string", "mensaje": "<p>Insertar RFC</p><br>"},
+                    {"valor": document.getElementById("email").value, "typeOf": "string", "mensaje": "<p>Insertar email</p><br>"},
+                    {"valor": document.getElementById("telefono").value, "typeOf": "string", "mensaje": "<p>Insertar telefono</p><br>"},
+                    {"valor": document.getElementById("status").value, "typeOf": "string", "mensaje": "<p>Insertar estatus</p><br>"},
+                    {"valor": document.getElementById("contra").value, "typeOf": "string", "mensaje": "<p>Insertar contraseña</p><br>"},
+                    {"valor": document.getElementById("jl").value, "typeOf": "string", "mensaje": "<p>Insertar junta local</p><br>"}
+                ]);
+                
+                // Obtén el valor del select sin convertirlo a entero
+                var jlValue = document.getElementById("jl").value;  // Esto será un string
+                /*
+                console.log({
+                    tipo: tipoUsuario,
+                    nombre: document.getElementById("nombre").value,
+                    email: document.getElementById("email").value,
+                    telefono: document.getElementById("telefono").value,
+                    contra: document.getElementById("contra").value,
+                    rfc: document.getElementById("rfc").value,
+                    curp: document.getElementById("curp").value,
+                    jl: jlValue,  // Asegúrate de enviar jlValue como string
+                    status: document.getElementById("status").value,
+                    id_productor: id_productor,
+                    id_usuario: id_usuario
+                });
+                */
+                if (resultado.estado) {
+                    $.ajax({
+                        url: '../../Backend/JuntasLocales/actualizarUsuario.php',
+                        type: 'POST',
+                        data: {
+                            tipo: tipoUsuario,
+                            nombre: document.getElementById("nombre").value,
+                            email: document.getElementById("email").value,
+                            telefono: document.getElementById("telefono").value,
+                            contra: document.getElementById("contra").value,
+                            rfc: document.getElementById("rfc").value,
+                            curp: document.getElementById("curp").value,
+                            jl: jlValue,  // Enviar jl como string
+                            status: document.getElementById("status").value,
+                            id_productor: id_productor,
+                            id_usuario: id_usuario
+                        },
+                        success: function(response) {
+                            Swal.fire({
+                                title: 'Listo',
+                                html: '<p>Guardado correctamente</p>',
+                                icon: 'success',
+                                showConfirmButton: true,
+                                allowOutsideClick: false
+                            }).then((result) => {
+                                // Redirigir a la página deseada cuando el usuario hace clic en "Aceptar"
+                                if (result.isConfirmed) {
+                                    window.location.href = "../JuntasLocales/menuJuntaLocal.php";
+                                }
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            let errorMessage = "Ocurrió un error al guardar el productor.";
+                            if (xhr.responseJSON && xhr.responseJSON.message) {
+                                errorMessage = xhr.responseJSON.message; // Mensaje de error desde el backend
+                            } else if (xhr.status === 0) {
+                                errorMessage = "No se pudo conectar al servidor. Verifica tu conexión a Internet.";
+                            } else {
+                                errorMessage += " Código de error: " + xhr.status + " - " + error;
+                            }
+                            aux.alert("<h5>Error</h5><br/><p>" + errorMessage + "</p>", true, true);
+                        }
+                    });
+                } else {
+                    aux.alert(resultado.texto, true, true);
+                }
+            });
+
+
+            $('#Cancelar').click(function() {
+                window.location.href = "../JuntasLocales/menuJuntaLocal.php";
+            });
+        });
+
+    </script>
+</body>
+</html>

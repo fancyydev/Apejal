@@ -12,28 +12,36 @@ if ($conn->errorCode() !== "00000") {
     $errorInfo = $conn->errorInfo();
     die("Conexión fallida: " . implode(", ", $errorInfo));
 }
+session_start();
+$id = $_SESSION["id"];
+$sql = "
+    SELECT m.id_municipio, m.nombre 
+    FROM municipio m
+    JOIN juntaslocales j ON FIND_IN_SET(m.id_municipio, j.carga_municipios)
+    WHERE j.id_usuario = :id
+    GROUP BY m.id_municipio, m.nombre;
+";
 
-$sql = "SELECT id_municipio, nombre FROM  municipio";
+$stmt = $conn->prepare($sql);
+$stmt->bindParam(':id', $id, PDO::PARAM_INT); // Asignar el ID a la consulta
+$stmt->execute();
 
-$result = $conn->query($sql);
+$municipios = array();
 
-// Verificar si hay resultados
-if ($result !== false && $result->rowCount() > 0) {
-    $options = array();
-    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-        $options[] = array(
-            'id_municipio' => $row['id_municipio'],
-            'nombre' => $row['nombre']
-        );
+if ($stmt->rowCount() > 0) {
+    // Convertir los datos en un array asociativo
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $municipios[] = $row;
     }
 } else {
-    $options = array('id_municipio' => '', 'nombre' => 'No hay municipios disponibles');
+    echo json_encode(['error' => 'No se encontraron datos']);
+    exit();
 }
 
 // Cerrar la conexión
 $conn = null;
-$result = null;
+$stmt = null;
 
-// Devolver las opciones como respuesta (formato JSON)
-echo json_encode($options);
+// Devolver datos en formato JSON
+echo json_encode($municipios);
 ?>

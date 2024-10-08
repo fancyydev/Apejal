@@ -65,6 +65,13 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
             <ion-icon name="location-outline"></ion-icon>
             <span>Municipios</span>
         </button>
+        <form action="../../Backend/JuntasLocales/generadorReporteExcel.php" method="POST">
+            <button class="boton" type="submit">Descargar Reporte General (Excel)</button>
+        </form>
+        <form action="../../Backend/JuntasLocales/generadorReportePdf.php" method="POST">
+            <button class="boton" type="submit">Descargar Reporte General (PDF)</button>
+        </form>
+
 
         <div class="usuario">
             <ion-icon id="key" name="key-outline"></ion-icon>
@@ -91,6 +98,8 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                 <input id="inputSearch" type="text">
                 <button id="btnSearch"> Buscar </button>
                 <button id="btnAdd"> Agregar </button>
+                <button id="btnReport"> Reporte </button>
+                
             </section>
             
             <section class="table-body">
@@ -146,6 +155,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
             currentContext = 'municipios';
             cargarMunicipios(); 
         });
+        
 
         // Evento de búsqueda (al hacer clic en el botón o presionar Enter)
         $('#btnSearch').click(function() {
@@ -174,6 +184,73 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                 window.location.href = '../JuntasLocales/edit.html';
             }
         });
+        $('#btnReport').on('click', function() {
+    const crearModalReporte = (pdfRoute, excelRoute) => {
+        const dropdownHtml = `
+            <div id="reportModal">
+                <label for="tipoReporte">Selecciona el tipo de reporte:</label>
+                <select id="tipoReporte">
+                    <option value="">-- Selecciona --</option>
+                    <option value="pdf">PDF</option>
+                    <option value="excel">Excel</option>
+                </select>
+                <button id="generarReporteBtn">Generar Reporte</button>
+                <button id="cancelarBtn">Cancelar</button>
+            </div>
+        `;
+        $('body').append(dropdownHtml);
+
+        $('#generarReporteBtn').on('click', function() {
+            const tipo = $('#tipoReporte').val();
+            if (tipo === 'pdf') {
+                window.location.href = pdfRoute;
+            } else if (tipo === 'excel') {
+                window.location.href = excelRoute;
+            } else {
+                alert('Por favor, selecciona un tipo de reporte.');
+            }
+            $('#reportModal').remove();
+        });
+
+        $('#cancelarBtn').on('click', function() {
+            $('#reportModal').remove();
+        });
+    };
+
+    if (currentContext === 'solicitudes') {
+        crearModalReporte(
+            '../../Backend/JuntasLocales/generadorReporteSolicitudPdf.php',
+            '../../Backend/JuntasLocales/generadorReporteSolicitudExcel.php'
+        );
+    } else if (currentContext === 'huertas') {
+        crearModalReporte(
+            '../../Backend/JuntasLocales/generadorReporteHuertaPdf.php',
+            '../../Backend/JuntasLocales/generadorReporteHuertaExcel.php'
+        );
+    } else if (currentContext === 'tecnicos') {
+        crearModalReporte(
+            '../../Backend/JuntasLocales/generadorReporteTecnicoPdf.php',
+            '../../Backend/JuntasLocales/generadorReporteTecnicoExcel.php'
+        );
+    } else if (currentContext === 'productores') {
+        crearModalReporte(
+            '../../Backend/JuntasLocales/generadorReporteProductorPdf.php',
+            '../../Backend/JuntasLocales/generadorReporteProductorExcel.php'
+        );
+    } else if (currentContext === 'laboratorio') {
+        crearModalReporte(
+            '../../Backend/JuntasLocales/generadorReporteLaboratorioPdf.php',
+            '../../Backend/JuntasLocales/generadorReporteLaboratorioExcel.php'
+        );
+    } else if (currentContext === 'municipios') {
+        crearModalReporte(
+            '../../Backend/JuntasLocales/generadorReporteMunicipiosPdf.php',
+            '../../Backend/JuntasLocales/generadorReporteMunicipiosExcel.php'
+        );
+    }
+});
+
+
 
         // Función para filtrar los datos según el contexto
     function filtrarDatos(context) {
@@ -240,7 +317,8 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                     <th>RFC</th>
                     <th>Curp</th>
                     <th>Estatus</th>
-                </tr>
+                </tr>}
+                
             `);
 
         $.ajax({
@@ -425,6 +503,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
             <th>Ruta KML</th>
             <th>Fecha de Registro</th>
         </tr>
+        
     `);
 
     // Hacer la llamada AJAX para obtener las huertas
@@ -444,7 +523,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                         <tr>
                             <td>${huerta.id_hue}</td>
                             <td>
-                                <button id="btnEdit" onclick="editRow(this)">
+                                <button id="btnEdit" onclick="editRow('${huerta.id_hue}','huerta')">
                                     <ion-icon name="pencil-outline"></ion-icon>
                                 </button>
                                 <button id="btnDelete" onclick="deleteRow(this)">
@@ -464,7 +543,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                             <td>${huerta.nomempresa}</td>
                             <td>${huerta.encargadoempresa}</td>
                             <td>${huerta.supervisorhuerta}</td>
-                            <td>${huerta.añoplantacion}</td>
+                            <td>${huerta.anoplantacion}</td>
                             <td>${huerta.arbolesporhectareas}</td>
                             <td>${huerta.totalarboles}</td>
                             <td>${huerta.etapafenologica}</td>
@@ -687,11 +766,14 @@ function editRow(id, tipo) {
     if (tipo === 'productor') {
         url = '../../Backend/JuntasLocales/envioDatosProductor.php?id_productor=' + id;
     } else if (tipo === 'tecnico') {
-        url = '../../Backend/JuntasLocales/envioDatosTecnico.php?id_tecnico=' + id;
+        url = '../../Backend/JuntasLocales/envioDatosTecnico.php?id_tecnico=' + id; 
     } else if(tipo == 'laboratorio') {
         url = '../../Backend/JuntasLocales/envioDatosPLaboratorio.php?id_laboratorio=' + id;
     } else if(tipo == 'solicitud') {
-        url = '../../Backend/JuntasLocales/envioDatosSolicitud.php?id_solicitud=' + id;
+        url = '../../Backend/JuntasLocales/envioDatosSolicitud.php?id_solicitud=' + id;     
+    } else if(tipo == 'huerta') {
+        url = '../../Backend/JuntasLocales/envioDatosHuerta.php?id_hue=' + id;
+        console.log('Entrando a huerta con ID:', id);
     } else {
         console.error('Tipo desconocido:', tipo);
         return;
@@ -745,6 +827,7 @@ function editRow(id, tipo) {
                 sessionStorage.setItem('jl', data.nombre_junta);
                 window.location.href = '../JuntasLocales/editarLaboratorio.html';
             } else if (tipo == 'solicitud') {
+<<<<<<< HEAD
                 sessionStorage.setItem('id_solicitud', id);
                 sessionStorage.setItem('status', data.status);
                 sessionStorage.setItem('nombre_productor', data.nombre_productor);
@@ -752,7 +835,39 @@ function editRow(id, tipo) {
                 sessionStorage.setItem('fecha_programada', data.fecha_programada);
                 sessionStorage.setItem('nombre_tecnico', data.nombre_tecnico);
                 sessionStorage.setItem('id_tecnico', data.id_tecnico);
+=======
+                sessionStorage.setItem('id_laboratorio', id);
+                sessionStorage.setItem('id_usuario', data.id_solicitud);
+                sessionStorage.setItem('nombre', data.status);
+                sessionStorage.setItem('correo', data.nombre_productor);
+                sessionStorage.setItem('telefono', data.teléfono);
+                sessionStorage.setItem('contraseña', data.fecha_programada);
+                sessionStorage.setItem('status', data.nombre_tecnico);
+>>>>>>> 58ca94e3334f4d6e80954689a9fb77ea3dd3bfd3
                 window.location.href = '../JuntasLocales/asignarSolicitudes.php';
+            } else if (tipo == 'huerta') {
+                sessionStorage.setItem('id_hue', id);
+                sessionStorage.setItem('nombre_huerta', data.nombre);
+                sessionStorage.setItem('localidad', data.localidad);
+                sessionStorage.setItem('centroide', data.centroide);
+                sessionStorage.setItem('hectareas', data.hectareas);
+                sessionStorage.setItem('pronostico_de_cosecha', data.pronostico_de_cosecha);
+                sessionStorage.setItem('longitud', data.longitud);
+                sessionStorage.setItem('altitud', data.altitud);
+                sessionStorage.setItem('altura_nivel_del_mar', data.altura_nivel_del_mar);
+                sessionStorage.setItem('variedad', data.variedad); 
+                sessionStorage.setItem('nomempresa', data.nomempresa); 
+                sessionStorage.setItem('encargadoempresa', data.encargadoempresa); 
+                sessionStorage.setItem('supervisorhuerta', data.supervisorhuerta); 
+                sessionStorage.setItem('anoplantacion', data.anoplantacion); 
+                sessionStorage.setItem('arbolesporhectareas', data.arbolesporhectareas);
+                sessionStorage.setItem('totalarboles', data.totalarboles); 
+                sessionStorage.setItem('etapafenologica', data.etapafenologica);
+                sessionStorage.setItem('fechasv_01', data.fechasv_01); 
+                sessionStorage.setItem('fechasv_02', data.fechasv_02);
+                sessionStorage.setItem('rutaKML', data.rutaKML); 
+                sessionStorage.setItem('fechaRegistro', data.fechaRegistro);
+                window.location.href = '../JuntasLocales/editarHuerta.html';
             }
         },
         error: function(xhr, status, error) {

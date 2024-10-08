@@ -104,7 +104,7 @@ if (isset($_FILES["file"])) {
 
 // Insertar los datos en la base de datos si no hay errores
 $sql = "INSERT INTO huertas 
-        (id_hue, id_productor, nombre, localidad, centroide, hectareas, pronostico_de_cosecha, longitud, altitud, altura_nivel_del_mar, variedad, nomempresa, encargadoempresa, supervisorhuerta, añoplantacion, arbolesporhectareas, totalarboles, etapafenologica, fechasv_01, fechasv_02, rutaKML, fechaRegistro, idjuntalocal)
+        (id_hue, id_productor, nombre, localidad, centroide, hectareas, pronostico_de_cosecha, longitud, altitud, altura_nivel_del_mar, variedad, nomempresa, encargadoempresa, supervisorhuerta, anoplantacion, arbolesporhectareas, totalarboles, etapafenologica, fechasv_01, fechasv_02, rutaKML, fechaRegistro, idjuntalocal)
         VALUES 
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 

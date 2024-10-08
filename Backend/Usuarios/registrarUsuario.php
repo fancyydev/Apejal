@@ -62,6 +62,9 @@ switch ($tipo) {
     case "adminJL":
         $id_tipo = 4;
         break;
+    case "adminGen":
+        $id_tipo = 5;
+        break;
     default:
         die("Tipo de usuario no válido");
 }

@@ -32,7 +32,9 @@ WHERE j.idjuntalocal = (
     SELECT j2.idjuntalocal 
     FROM juntaslocales j2
     WHERE j2.id_usuario = :id
-);
+)
+GROUP BY p.id_productor, u.nombre, u.correo, u.teléfono, p.rfc, p.curp, p.estatus, j.nombre;
+;
 "; // Uso de parámetro nombrado
 
 $stmt = $conn->prepare($sql);
