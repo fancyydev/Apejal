@@ -18,6 +18,67 @@
     box-sizing: border-box;
     font-family: 'Outfit', sans-serif;
 }
+
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 300px; /* Ancho del modal */
+}
+
+.modal-content h2 {
+    margin: 0 0 15px;
+}
+
+.modal-content label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.modal-content select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+.button-container {
+    text-align: right;
+}
+
+.button-container button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.button-container #generarReporteBtn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.button-container #cancelarBtn {
+    background-color: #f44336;
+    color: white;
+    margin-left: 10px;
+}
+
 .logout-button {
     background-color: #ff4c4c;
     color: white;
@@ -181,7 +242,7 @@ body {
     padding: 0;
 
     box-sizing: border-box;
-    background-color: rgb(190,233,223);
+    background-color: #52672e;
 
     font-family: sans-serif;
     display: flex;

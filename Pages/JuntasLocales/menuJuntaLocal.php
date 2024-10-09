@@ -185,37 +185,42 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
             }
         });
         $('#btnReport').on('click', function() {
-    const crearModalReporte = (pdfRoute, excelRoute) => {
-        const dropdownHtml = `
-            <div id="reportModal">
-                <label for="tipoReporte">Selecciona el tipo de reporte:</label>
+            const crearModalReporte = (pdfRoute, excelRoute) => {
+    const dropdownHtml = `
+        <div id="reportModal" class="modal">
+            <div class="modal-content">
+                <h2>Selecciona el tipo de reporte:</h2>
+                <label for="tipoReporte">Tipo de reporte:</label>
                 <select id="tipoReporte">
                     <option value="">-- Selecciona --</option>
                     <option value="pdf">PDF</option>
                     <option value="excel">Excel</option>
                 </select>
-                <button id="generarReporteBtn">Generar Reporte</button>
-                <button id="cancelarBtn">Cancelar</button>
+                <div class="button-container">
+                    <button id="generarReporteBtn">Generar Reporte</button>
+                    <button id="cancelarBtn">Cancelar</button>
+                </div>
             </div>
-        `;
-        $('body').append(dropdownHtml);
+        </div>
+    `;
+    $('body').append(dropdownHtml);
 
-        $('#generarReporteBtn').on('click', function() {
-            const tipo = $('#tipoReporte').val();
-            if (tipo === 'pdf') {
-                window.location.href = pdfRoute;
-            } else if (tipo === 'excel') {
-                window.location.href = excelRoute;
-            } else {
-                alert('Por favor, selecciona un tipo de reporte.');
-            }
-            $('#reportModal').remove();
-        });
+    $('#generarReporteBtn').on('click', function() {
+        const tipo = $('#tipoReporte').val();
+        if (tipo === 'pdf') {
+            window.location.href = pdfRoute;
+        } else if (tipo === 'excel') {
+            window.location.href = excelRoute;
+        } else {
+            alert('Por favor, selecciona un tipo de reporte.');
+        }
+        $('#reportModal').remove();
+    });
 
-        $('#cancelarBtn').on('click', function() {
-            $('#reportModal').remove();
-        });
-    };
+    $('#cancelarBtn').on('click', function() {
+        $('#reportModal').remove();
+    });
+};
 
     if (currentContext === 'solicitudes') {
         crearModalReporte(
