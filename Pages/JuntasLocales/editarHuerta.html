@@ -128,11 +128,14 @@
                         <input class="form-control" type="date" name="fechasv_02" id="fechasv_02"/>
                     </div>
                     <div class="col-md-5">
-                        <label for="rutaKML" class="form-label">Ruta KML</label>
-                        <input class="form-control" type="text" name="rutaKML" id="rutaKML"/>
+                        <label for="subirKML" class="form-label" id="subirKMLLabel" style="display: none;">Subir archivo KML</label>
+                        <input class="form-control" type="file" name="subirKML" id="subirKML" accept=".kml" style="display: none;"/>
                     </div>
-                </div>
-            </div>
+                    <button type="button" class="btn btn-primary btn-sm" id="cambiarKMLBtn">¿Desea cambiar el KML?</button>
+                    
+                    
+                    
+                   
         </div>
 
         <br>
@@ -148,7 +151,21 @@
         </div>
         <br>
     </div>
-
+    <script>
+        document.getElementById('cambiarKMLBtn').addEventListener('click', function() {
+            const subirKMLInput = document.getElementById('subirKML');
+            const subirKMLLabel = document.getElementById('subirKMLLabel');
+    
+            // Mostrar u ocultar el campo y la etiqueta para subir KML
+            if (subirKMLInput.style.display === 'none' || subirKMLInput.style.display === '') {
+                subirKMLInput.style.display = 'block'; // Muestra el input
+                subirKMLLabel.style.display = 'block'; // Muestra la etiqueta
+            } else {
+                subirKMLInput.style.display = 'none'; // Oculta el input
+                subirKMLLabel.style.display = 'none'; // Oculta la etiqueta
+            }
+        });
+    </script>
     <script>
         console.log(sessionStorage.getItem('jl')); // Corrección aquí
         document.addEventListener('DOMContentLoaded', function() {
