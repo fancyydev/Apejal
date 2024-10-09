@@ -31,6 +31,12 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
             <span>Solicitudes</span>
         </button>
 
+        <button class="boton" data-content="administradores">
+            <ion-icon name="archive-outline"></ion-icon>
+            <span>Admins
+            </span>
+        </button>
+
         <button class="boton" data-content="juntalocal">
             <ion-icon name="archive-outline"></ion-icon>
             <span>Junta Local</span>
@@ -50,6 +56,11 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
         <button class="boton" data-content="productores">
             <ion-icon name="person-circle-outline"></ion-icon>
             <span>Productores</span>
+        </button>
+
+        <button class="boton" data-content="laboratorio">
+            <ion-icon name="location-outline"></ion-icon>
+            <span>Laboratorio</span>
         </button>
 
         <button class="boton" data-content="municipios">
@@ -95,6 +106,13 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
     $(document).ready(function() {
         let currentContext = '';
 
+        $('button[data-content="solicitudes"]').click(function() {
+            $('#title').text('Solicitudes'); 
+            currentContext = 'solicitudes';
+            cargarSolicitudes(); 
+        });
+
+
         // Detectar contexto actual (Productores, Técnicos o Huertas)
         $('button[data-content="juntalocal"]').click(function() {
             $('#title').text('Junta Local'); 
@@ -126,6 +144,12 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
             cargarMunicipios(); 
         });
 
+        $('button[data-content="laboratorio"]').click(function() {
+            $('#title').text('Laboratorio'); 
+            currentContext = 'laboratorio';
+            cargarLaboratorio(); 
+        });
+
         // Evento de búsqueda (al hacer clic en el botón o presionar Enter)
         $('#btnSearch').click(function() {
             filtrarDatos(currentContext);
@@ -138,10 +162,21 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
         });
 
         $('#btnAdd').on('click', function() {
-        if (currentContext === 'juntalocal') {
-             window.location.href = '../Apeajal/agregarJL.html';
-        } 
-    });
+            if (currentContext === 'solicitudes') {
+                window.location.href = '../Apeajal/agregarJL.html';
+            } else if (currentContext === 'huertas') {
+                window.location.href = '../Apeajal/agregarHuerta.html';
+            } else if (currentContext === 'tecnicos') {
+                window.location.href = '../Apeajal/agregarTecnico.html';
+            } else if (currentContext === 'productores') {
+                window.location.href = '../Apeajal/agregarProductor.html';
+            } else if (currentContext === 'laboratorio') {
+                window.location.href = '../Apeajal/agregarLaboratorio.html';
+            } else if (currentContext === 'municipios') {
+                window.location.href = '../Apeajal/edit.html';
+            }
+        });
+    
 
         // Función para filtrar los datos según el contexto
     function filtrarDatos(context) {
@@ -170,6 +205,13 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                 const huerta = row.find('td:eq(4)').text().toLowerCase();   // Nombre Huerta
                 const localidad = row.find('td:eq(5)').text().toLowerCase(); // Localidad
                 if (productor.includes(searchValue) || junta.includes(searchValue) || huerta.includes(searchValue) || localidad.includes(searchValue)) {
+                    showRow = true;
+                }
+            } else if (context === 'laboratorio') {
+                const nombre = row.find('td:eq(2)').text().toLowerCase(); // Nombre Usuario
+                const correo = row.find('td:eq(4)').text().toLowerCase(); // Correo
+                const junta = row.find('td:eq(3)').text().toLowerCase();  // Nombre Junta Local
+                if (nombre.includes(searchValue) || correo.includes(searchValue) || junta.includes(searchValue)) {
                     showRow = true;
                 }
             } else if (context === 'municipios') {
@@ -286,7 +328,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                         <tr>
                             <td>${productor.id_productor}</td>
                             <td>
-                                <button id="btnEdit" onclick="editRow(this)">
+                                <button id="btnEdit" onclick="editRow(${productor.id_productor}, 'productor')">
                                     <ion-icon name="pencil-outline"></ion-icon>
                                 </button>
                                 <button id="btnDelete" onclick="deleteRow(this)">
@@ -311,33 +353,71 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
         });
     }
 
+   
     function cargarSolicitudes() {
-        $.ajax({
-            url: '../../Backend/Apeajal/obtenerSolicitudes.php',
-            type: 'GET',
-            dataType: 'json',
-            success: function(data) {
-                const tableBody = $('.table-body tbody');
-                tableBody.empty();
+    $('.table-body thead').html(`
+        <tr>
+            <th>Id</th>
+            <th>Accion</th>
+            <th>Status</th>
+            <th>Productor</th>
+            <th>Huerta</th>
+            <th>Junta Local</th>
+            <th>Fecha</th>
+            <th>Tecnico</th>
+        </tr>
+    `);
 
-                $.each(data, function(index, solicitud) {
+    $.ajax({
+        url: '../../Backend/Apeajal/obtenerSolicitudes.php',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            const tableBody = $('.table-body tbody');
+            console.log(data);
+
+            tableBody.empty();
+
+            if (data.solicitudes.length > 0) {
+                $.each(data.solicitudes, function(index, solicitud) {
+                    console.log(solicitud);
+
                     const row = `
                         <tr>
                             <td>${solicitud.id_solicitud}</td>
-                            <td>${solicitud.nombre_solicitud}</td>
-                            <td>${solicitud.fecha}</td>
-                            <td>${solicitud.estatus}</td>
+                            <td>
+                                <button id="btnAssign" class="btnAssign" onclick="editRow(${solicitud.id_solicitud}, 'solicitud')">
+                                    <ion-icon name="checkmark-outline"></ion-icon> Asignar
+                                </button>
+                            </td>
+                            <td>${solicitud.status}</td>
+                            <td>${solicitud.nombre_productor}</td>
+                            <td>${solicitud.nombre_huerta}</td>
+                            <td>${solicitud.nombre_junta}</td>
+                            <td>${solicitud.fecha_programada}</td>
+                            <td>${solicitud.nombre_tecnico}</td>
                         </tr>
                     `;
+                    
                     tableBody.append(row);
                 });
-            },
-            error: function(xhr, status, error) {
-                console.error('Error al obtener las solicitudes:', status, error);
-                console.error('Respuesta del servidor:', xhr.responseText);
+            } else {
+                // Si no hay solicitudes, mostrar un mensaje
+                const messageRow = `
+                    <tr>
+                        <td colspan="6" style="text-align: center;">${data.message}</td>
+                    </tr>
+                `;
+                tableBody.append(messageRow);
             }
-        });
-    }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error al obtener las solicitudes:', status, error);
+            console.error('Respuesta del servidor:', xhr.responseText);
+        }
+    });
+}
+
 
     function cargarHuertas() {
     // Cambiar los encabezados de la tabla
@@ -347,6 +427,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
             <th>Accion</th>
             <th>Nombre Productor</th>
             <th>Nombre Huerta</th>
+            <th>Nombre Junta</th>
             <th>Localidad</th>
             <th>Centroide</th>
             <th>Hectáreas</th>
@@ -386,7 +467,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                         <tr>
                             <td>${huerta.id_hue}</td>
                             <td>
-                                <button id="btnEdit" onclick="editRow(this)">
+                                <button id="btnEdit" onclick="editRow('${huerta.id_hue}','huerta')">
                                     <ion-icon name="pencil-outline"></ion-icon>
                                 </button>
                                 <button id="btnDelete" onclick="deleteRow(this)">
@@ -395,6 +476,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                             </td>
                             <td>${huerta.nombre_productor}</td>
                             <td>${huerta.nombre_huerta}</td>
+                            <td>${huerta.nombre_junta}</td>
                             <td>${huerta.localidad}</td>
                             <td>${huerta.centroide}</td>
                             <td>${huerta.hectareas}</td>
@@ -468,7 +550,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                         <tr>
                             <td>${tecnico.id_tecnico}</td>
                             <td>
-                                <button id="btnEdit" onclick="editRow(this)">
+                                <button id="btnEdit" onclick="editRow(${tecnico.id_tecnico}, 'tecnico')">
                                     <ion-icon name="pencil-outline"></ion-icon>
                                 </button>
                                 <button id="btnDelete" onclick="deleteRow(this)">
@@ -501,6 +583,71 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
         }
     });
 }
+
+function cargarLaboratorio() {
+   // Cambiar los encabezados de la tabla
+   $('.table-body thead').html(`
+        <tr>
+            <th>Id Personal Lab</th>
+            <th>Accion</th>
+            <th>Nombre Usuario</th>
+            <th>Nombre Junta Local</th>
+            <th>Correo</th>
+            <th>Teléfono</th>
+            <th>Estatus</th>
+        </tr>
+    `);
+
+    // Hacer la llamada AJAX para obtener los técnicos
+    $.ajax({
+        url: '../../Backend/Apeajal/obtenerLaboratorio.php', // La URL del archivo PHP
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            const tableBody = $('.table-body tbody');
+            tableBody.empty(); // Limpiar el contenido anterior de la tabla
+
+            // Verificar si se recibieron técnicos
+            if (data.length > 0 && !data.error) {
+                // Recorrer los datos recibidos y agregarlos a la tabla
+                $.each(data, function(index, laboratorio) {
+                    const row = `
+                        <tr>
+                            <td>${laboratorio.id_laboratorio}</td>
+                            <td>
+                                <button id="btnEdit" onclick="editRow(${laboratorio.id_laboratorio}, 'laboratorio')">
+                                    <ion-icon name="pencil-outline"></ion-icon>
+                                </button>
+                                <button id="btnDelete" onclick="deleteRow(this)">
+                                    <ion-icon name="trash-outline"></ion-icon>
+                                </button>
+                            </td>
+                            <td>${laboratorio.nombre_usuario}</td>
+                            <td>${laboratorio.nombre_junta}</td>
+                            <td>${laboratorio.correo}</td>
+                            <td>${laboratorio.teléfono }</td>
+                            <td>${laboratorio.estatus}</td>
+                        </tr>
+                    `;
+                    tableBody.append(row); // Agregar la fila a la tabla
+                });
+            } else {
+                // Mostrar un mensaje si no hay técnicos disponibles o hay un error
+                const row = `
+                    <tr>
+                        <td colspan="5">No se encontraron personal de laboratorio disponibles o ocurrió un error</td>
+                    </tr>
+                `;
+                tableBody.append(row);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error al obtener el personal de laboratorio:', status, error);
+            console.error('Respuesta del servidor:', xhr.responseText);
+        }
+    });
+}
+
 
     function cargarMunicipios() {
     // Cambiar los encabezados de la tabla
@@ -563,6 +710,16 @@ function editRow(id, tipo) {
     let url = '';
     if(tipo == 'juntaLocal') {
         url = '../../Backend/Apeajal/envioDatosJL.php?idjuntalocal=' + id;
+    } else if (tipo === 'productor') {
+        url = '../../Backend/JuntasLocales/envioDatosProductor.php?id_productor=' + id;
+    } else if (tipo === 'tecnico') {
+        url = '../../Backend/JuntasLocales/envioDatosTecnico.php?id_tecnico=' + id; 
+    } else if(tipo == 'laboratorio') {
+        url = '../../Backend/JuntasLocales/envioDatosPLaboratorio.php?id_laboratorio=' + id;
+    } else if(tipo == 'solicitud') {
+        url = '../../Backend/JuntasLocales/envioDatosSolicitud.php?id_solicitud=' + id;     
+    } else if(tipo == 'huerta') {
+        url = '../../Backend/JuntasLocales/envioDatosHuerta.php?id_hue=' + id;
     } else {
         console.error('Tipo desconocido:', tipo);
         return;
@@ -588,6 +745,73 @@ function editRow(id, tipo) {
                 sessionStorage.setItem('ruta_img', data.ruta_img);
                 sessionStorage.setItem('municipios', data.municipios);
                 window.location.href = '../Apeajal/editarJL.html';
+            } else if (tipo === 'productor') {
+                sessionStorage.setItem('id_productor', id);
+                sessionStorage.setItem('id_usuario', data.id_usuario);
+                sessionStorage.setItem('nombre', data.nombre);
+                sessionStorage.setItem('rfc', data.rfc);
+                sessionStorage.setItem('curp', data.curp);
+                sessionStorage.setItem('correo', data.correo);
+                sessionStorage.setItem('telefono', data.teléfono);
+                sessionStorage.setItem('contraseña', data.contraseña);
+                sessionStorage.setItem('status', data.estatus);
+                window.location.href = '../Apeajal/editarProductor.html';
+            } else if (tipo === 'tecnico') {
+                sessionStorage.setItem('id_tecnico', id);
+                sessionStorage.setItem('id_usuario', data.id_usuario);
+                sessionStorage.setItem('nombre', data.nombre);
+                sessionStorage.setItem('correo', data.correo);
+                sessionStorage.setItem('telefono', data.teléfono);
+                sessionStorage.setItem('contraseña', data.contraseña);
+                sessionStorage.setItem('status', data.estatus);
+                sessionStorage.setItem('jl_id', data.idjuntalocal); 
+                sessionStorage.setItem('jl', data.nombre_junta);
+                sessionStorage.setItem('carga_municipios', data.carga_municipios);
+                sessionStorage.setItem('municipios', data.municipios);
+                window.location.href = '../Apeajal/editarTecnico.html';
+            } else if (tipo == 'laboratorio') {
+                sessionStorage.setItem('id_laboratorio', id);
+                sessionStorage.setItem('id_usuario', data.id_usuario);
+                sessionStorage.setItem('nombre', data.nombre);
+                sessionStorage.setItem('correo', data.correo);
+                sessionStorage.setItem('telefono', data.teléfono);
+                sessionStorage.setItem('contraseña', data.contraseña);
+                sessionStorage.setItem('status', data.estatus);
+                sessionStorage.setItem('jl_id', data.idjuntalocal); 
+                sessionStorage.setItem('jl', data.nombre_junta);
+                window.location.href = '../Apeajal/editarLaboratorio.html';
+            } else if (tipo == 'solicitud') {
+                sessionStorage.setItem('id_solicitud', id);
+                sessionStorage.setItem('status', data.status);
+                sessionStorage.setItem('nombre_productor', data.nombre_productor);
+                sessionStorage.setItem('nombre_huerta', data.nombre_huerta);
+                sessionStorage.setItem('fecha_programada', data.fecha_programada);
+                sessionStorage.setItem('nombre_tecnico', data.nombre_tecnico);
+                sessionStorage.setItem('id_tecnico', data.id_tecnico);
+                window.location.href = '../Apeajal/asignarSolicitudes.php';
+            } else if (tipo == 'huerta') {
+                sessionStorage.setItem('id_hue', id);
+                sessionStorage.setItem('nombre_huerta', data.nombre);
+                sessionStorage.setItem('localidad', data.localidad);
+                sessionStorage.setItem('centroide', data.centroide);
+                sessionStorage.setItem('hectareas', data.hectareas);
+                sessionStorage.setItem('pronostico_de_cosecha', data.pronostico_de_cosecha);
+                sessionStorage.setItem('longitud', data.longitud);
+                sessionStorage.setItem('altitud', data.altitud);
+                sessionStorage.setItem('altura_nivel_del_mar', data.altura_nivel_del_mar);
+                sessionStorage.setItem('variedad', data.variedad); 
+                sessionStorage.setItem('nomempresa', data.nomempresa); 
+                sessionStorage.setItem('encargadoempresa', data.encargadoempresa); 
+                sessionStorage.setItem('supervisorhuerta', data.supervisorhuerta); 
+                sessionStorage.setItem('anoplantacion', data.anoplantacion); 
+                sessionStorage.setItem('arbolesporhectareas', data.arbolesporhectareas);
+                sessionStorage.setItem('totalarboles', data.totalarboles); 
+                sessionStorage.setItem('etapafenologica', data.etapafenologica);
+                sessionStorage.setItem('fechasv_01', data.fechasv_01); 
+                sessionStorage.setItem('fechasv_02', data.fechasv_02);
+                sessionStorage.setItem('rutaKML', data.rutaKML); 
+                sessionStorage.setItem('fechaRegistro', data.fechaRegistro);
+                window.location.href = '../Apeajal/editarHuerta.html';
             }
         },
         error: function(xhr, status, error) {
