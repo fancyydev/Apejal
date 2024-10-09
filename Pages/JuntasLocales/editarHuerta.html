@@ -474,64 +474,75 @@ $('#jl').on('change', function() {
 
             // Manejo del evento para guardar la huerta
             $('#guardarHuerta').click(function() {
-                // Obtiene los valores de los campos del formulario
-                const updatedData = {
-                    id_hue: $('#hue').val(),
-                    nombre: $('#nombre').val(),
-                    localidad: $('#municipios').val(),
-                    idjuntalocal : $('#jl').val(),
-                    centroide: $('#centroide').val(),
-                    hectareas: $('#hectareas').val(),
-                    pronostico_de_cosecha: $('#pronostico_de_cosecha').val(),
-                    longitud: $('#longitud').val(),
-                    altitud: $('#altitud').val(),
-                    altura_nivel_del_mar: $('#altura_nivel_del_mar').val(),
-                    variedad: $('#variedad').val(),
-                    nomempresa: $('#nomempresa').val(),
-                    encargadoempresa: $('#encargadoempresa').val(),
-                    supervisorhuerta: $('#supervisorhuerta').val(),
-                    añoplantacion: $('#añoplantacion').val(),
-                    arbolesporhectareas: $('#arbolesporhectareas').val(),
-                    totalarboles: $('#totalarboles').val(),
-                    etapafenologica: $('#etapafenologica').val(),
-                    fechasv_01: $('#fechasv_01').val(),
-                    fechasv_02: $('#fechasv_02').val(),
-                    rutaKML: $('#rutaKML').val(),
-                };
+    const formData = new FormData();
 
-                 // Para verificar los datos en la consola antes de enviarlos
-                 console.log('Datos a enviar:', updatedData);
+    // Obtiene los valores de los campos del formulario
+    formData.append('id_hue', $('#hue').val());
+    formData.append('nombre', $('#nombre').val());
+    formData.append('localidad', $('#municipios').val());
+    formData.append('idjuntalocal', $('#jl').val());
+    formData.append('centroide', $('#centroide').val());
+    formData.append('hectareas', $('#hectareas').val());
+    formData.append('pronostico_de_cosecha', $('#pronostico_de_cosecha').val());
+    formData.append('longitud', $('#longitud').val());
+    formData.append('altitud', $('#altitud').val());
+    formData.append('altura_nivel_del_mar', $('#altura_nivel_del_mar').val());
+    formData.append('variedad', $('#variedad').val());
+    formData.append('nomempresa', $('#nomempresa').val());
+    formData.append('encargadoempresa', $('#encargadoempresa').val());
+    formData.append('supervisorhuerta', $('#supervisorhuerta').val());
+    formData.append('añoplantacion', $('#añoplantacion').val());
+    formData.append('arbolesporhectareas', $('#arbolesporhectareas').val());
+    formData.append('totalarboles', $('#totalarboles').val());
+    formData.append('etapafenologica', $('#etapafenologica').val());
+    formData.append('fechasv_01', $('#fechasv_01').val());
+    formData.append('fechasv_02', $('#fechasv_02').val());
 
-                $.ajax({
-                    url: '../../Backend/Huertas/guardar_huerta.php',
-                    type: 'POST',
-                    data: updatedData,
-                    success: function(response) {
-                        console.log('Respuesta del servidor:', response);
-                        // Puedes mostrar un mensaje de éxito o redirigir
-                        Swal.fire({
-                                            title: 'Listo',
-                                            html: '<p>Guardado correctamente</p>',
-                                            icon: 'success',
-                                            showConfirmButton: true,
-                                            allowOutsideClick: false
-                                        }).then((result) => {
-                                            // Redirigir a la página deseada cuando el usuario hace clic en "Aceptar"
-                                            if (result.isConfirmed) {
-                                                window.location.href = "../JuntasLocales/menuJuntaLocal.php";
-                                            }
-                                        });
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error en la petición:', error);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Hubo un problema al guardar la huerta',
-                            text: error,
-                        });
-                    }
-                });
+    // Verificar si se seleccionó un nuevo archivo KML
+    const subirKMLInput = document.getElementById('subirKML').files[0];
+    if (subirKMLInput) {
+        // Si se seleccionó un nuevo archivo, lo añadimos a los datos a enviar
+        formData.append('file', subirKMLInput);
+    } else {
+        // Si no se seleccionó uno nuevo, se mantiene la ruta KML actual
+        const rutaKMLActual = $('#rutaKML').val();
+        formData.append('rutaKML', rutaKMLActual);
+    }
+
+    // Para verificar los datos en la consola antes de enviarlos
+    console.log('Datos a enviar:', formData);
+
+    $.ajax({
+        url: '../../Backend/Huertas/guardar_huerta.php',
+        type: 'POST',
+        data: formData,
+        processData: false,  // Evita que jQuery procese los datos (necesario para FormData)
+        contentType: false,  // Evita que jQuery establezca el Content-Type (necesario para archivos)
+        success: function(response) {
+            console.log('Respuesta del servidor:', response);
+            Swal.fire({
+                title: 'Listo',
+                html: '<p>Guardado correctamente</p>',
+                icon: 'success',
+                showConfirmButton: true,
+                allowOutsideClick: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "../JuntasLocales/menuJuntaLocal.php";
+                }
             });
+        },
+        error: function(xhr, status, error) {
+            console.error('Error en la petición:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Hubo un problema al guardar la huerta',
+                text: error,
+            });
+        }
+    });
+});
+
 
             // Manejo del evento para cancelar
             $('#cancelar').click(function() {
