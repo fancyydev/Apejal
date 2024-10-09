@@ -520,6 +520,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
             if (data.length > 0 && !data.error) {
                 // Recorrer los datos recibidos y agregarlos a la tabla
                 $.each(data, function(index, huerta) {
+                    sessionStorage.setItem('nombre_productor', huerta.nombre_productor); // Guardar el último productor
                     const row = `
                         <tr>
                             <td>${huerta.id_hue}</td>

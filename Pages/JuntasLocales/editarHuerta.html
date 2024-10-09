@@ -150,7 +150,7 @@
     </div>
 
     <script>
-        
+        console.log(sessionStorage.getItem('jl')); // Corrección aquí
         document.addEventListener('DOMContentLoaded', function() {
         const aPlantacionSelect = document.getElementById('añoplantacion');
 
@@ -285,73 +285,7 @@
         }
     });
     
-            // Obtener Productores (Propietarios)
-        $.ajax({
-            url: '../../Backend/Huertas/obtenerProductor.php',
-            type: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                $.each(response, function(index, user) {
-                    let isSelected = (user.id_productor == sessionStorage.getItem('propietario_id')) ? 'selected' : '';
-                    $('#propietario').append($('<option>', {
-                        value: user.id_productor,
-                        text: user.nombre,
-                        selected: isSelected
-                    }));
-                });
-            },
-            error: function(xhr, status, error) {
-                console.error('Error al obtener los productores:', status, error);
-            }
-        });
-
-        // Obtener Juntas Locales
-        $.ajax({
-            url: '../../Backend/Huertas/obtenerJL.php',
-            type: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                $.each(response, function(index, jl) {
-                    let isSelected = (jl.idjuntalocal == sessionStorage.getItem('idjuntalocal')) ? 'selected' : '';
-                    $('#jl').append($('<option>', {
-                        value: jl.idjuntalocal,
-                        text: jl.nombre,
-                        selected: isSelected
-                    }));
-                });
-            },
-            error: function(xhr, status, error) {
-                console.error('Error al obtener juntas locales:', status, error);
-            }
-        });
-        // Obtener Municipios según la Junta Local seleccionada
-$('#jl').on('change', function() {
-    var idJuntaLocal = $(this).val();
-    if (idJuntaLocal) {
-        $.ajax({
-            url: '../../Backend/JuntasLocales/obtenerMunicipiosEsp.php',
-            type: 'POST',
-            data: {idJuntaLocal: idJuntaLocal},
-            dataType: 'json',
-            success: function(response) {
-                $('#municipios').empty();
-                $.each(response, function(index, municipio) {
-                    let isSelected = (municipio.id_municipio == sessionStorage.getItem('id_municipio')) ? 'selected' : '';
-                    $('#municipios').append($('<option>', {
-                        value: municipio.id_municipio,
-                        text: municipio.nombre,
-                        selected: isSelected
-                    }));
-                });
-            },
-            error: function() {
-                $('#municipios').html('<p>Error al obtener los municipios.</p>');
-            }
-        });
-    } else {
-        $('#municipios').empty();
-    }
-});
+        
 
 
 
@@ -363,7 +297,7 @@ $('#jl').on('change', function() {
             
             // Recupera los datos de la huerta desde sessionStorage
             const id_hue = sessionStorage.getItem('id_hue');
-            const idjuntalocal = sessionStorage.getItem('idjuntalocal');
+            const idjuntalocal = sessionStorage.getItem('jl');
             const nombre = sessionStorage.getItem('nombre_huerta');
             const localidad = sessionStorage.getItem('localidad');
             const centroide = sessionStorage.getItem('centroide');
@@ -384,7 +318,115 @@ $('#jl').on('change', function() {
             const fechasv_02 = sessionStorage.getItem('fechasv_02');
             const rutaKML = sessionStorage.getItem('rutaKML');
 
+           // Obtener Productores (Propietarios)
+$.ajax({
+    url: '../../Backend/Huertas/obtenerProductor.php',
+    type: 'GET',
+    dataType: 'json',
+    success: function(response) {
+        $('#propietario').empty();
+        $('#propietario').append('<option value="">Seleccione un productor</option>'); // Opción por defecto
+
+        let productorSeleccionado = sessionStorage.getItem('nombre_productor'); // Cambiar a 'propietario_id' para obtener el ID
+        console.log(productorSeleccionado); // Verificamos el ID del productor seleccionado
+        
+        $.each(response, function(index, user) {
+            // Comparar con el nombre almacenado
+            let isSelected = (productorSeleccionado === user.nombre); // Comparación estricta
+            console.log(user.nombre, productorSeleccionado); // Mostrar el nombre del productor y el seleccionado
+            $('#propietario').append($('<option>', {
+                value: user.id_productor,
+                text: user.nombre,
+                selected: isSelected // Establecer la opción seleccionada correctamente
+            }));
+        });
+    },
+    error: function(xhr, status, error) {
+        console.error('Error al obtener los productores:', status, error);
+    }
+});
+
+
+// Obtener Juntas Locales al cargar la página
+$(document).ready(function() {
+    $.ajax({
+        url: '../../Backend/Huertas/obtenerJL.php',
+        type: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            $('#jl').empty();
+            $('#jl').append('<option value="">Seleccione Junta local</option>'); // Opción por defecto
+
+            // Obtener la Junta Local seleccionada desde sessionStorage
+            let juntaLocalSeleccionada = sessionStorage.getItem('jl'); 
+
+            $.each(response, function(index, jl) {
+                // Comparar y seleccionar la opción correspondiente
+                let isSelected = (juntaLocalSeleccionada == jl.nombre) ? true : false; // Comparar con el id
+                $('#jl').append($('<option>', {
+                    value: jl.idjuntalocal,
+                    text: jl.nombre,
+                    selected: isSelected // Establecer como seleccionada si coincide
+                }));
+            });
+
+            // Si hay una Junta Local seleccionada, cargar los municipios
+            if (juntaLocalSeleccionada) {
+                cargarMunicipios(juntaLocalSeleccionada);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error al obtener juntas locales:', status, error);
+        }
+    });
+});
+
+// Función para cargar los municipios según la Junta Local seleccionada
+function cargarMunicipios(idJuntaLocal) {
+    $.ajax({
+        url: '../../Backend/JuntasLocales/obtenerMunicipiosEsp.php',
+        type: 'POST',
+        data: { idJuntaLocal: idJuntaLocal }, // Usar el ID de la Junta Local
+        dataType: 'json',
+        success: function(response) {
+            $('#municipios').empty();
+            $('#municipios').append('<option value="">Seleccione un municipio</option>'); // Opción por defecto
+
+            // Obtener el id_municipio seleccionado desde sessionStorage
+            let municipioSeleccionado = sessionStorage.getItem('localidad'); 
+            console.log(municipioSeleccionado);
             
+            $.each(response, function(index, municipio) {
+                // Comparar el id_municipio con el almacenado en sessionStorage
+                let isSelected = (municipioSeleccionado && municipio.id_municipio == municipioSeleccionado) ? true : false; 
+                console.log(municipio.id_municipio);
+                
+                // Agregar la opción al select
+                $('#municipios').append($('<option>', {
+                    value: municipio.id_municipio,
+                    text: municipio.nombre,
+                    selected: isSelected // Establecer como seleccionada si coincide
+                }));
+            });
+        },
+        error: function() {
+            $('#municipios').html('<option value="">Error al obtener los municipios.</option>');
+        }
+    });
+}
+
+// Obtener Municipios según la Junta Local seleccionada
+$('#jl').on('change', function() {
+    var idJuntaLocal = $(this).val(); // Obtener el ID de la Junta Local seleccionada
+    if (idJuntaLocal) {
+        cargarMunicipios(idJuntaLocal); // Llamar a la función para cargar municipios
+    } else {
+        // Limpiar el select si no se ha seleccionado una Junta Local
+        $('#municipios').empty();
+        $('#municipios').append('<option value="">Seleccione un municipio</option>'); // Opción por defecto
+    }
+});
+
 
 
         
@@ -392,7 +434,8 @@ $('#jl').on('change', function() {
             // Asigna los valores a los campos del formulario
             $('#hue').val(id_hue);
             $('#nombre').val(nombre);
-            $('#nombre_huerta').val(idjuntalocal);
+            $('#nombre_huerta').val(nombre);
+            $('#jl').val(idjuntalocal);
             $('#municipio').val(localidad);
             $('#centroide').val(centroide);
             $('#hectareas').val(hectareas);

@@ -24,20 +24,40 @@ if (!isset($id_usuario)) {
     exit();
 }
 
-$sql = "SELECT h.id_hue, u.nombre AS nombre_productor, jl.nombre AS nombre_junta_local, h.nombre AS nombre_huerta, h.localidad, h.centroide, 
-               h.hectareas, h.pronostico_de_cosecha, h.longitud, h.altitud, h.altura_nivel_del_mar, 
-               h.variedad, h.nomempresa, h.encargadoempresa, h.supervisorhuerta, h.anoplantacion, 
-               h.arbolesporhectareas, h.totalarboles, h.etapafenologica, h.fechasv_01, h.fechasv_02, 
-               h.rutaKML, h.fechaRegistro 
-        FROM huertas h
-        JOIN juntaslocales jl ON jl.idjuntaLocal = h.idjuntaLocal
-        JOIN productores p ON p.id_productor = h.id_productor
-        JOIN usuario u ON u.id_usuario = p.id_usuario
-        WHERE jl.idjuntalocal = (
-            SELECT j2.idjuntalocal 
-            FROM juntaslocales j2
-            WHERE j2.id_usuario = :id_usuario
-        )"; // Cerrar la consulta correctamente
+$sql = "SELECT 
+    h.id_hue, 
+    u.nombre AS nombre_productor, 
+    jl.nombre AS nombre_junta_local, 
+    h.nombre AS nombre_huerta, 
+    h.localidad, 
+    h.centroide, 
+    h.hectareas, 
+    h.pronostico_de_cosecha, 
+    h.longitud, 
+    h.altitud, 
+    h.altura_nivel_del_mar, 
+    h.variedad, 
+    h.nomempresa, 
+    h.encargadoempresa, 
+    h.supervisorhuerta, 
+    h.anoplantacion, 
+    h.arbolesporhectareas, 
+    h.totalarboles, 
+    h.etapafenologica, 
+    h.fechasv_01, 
+    h.fechasv_02, 
+    h.rutaKML, 
+    h.fechaRegistro 
+FROM huertas h
+JOIN productores p ON p.id_productor = h.id_productor
+JOIN usuario u ON u.id_usuario = p.id_usuario
+JOIN juntaslocales jl ON jl.idjuntaLocal = h.idjuntaLocal
+WHERE jl.idjuntalocal = (
+    SELECT j2.idjuntalocal 
+    FROM juntaslocales j2
+    WHERE j2.id_usuario = :id_usuario
+);
+"; // Cerrar la consulta correctamente
 
 // Preparar la consulta
 $stmt = $conn->prepare($sql);
