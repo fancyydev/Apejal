@@ -25,7 +25,7 @@ if (!isset($id_usuario)) {
 }
 
 
-$sql = "SELECT DISTINCT l.id_laboratorio, u.nombre AS nombre_usuario, u.correo, u.teléfono, 
+$sql = "SELECT l.id_laboratorio, u.nombre AS nombre_usuario, u.correo, u.teléfono, 
                 l.estatus, j.nombre AS nombre_junta
         FROM laboratorio l
         JOIN usuario u ON l.id_usuario = u.id_usuario 

@@ -421,6 +421,8 @@
                             jlLab: document.getElementById("jlLab").value
                         },
                         success: function(response) {
+                            console.log("Respuesta del servidor:", response);
+
                             Swal.fire({
                                 title: 'Listo',
                                 html: '<p>Guardado correctamente</p>',

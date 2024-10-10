@@ -112,6 +112,11 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
             cargarSolicitudes(); 
         });
 
+        $('button[data-content="administradores"]').click(function() {
+            $('#title').text('Administradores'); 
+            currentContext = 'administradores';
+            cargarAdministradores(); 
+        });
 
         // Detectar contexto actual (Productores, Técnicos o Huertas)
         $('button[data-content="juntalocal"]').click(function() {
@@ -162,7 +167,9 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
         });
 
         $('#btnAdd').on('click', function() {
-            if (currentContext === 'solicitudes') {
+            if (currentContext === 'administradores') {
+                window.location.href = '../Apeajal/agregarAdmin.html';
+            } else if (currentContext === 'juntalocal') {
                 window.location.href = '../Apeajal/agregarJL.html';
             } else if (currentContext === 'huertas') {
                 window.location.href = '../Apeajal/agregarHuerta.html';
@@ -299,6 +306,56 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
         }
     });
 }
+
+function cargarAdministradores() {
+        // Cambiar los encabezados de la tabla
+        $('.table-body thead').html(`
+                <tr>
+                    <th>Id</th>
+                    <th>Accion</th>
+                    <th>Nombre Usuario</th>
+                    <th>Tipo</th>
+                    <th>Correo</th>
+                    <th>Telefono</th>
+                </tr>
+            `);
+
+        $.ajax({
+            url: '../../Backend/Apeajal/obtenerAdministradores.php',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                const tableBody = $('.table-body tbody');
+                tableBody.empty();
+
+                $.each(data, function(index, administrador) {
+                    const row = `
+                        <tr>
+                            <td>${administrador.id_usuario}</td>
+                            <td>
+                                <button id="btnEdit" onclick="editRow(${administrador.id_usuario}, 'administrador')">
+                                    <ion-icon name="pencil-outline"></ion-icon>
+                                </button>
+                                <button id="btnDelete" onclick="deleteRow(this)">
+                                    <ion-icon name="trash-outline"></ion-icon>
+                                </button>
+                            </td>
+                            <td>${administrador.nombre_usuario}</td>
+                            <td>${administrador.nombre_tipo}</td>
+                            <td>${administrador.correo}</td>
+                            <td>${administrador.teléfono}</td>
+                        </tr>
+                    `;
+                    tableBody.append(row);
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error('Error al obtener los productores:', status, error);
+                console.error('Respuesta del servidor:', xhr.responseText);
+            }
+        });
+    }
+
 
     function cargarProductores() {
         // Cambiar los encabezados de la tabla
@@ -718,7 +775,9 @@ function editRow(id, tipo) {
         url = '../../Backend/JuntasLocales/envioDatosPLaboratorio.php?id_laboratorio=' + id;
     } else if(tipo == 'solicitud') {
         url = '../../Backend/JuntasLocales/envioDatosSolicitud.php?id_solicitud=' + id;     
-    } else if(tipo == 'huerta') {
+    } else if(tipo == 'administrador') {
+        url = '../../Backend/Apeajal/envioDatosAdministrador.php?id_usuario=' + id;     
+    }else if(tipo == 'huerta') {
         url = '../../Backend/JuntasLocales/envioDatosHuerta.php?id_hue=' + id;
     } else {
         console.error('Tipo desconocido:', tipo);
@@ -780,6 +839,16 @@ function editRow(id, tipo) {
                 sessionStorage.setItem('jl_id', data.idjuntalocal); 
                 sessionStorage.setItem('jl', data.nombre_junta);
                 window.location.href = '../Apeajal/editarLaboratorio.html';
+            } else if (tipo == 'administrador') {
+                sessionStorage.setItem('id_usuario', id);
+                sessionStorage.setItem('nombre', data.nombre);
+                sessionStorage.setItem('id_tipo', data.id_tipo);
+                sessionStorage.setItem('nombre_tipo', data.nombre_tipo);
+                sessionStorage.setItem('correo', data.correo);
+                sessionStorage.setItem('telefono', data.teléfono);
+                sessionStorage.setItem('contraseña', data.teléfono);
+                window.location.href = '../Apeajal/editarAdmin.html';
+
             } else if (tipo == 'solicitud') {
                 sessionStorage.setItem('id_solicitud', id);
                 sessionStorage.setItem('status', data.status);
