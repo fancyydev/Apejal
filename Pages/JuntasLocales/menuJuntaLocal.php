@@ -820,7 +820,8 @@ function cargarLaboratorio() {
                     </tr>
                 `;
                 tableBody.append(messageRow);
-            },
+            }
+        },
         error: function(xhr, status, error) {
             console.error('Error al obtener los municipios:', status, error);
             console.error('Respuesta del servidor:', xhr.responseText);
