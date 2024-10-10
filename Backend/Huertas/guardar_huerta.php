@@ -14,13 +14,19 @@ try {
     // Obtiene los datos de la solicitud POST
     $id_hue = $_POST['id_hue'] ?? null;
     if ($id_hue === null) {
+        error_log("Error: El ID de la huerta es requerido.");
         echo json_encode(['message' => 'El ID de la huerta es requerido.']);
         exit();
     }
+    
+
+    // Log para verificar si llegan los datos POST
+    error_log("Datos recibidos: " . json_encode($_POST));
 
     // Otras variables
     $idjuntalocal = $_POST['idjuntalocal'] ?? null;
     $nombre = $_POST['nombre'] ?? '';
+    $id_productor = $_POST['id_productor'] ?? '';
     $localidad = $_POST['localidad'] ?? '';
     $centroide = $_POST['centroide'] ?? '';
     $hectareas = $_POST['hectareas'] ?? 0;
@@ -48,10 +54,11 @@ try {
         // Validar el tipo de archivo para asegurar que sea un KML
         $fileType = mime_content_type($origen);
         if ($fileType !== 'application/vnd.google-earth.kml+xml' && pathinfo($nombreArchivo, PATHINFO_EXTENSION) !== 'kml') {
+            error_log("Error: El archivo no es un KML válido.");
             echo json_encode(['error' => true, 'message' => 'El archivo no es un KML válido.']);
             exit();
         }
-    
+
         // Crear la carpeta base KMLS si no existe
         $carpetaDestinoBase = $_SERVER['DOCUMENT_ROOT'] . "/proyectoApeajal/APEJAL/Assets/KMLS/";
         if (!file_exists($carpetaDestinoBase)) {
@@ -88,34 +95,43 @@ try {
         if (!move_uploaded_file($origen, $destino)) {
             throw new Exception("Error al mover el archivo KML.");
         }
-    
+
+        // Log para el archivo KML subido
+        error_log("Archivo KML subido a: " . $destino);
+
         // Actualiza la ruta KML
         $rutaKML = $destino;
     }
-    
+
+    // Log para la actualización de la base de datos
+    error_log("Actualizando datos de la huerta con ID: $id_hue");
+
     // Actualizar los datos de la huerta en la base de datos
     $sql = "UPDATE huertas SET
-        nombre = :nombre,
-        idjuntalocal = :idjuntalocal,
-        localidad = :localidad,
-        centroide = :centroide,
-        hectareas = :hectareas,
-        pronostico_de_cosecha = :pronostico_de_cosecha,
-        longitud = :longitud,
-        altitud = :altitud,
-        altura_nivel_del_mar = :altura_nivel_del_mar,
-        variedad = :variedad,
-        nomempresa = :nomempresa,
-        encargadoempresa = :encargadoempresa,
-        supervisorhuerta = :supervisorhuerta,
-        anoplantacion = :anoplantacion,
-        arbolesporhectareas = :arbolesporhectareas,
-        totalarboles = :totalarboles,
-        etapafenologica = :etapafenologica,
-        fechasv_01 = :fechasv_01,
-        fechasv_02 = :fechasv_02,
-        rutaKML = :rutaKML
-    WHERE id_hue = :id_hue";
+    nombre = :nombre,
+    idjuntalocal = :idjuntalocal,
+    id_productor = :id_productor,
+    localidad = :localidad,
+    centroide = :centroide,
+    hectareas = :hectareas,
+    pronostico_de_cosecha = :pronostico_de_cosecha,
+    longitud = :longitud,
+    altitud = :altitud,
+    altura_nivel_del_mar = :altura_nivel_del_mar,
+    variedad = :variedad,
+    nomempresa = :nomempresa,
+    encargadoempresa = :encargadoempresa,
+    supervisorhuerta = :supervisorhuerta,
+    anoplantacion = :anoplantacion,
+    arbolesporhectareas = :arbolesporhectareas,
+    totalarboles = :totalarboles,
+    etapafenologica = :etapafenologica,
+    fechasv_01 = :fechasv_01,
+    fechasv_02 = :fechasv_02,
+    rutaKML = :rutaKML
+WHERE id_hue = :id_hue";
+
+
 
     $stmt = $conn->prepare($sql);
 
@@ -123,6 +139,7 @@ try {
     $stmt->bindValue(':nombre', $nombre);
     $stmt->bindValue(':idjuntalocal', $idjuntalocal);
     $stmt->bindValue(':localidad', $localidad);
+    $stmt->bindValue(':id_productor', $id_productor);
     $stmt->bindValue(':centroide', $centroide);
     $stmt->bindValue(':hectareas', $hectareas);
     $stmt->bindValue(':pronostico_de_cosecha', $pronostico_de_cosecha);
@@ -143,14 +160,22 @@ try {
     $stmt->bindValue(':id_hue', $id_hue);
 
     // Ejecutar la consulta
-    $stmt->execute();
-    echo json_encode(['message' => 'Huerta actualizada con éxito.']);
+    if ($stmt->execute()) {
+        error_log("Datos de la huerta actualizados correctamente.");
+        echo json_encode(['message' => 'Huerta actualizada con éxito.']);
+    } else {
+        error_log("Error al actualizar los datos en la base de datos.");
+        echo json_encode(['message' => 'Error al actualizar la huerta.']);
+    }
 
 } catch (PDOException $e) {
+    error_log("Error PDO: " . $e->getMessage());
     echo json_encode(['message' => 'Error al actualizar la huerta: ' . $e->getMessage()]);
 } catch (Exception $e) {
+    error_log("Error: " . $e->getMessage());
     echo json_encode(['message' => $e->getMessage()]);
 } finally {
     $conn = null; // Cierra la conexión
 }
 ?>
+

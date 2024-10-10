@@ -167,7 +167,6 @@
         });
     </script>
     <script>
-        console.log(sessionStorage.getItem('jl')); // Corrección aquí
         document.addEventListener('DOMContentLoaded', function() {
         const aPlantacionSelect = document.getElementById('añoplantacion');
 
@@ -314,7 +313,11 @@
             
             // Recupera los datos de la huerta desde sessionStorage
             const id_hue = sessionStorage.getItem('id_hue');
+            console.log("id del id_hue "+sessionStorage.getItem('id_hue'));
             const idjuntalocal = sessionStorage.getItem('jl');
+            console.log("id del jl "+sessionStorage.getItem('jl'));
+            const id_productor = sessionStorage.getItem('id_productor');
+            console.log("id del productor"+sessionStorage.getItem('id_productor'));
             const nombre = sessionStorage.getItem('nombre_huerta');
             const localidad = sessionStorage.getItem('localidad');
             const centroide = sessionStorage.getItem('centroide');
@@ -334,9 +337,10 @@
             const fechasv_01 = sessionStorage.getItem('fechasv_01');
             const fechasv_02 = sessionStorage.getItem('fechasv_02');
             const rutaKML = sessionStorage.getItem('rutaKML');
+            console.log(sessionStorage.getItem('rutaKML'));
 
            // Obtener Productores (Propietarios)
-$.ajax({
+           $.ajax({
     url: '../../Backend/Huertas/obtenerProductor.php',
     type: 'GET',
     dataType: 'json',
@@ -344,17 +348,18 @@ $.ajax({
         $('#propietario').empty();
         $('#propietario').append('<option value="">Seleccione un productor</option>'); // Opción por defecto
 
-        let productorSeleccionado = sessionStorage.getItem('nombre_productor'); // Cambiar a 'propietario_id' para obtener el ID
-        console.log(productorSeleccionado); // Verificamos el ID del productor seleccionado
-        
+        let productorSeleccionado = sessionStorage.getItem('id_productor'); // Obtener el ID del productor seleccionado
+        console.log('Productor seleccionado desde sessionStorage:', productorSeleccionado); // Verificar el ID del productor seleccionado
+
         $.each(response, function(index, user) {
-            // Comparar con el nombre almacenado
-            let isSelected = (productorSeleccionado === user.nombre); // Comparación estricta
-            console.log(user.nombre, productorSeleccionado); // Mostrar el nombre del productor y el seleccionado
+            // Convertir ambos valores a cadenas para la comparación
+            let isSelected = (String(productorSeleccionado) === String(user.id_productor)); 
+            console.log('Comparación:', user.id_productor, productorSeleccionado); // Mostrar los valores comparados
+
             $('#propietario').append($('<option>', {
                 value: user.id_productor,
                 text: user.nombre,
-                selected: isSelected // Establecer la opción seleccionada correctamente
+                selected: isSelected // Establecer la opción seleccionada si coincide
             }));
         });
     },
@@ -364,7 +369,7 @@ $.ajax({
 });
 
 
-// Obtener Juntas Locales al cargar la página
+
 $(document).ready(function() {
     $.ajax({
         url: '../../Backend/Huertas/obtenerJL.php',
@@ -378,10 +383,12 @@ $(document).ready(function() {
             let juntaLocalSeleccionada = sessionStorage.getItem('jl'); 
 
             $.each(response, function(index, jl) {
+
+
                 // Comparar y seleccionar la opción correspondiente
-                let isSelected = (juntaLocalSeleccionada == jl.nombre) ? true : false; // Comparar con el id
+                let isSelected = (juntaLocalSeleccionada == jl.idjuntalocal); // Comparar con el id
                 $('#jl').append($('<option>', {
-                    value: jl.idjuntalocal,
+                    value: jl.idjuntalocal, // Asegúrate de que idjuntalocal esté en minúsculas si así viene del backend
                     text: jl.nombre,
                     selected: isSelected // Establecer como seleccionada si coincide
                 }));
@@ -398,6 +405,7 @@ $(document).ready(function() {
     });
 });
 
+
 // Función para cargar los municipios según la Junta Local seleccionada
 function cargarMunicipios(idJuntaLocal) {
     $.ajax({
@@ -411,12 +419,10 @@ function cargarMunicipios(idJuntaLocal) {
 
             // Obtener el id_municipio seleccionado desde sessionStorage
             let municipioSeleccionado = sessionStorage.getItem('localidad'); 
-            console.log(municipioSeleccionado);
             
             $.each(response, function(index, municipio) {
                 // Comparar el id_municipio con el almacenado en sessionStorage
                 let isSelected = (municipioSeleccionado && municipio.id_municipio == municipioSeleccionado) ? true : false; 
-                console.log(municipio.id_municipio);
                 
                 // Agregar la opción al select
                 $('#municipios').append($('<option>', {
@@ -443,15 +449,13 @@ $('#jl').on('change', function() {
         $('#municipios').append('<option value="">Seleccione un municipio</option>'); // Opción por defecto
     }
 });
-
-
-
-        
+      
 
             // Asigna los valores a los campos del formulario
             $('#hue').val(id_hue);
             $('#nombre').val(nombre);
             $('#nombre_huerta').val(nombre);
+            $('#propietario').val(id_productor);
             $('#jl').val(idjuntalocal);
             $('#municipio').val(localidad);
             $('#centroide').val(centroide);
@@ -479,6 +483,7 @@ $('#jl').on('change', function() {
     // Obtiene los valores de los campos del formulario
     formData.append('id_hue', $('#hue').val());
     formData.append('nombre', $('#nombre').val());
+    formData.append('id_productor', $('#propietario').val());
     formData.append('localidad', $('#municipios').val());
     formData.append('idjuntalocal', $('#jl').val());
     formData.append('centroide', $('#centroide').val());
@@ -505,12 +510,13 @@ $('#jl').on('change', function() {
         formData.append('file', subirKMLInput);
     } else {
         // Si no se seleccionó uno nuevo, se mantiene la ruta KML actual
-        const rutaKMLActual = $('#rutaKML').val();
+        const rutaKMLActual = sessionStorage.getItem('rutaKML');
+        console.log(rutaKMLActual);
         formData.append('rutaKML', rutaKMLActual);
     }
 
-    // Para verificar los datos en la consola antes de enviarlos
-    console.log('Datos a enviar:', formData);
+
+
 
     $.ajax({
         url: '../../Backend/Huertas/guardar_huerta.php',
@@ -528,7 +534,7 @@ $('#jl').on('change', function() {
                 allowOutsideClick: false
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = "../JuntasLocales/menuJuntaLocal.php";
+                    window.location.href = "../Apeajal/menuApeajal.php";
                 }
             });
         },
@@ -554,3 +560,5 @@ $('#jl').on('change', function() {
 
 </body>
 </html>
+
+

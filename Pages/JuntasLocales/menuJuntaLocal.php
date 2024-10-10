@@ -587,7 +587,6 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
             if (data.length > 0 && !data.error) {
                 // Recorrer los datos recibidos y agregarlos a la tabla
                 $.each(data, function(index, huerta) {
-                    sessionStorage.setItem('nombre_productor', huerta.nombre_productor); // Guardar el último productor
                     const row = `
                         <tr>
                             <td>${huerta.id_hue}</td>
@@ -905,8 +904,11 @@ function editRow(id, tipo) {
                 sessionStorage.setItem('id_tecnico', data.id_tecnico);
                 window.location.href = '../JuntasLocales/asignarSolicitudes.php';
             } else if (tipo == 'huerta') {
+                console.log(data); // Verifica el contenido de 'data' aquí
                 sessionStorage.setItem('id_hue', id);
+                sessionStorage.setItem('jl', data.idjuntalocal);
                 sessionStorage.setItem('nombre_huerta', data.nombre);
+                sessionStorage.setItem('id_productor', data.id_productor); // Verifica si 'nombre_productor' es indefinido
                 sessionStorage.setItem('localidad', data.localidad);
                 sessionStorage.setItem('centroide', data.centroide);
                 sessionStorage.setItem('hectareas', data.hectareas);
@@ -928,6 +930,7 @@ function editRow(id, tipo) {
                 sessionStorage.setItem('fechaRegistro', data.fechaRegistro);
                 window.location.href = '../JuntasLocales/editarHuerta.html';
             }
+
         },
         error: function(xhr, status, error) {
             console.error('Error al obtener los datos:', status, error);
