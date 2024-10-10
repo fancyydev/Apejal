@@ -534,7 +534,7 @@ function cargarAdministradores() {
                             <td>${huerta.nombre_productor}</td>
                             <td>${huerta.nombre_huerta}</td>
                             <td>${huerta.nombre_junta}</td>
-                            <td>${huerta.localidad}</td>
+                            <td>${huerta.nombre_municipio}</td>
                             <td>${huerta.centroide}</td>
                             <td>${huerta.hectareas}</td>
                             <td>${huerta.pronostico_de_cosecha}</td>

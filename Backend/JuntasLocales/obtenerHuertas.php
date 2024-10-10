@@ -73,6 +73,22 @@ if ($stmt->execute()) {
     if ($stmt->rowCount() > 0) {
         // Convertir los datos en un array asociativo
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            // Obtener el ID del municipio
+            $localidadId = $row['localidad'];
+
+            // Segunda consulta para obtener el nombre del municipio
+            $sqlMunicipio = "SELECT nombre FROM municipio WHERE id_municipio = :id_municipio";
+            $stmtMunicipio = $conn->prepare($sqlMunicipio);
+            $stmtMunicipio->bindParam(':id_municipio', $localidadId, PDO::PARAM_INT);
+            $stmtMunicipio->execute();
+
+            // Obtener el nombre del municipio
+            $municipio = $stmtMunicipio->fetch(PDO::FETCH_ASSOC);
+
+            // Agregar el nombre del municipio a los datos de la huerta
+            $row['nombre_municipio'] = $municipio['nombre'];
+
+            // Añadir la huerta (con el nombre del municipio) al array de huertas
             $huertas[] = $row;
         }
         // Devolver datos en formato JSON
@@ -91,4 +107,3 @@ $conn = null;
 $stmt = null;
 
 ?>
-
