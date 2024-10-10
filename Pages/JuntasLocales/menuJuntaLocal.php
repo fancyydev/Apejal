@@ -309,6 +309,62 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
         });
     }
 
+    // function cargarProductores() {
+    //     // Cambiar los encabezados de la tabla
+    //     $('.table-body thead').html(`
+    //             <tr>
+    //                 <th>Id</th>
+    //                 <th>Accion</th>
+    //                 <th>Nombre Usuario</th>
+    //                 <th>Junta Local</th>
+    //                 <th>Correo</th>
+    //                 <th>Telefono</th>
+    //                 <th>RFC</th>
+    //                 <th>Curp</th>
+    //                 <th>Estatus</th>
+    //             </tr>}
+                
+    //         `);
+
+    //     $.ajax({
+    //         url: '../../Backend/JuntasLocales/obtenerProductores.php',
+    //         type: 'GET',
+    //         dataType: 'json',
+    //         success: function(data) {
+    //             const tableBody = $('.table-body tbody');
+    //             tableBody.empty();
+
+    //             $.each(data, function(index, productor) {
+    //                 const row = `
+    //                     <tr>
+    //                         <td>${productor.id_productor}</td>
+    //                         <td>
+    //                             <button id="btnEdit" onclick="editRow(${productor.id_productor}, 'productor')">
+    //                                 <ion-icon name="pencil-outline"></ion-icon>
+    //                             </button>
+    //                             <button id="btnDelete" onclick="deleteRow(this)">
+    //                                 <ion-icon name="trash-outline"></ion-icon>
+    //                             </button>
+    //                         </td>
+    //                         <td>${productor.nombre}</td>
+    //                         <td>${productor.nombre_junta}</td>
+    //                         <td>${productor.correo}</td>
+    //                         <td>${productor.teléfono}</td>
+    //                         <td>${productor.rfc}</td>
+    //                         <td>${productor.curp}</td>
+    //                         <td>${productor.estatus}</td>
+    //                     </tr>
+    //                 `;
+    //                 tableBody.append(row);
+    //             });
+    //         },
+    //         error: function(xhr, status, error) {
+    //             console.error('Error al obtener los productores:', status, error);
+    //             console.error('Respuesta del servidor:', xhr.responseText);
+    //         }
+    //     });
+    // }
+
     function cargarProductores() {
         // Cambiar los encabezados de la tabla
         $('.table-body thead').html(`
@@ -316,18 +372,16 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                     <th>Id</th>
                     <th>Accion</th>
                     <th>Nombre Usuario</th>
-                    <th>Junta Local</th>
                     <th>Correo</th>
                     <th>Telefono</th>
                     <th>RFC</th>
                     <th>Curp</th>
                     <th>Estatus</th>
-                </tr>}
-                
+                </tr>
             `);
 
         $.ajax({
-            url: '../../Backend/JuntasLocales/obtenerProductores.php',
+            url: '../../Backend/Apeajal/obtenerProductores.php',
             type: 'GET',
             dataType: 'json',
             success: function(data) {
@@ -347,7 +401,6 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                                 </button>
                             </td>
                             <td>${productor.nombre}</td>
-                            <td>${productor.nombre_junta}</td>
                             <td>${productor.correo}</td>
                             <td>${productor.teléfono}</td>
                             <td>${productor.rfc}</td>
