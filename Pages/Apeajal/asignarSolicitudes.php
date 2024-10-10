@@ -13,6 +13,14 @@
     <link href="../../Styles/navbar.css" rel="stylesheet">
     <link href="../../Styles/movimientos.css" rel="stylesheet">
     <link href="../../Styles/checkboxes.css" rel="stylesheet">
+    <!-- Link para jQuery UI CSS -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <!--Links para jquery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- Links para jQuery UI -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     
 </head>
 <body>
@@ -31,45 +39,38 @@
     </div>
 
     <div class="container">
-        <h3 class="text-center">Editar Productor</h3>
+        <h3 class="text-center">Asignar Solicitud</h3>
         <div class="card">
-            <div class="card-header">Detalles del Productor</div>
+            <div class="card-header">Detalles de la solicitud</div>
             <div class="card-body">
                 <div class="row g-3">
-                    
-                    <div class="col-md-5" id="rfcField" >
-                        <label for="rfc" class="form-label">RFC</label>
-                        <input class="form-control" type="text" name="rfc" id="rfc" maxlength="13"/>
+
+                    <div class="col-md-5">
+                        <label for="productor" class="form-label">Productor</label>
+                        <input class="form-control" type="text" name="productor" id="productor" maxlength="50" readonly />
                     </div>
-                    <div class="col-md-5" id="curpField" >
-                        <label for="curp" class="form-label">CURP</label>
-                        <input class="form-control" type="text" name="curp" id="curp" maxlength="18"/>
+                    <div class="col-md-5">
+                        <label for="huerta" class="form-label">Huerta</label>
+                        <input class="form-control" type="text" name="huerta" id="huerta" maxlength="50" readonly />
                     </div>
-                    
                     <div class="col-md-5">
                         <label for="status" class="form-label">Estatus</label>
                         <select class="form-control" name="status" id="status">
                             <option value="">Seleccione el estatus</option>
-                            <option value="activo">Activo</option>
-                            <option value="inactivo">Inactivo</option>
+                            <option value="pendiente">Pendiente</option>
+                            <option value="activa">Activa</option>
+                            <option value="cancelada">Cancelada</option>
                         </select>
                     </div>
-                
                     <div class="col-md-5">
-                        <label for="nombre" class="form-label">Nombre</label>
-                        <input class="form-control" type="text" name="nombre" id="nombre" maxlength="50"/>
+                        <label for="tecnico" class="form-label">Tecnico</label>
+                        <select class="form-control" name="tecnico" id="tecnico">
+                            <option value="">Seleccione Tecnico</option>
+                        </select>
                     </div>
-                    <div class="col-md-5">
-                        <label for="email" class="form-label">Correo</label>
-                        <input class="form-control" type="text" name="email" id="email" maxlength="50"/>
-                    </div>
-                    <div class="col-md-5">
-                        <label for="telefono" class="form-label">Teléfono</label>
-                        <input class="form-control" type="text" name="telefono" id="telefono" maxlength="15"/>
-                    </div>
-                    <div class="col-md-5">
-                        <label for="contra" class="form-label">Contraseña</label>
-                        <input class="form-control" type="text" name="contra" id="contra" maxlength="30"/>
+                    <div class="col-md-4">
+                        <label for="fechaProg" class="form-label">Fecha programada</label>
+                        <input class="form-control" type="text" name="fechaProg" id="fechaProg" />
                     </div>
                 </div>
             </div>
@@ -95,68 +96,76 @@
         $(document).ready(function() {
 
             // Recupera los datos del productor desde sessionStorage
-            const id_productor = sessionStorage.getItem('id_productor');
-            const id_usuario = sessionStorage.getItem('id_usuario')
-            const nombre = sessionStorage.getItem('nombre');
-            const rfc = sessionStorage.getItem('rfc');
-            const curp = sessionStorage.getItem('curp');
-            const correo = sessionStorage.getItem('correo');
-            const telefono = sessionStorage.getItem('telefono');
+            const id_solicitud = sessionStorage.getItem('id_solicitud');
+            const id_tecnico = sessionStorage.getItem('id_tecnico');
+            const nombre_productor = sessionStorage.getItem('nombre_productor');
+            const nombre_huerta = sessionStorage.getItem('nombre_huerta');
             const status = sessionStorage.getItem('status');
-            const contra = sessionStorage.getItem('contraseña')
-            const id_tipo = sessionStorage.getItem('id_tipo')
+            const nombre_tecnico = sessionStorage.getItem('nombre_tecnico');
+            const fecha_programada = sessionStorage.getItem('fecha_programada');
 
             // Rellena los campos del formulario
-            $('#nombre').val(nombre);
-            $('#rfc').val(rfc);
-            $('#curp').val(curp);
-            $('#email').val(correo);
-            $('#telefono').val(telefono);
+            $('#productor').val(nombre_productor);
+            $('#huerta').val(nombre_huerta);
             $('#status').val(status);
-            $('#contra').val(contra)
-            
+
+            // Si la fecha es null o no existe, dejamos el campo vacío, si no, asignamos la fecha
+            if (fecha_programada != "null") {
+                $('#fechaProg').val(fecha_programada);
+            } else {
+                $('#fechaProg').val(''); // Deja el campo vacío si no hay fecha
+            }
+
+            // Cargar Juntas Locales
+            $.ajax({
+                url: '../../Backend/Apeajal/obtenerTecnicosOpciones.php',
+                type: 'GET',
+                data: { id_solicitud: id_solicitud },
+                dataType: 'json',
+                success: function(response) {
+                    $.each(response, function(index, tecnico) {
+                        $('#tecnico').append($('<option>', {
+                            value: tecnico.id_tecnico,
+                            text: tecnico.nombre
+                        }));
+                    });
+                    if (id_tecnico) {
+                        $('#tecnico').val(id_tecnico).change();  // Esto fuerza a que se seleccione la junta local y cargue los municipios
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error al obtener tecnicos: ', status, error);
+                }
+            });
+
+            // Inicializar el calendario datepicker en el campo de fecha
+            $("#fechaProg").datepicker({
+                dateFormat: 'yy-mm-dd',   // Formato de la fecha (Año-Mes-Día)
+                changeMonth: true,        // Permitir cambiar el mes
+                changeYear: true          // Permitir cambiar el año
+            });
+
             $('#regristar').click(function() {
-                var tipoUsuario = id_tipo;
                 
                 // Validación de los campos
                 var resultado = aux.validateAll([
-                    {"valor": document.getElementById("nombre").value, "typeOf": "string", "mensaje": "<p>Insertar nombre</p><br>"},
-                    {"valor": document.getElementById("curp").value, "typeOf": "string", "mensaje": "<p>Insertar CURP</p><br>"},
-                    {"valor": document.getElementById("rfc").value, "typeOf": "string", "mensaje": "<p>Insertar RFC</p><br>"},
-                    {"valor": document.getElementById("email").value, "typeOf": "string", "mensaje": "<p>Insertar email</p><br>"},
-                    {"valor": document.getElementById("telefono").value, "typeOf": "string", "mensaje": "<p>Insertar telefono</p><br>"},
                     {"valor": document.getElementById("status").value, "typeOf": "string", "mensaje": "<p>Insertar estatus</p><br>"},
-                    {"valor": document.getElementById("contra").value, "typeOf": "string", "mensaje": "<p>Insertar contraseña</p><br>"},
+                    {"valor": document.getElementById("tecnico").value, "typeOf": "string", "mensaje": "<p>Insertar tecnico</p><br>"},
+                    {"valor": document.getElementById("fechaProg").value, "typeOf": "string", "mensaje": "<p>Insertar la fecha programada</p><br>"},
                 ]);
-                
-                console.log({
-                    tipo: tipoUsuario,
-                    nombre: document.getElementById("nombre").value,
-                    email: document.getElementById("email").value,
-                    telefono: document.getElementById("telefono").value,
-                    contra: document.getElementById("contra").value,
-                    rfc: document.getElementById("rfc").value,
-                    curp: document.getElementById("curp").value,
-                    status: document.getElementById("status").value,
-                    id_productor: id_productor,
-                    id_usuario: id_usuario
-                });
+       
+                var tecnicoValue = document.getElementById("tecnico").value; 
                 
                 if (resultado.estado) {
                     $.ajax({
-                        url: '../../Backend/JuntasLocales/actualizarUsuario.php',
+                        url: '../../Backend/JuntasLocales/actualizarSolicitud.php',
                         type: 'POST',
                         data: {
-                            tipo: tipoUsuario,
-                            nombre: document.getElementById("nombre").value,
-                            email: document.getElementById("email").value,
-                            telefono: document.getElementById("telefono").value,
-                            contra: document.getElementById("contra").value,
-                            rfc: document.getElementById("rfc").value,
-                            curp: document.getElementById("curp").value,
+
+                            id_solicitud: id_solicitud,
                             status: document.getElementById("status").value,
-                            id_productor: id_productor,
-                            id_usuario: id_usuario
+                            fecha_programada: document.getElementById("fechaProg").value,
+                            tecnico: tecnicoValue
                         },
                         success: function(response) {
                             Swal.fire({
@@ -173,7 +182,7 @@
                             });
                         },
                         error: function(xhr, status, error) {
-                            let errorMessage = "Ocurrió un error al guardar el productor.";
+                            let errorMessage = "Ocurrió un error al guardar la solicitud.";
                             if (xhr.responseJSON && xhr.responseJSON.message) {
                                 errorMessage = xhr.responseJSON.message; // Mensaje de error desde el backend
                             } else if (xhr.status === 0) {
@@ -191,7 +200,7 @@
 
 
             $('#Cancelar').click(function() {
-                window.location.href = "../Apeajal/Apeajal.php";
+                window.location.href = "../Apeajal/menuApeajal.php";
             });
         });
 

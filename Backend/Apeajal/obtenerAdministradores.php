@@ -14,11 +14,10 @@ if ($conn->errorCode() !== "00000") {
     die("Conexión fallida: " . implode(", ", $errorInfo));
 }
 
-$sql = "SELECT l.id_laboratorio, u.nombre AS nombre_usuario, u.correo, u.teléfono, 
-                l.estatus, j.nombre AS nombre_junta
-        FROM laboratorio l
-        JOIN usuario u ON l.id_usuario = u.id_usuario 
-        JOIN juntaslocales j ON l.idjuntalocal = j.idjuntalocal";
+$sql = "SELECT u.id_usuario, u.nombre AS nombre_usuario, tu.descripcion as nombre_tipo, u.correo, u.teléfono
+        FROM usuario u 
+        JOIN tipousuario tu ON tu.id_tipo = u.id_tipo
+        WHERE u.id_tipo = 4 OR u.id_tipo = 5";
 
 $stmt = $conn->prepare($sql);
 // Ejecutar la consulta

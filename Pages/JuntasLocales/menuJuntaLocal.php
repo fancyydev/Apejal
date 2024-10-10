@@ -663,7 +663,7 @@ function cargarLaboratorio() {
 
     // Hacer la llamada AJAX para obtener los técnicos
     $.ajax({
-        url: '../../Backend/Apeajal/obtenerLaboratorio.php', // La URL del archivo PHP
+        url: '../../Backend/JuntasLocales/obtenerLaboratorio.php', // La URL del archivo PHP
         type: 'GET',
         dataType: 'json',
         success: function(data) {
@@ -705,7 +705,7 @@ function cargarLaboratorio() {
             }
         },
         error: function(xhr, status, error) {
-            console.error('Error al obtener los técnicos:', status, error);
+            console.error('Error al obtener el personal del laboratorio: ', status, error);
             console.error('Respuesta del servidor:', xhr.responseText);
         }
     });
