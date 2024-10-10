@@ -292,12 +292,12 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                 });
             } else {
                 // Mostrar un mensaje si no hay técnicos disponibles o hay un error
-                const row = `
+                const messageRow = `
                     <tr>
-                        <td colspan="5">No se encontraron técnicos o ocurrió un error</td>
+                        <td colspan="6" style="text-align: left;">No se encontraron juntas locales</td>
                     </tr>
                 `;
-                tableBody.append(row);
+                tableBody.append(messageRow);
             }
         },
         error: function(xhr, status, error) {
@@ -328,26 +328,35 @@ function cargarAdministradores() {
                 const tableBody = $('.table-body tbody');
                 tableBody.empty();
 
-                $.each(data, function(index, administrador) {
-                    const row = `
-                        <tr>
-                            <td>${administrador.id_usuario}</td>
-                            <td>
-                                <button id="btnEdit" onclick="editRow(${administrador.id_usuario}, 'administrador')">
-                                    <ion-icon name="pencil-outline"></ion-icon>
-                                </button>
-                                <button id="btnDelete" onclick="deleteRow(this)">
-                                    <ion-icon name="trash-outline"></ion-icon>
-                                </button>
-                            </td>
-                            <td>${administrador.nombre_usuario}</td>
-                            <td>${administrador.nombre_tipo}</td>
-                            <td>${administrador.correo}</td>
-                            <td>${administrador.teléfono}</td>
-                        </tr>
+                if (data.length > 0 && !data.error) {
+                    $.each(data, function(index, administrador) {
+                        const row = `
+                            <tr>
+                                <td>${administrador.id_usuario}</td>
+                                <td>
+                                    <button id="btnEdit" onclick="editRow(${administrador.id_usuario}, 'administrador')">
+                                        <ion-icon name="pencil-outline"></ion-icon>
+                                    </button>
+                                    <button id="btnDelete" onclick="deleteRow(this)">
+                                        <ion-icon name="trash-outline"></ion-icon>
+                                    </button>
+                                </td>
+                                <td>${administrador.nombre_usuario}</td>
+                                <td>${administrador.nombre_tipo}</td>
+                                <td>${administrador.correo}</td>
+                                <td>${administrador.teléfono}</td>
+                            </tr>
+                        `;
+                        tableBody.append(row);
+                    });
+                } else {
+                    const messageRow = `
+                    <tr>
+                        <td colspan="6" style="text-align: left;">No se encontraron administradores</td>
+                    </tr>
                     `;
-                    tableBody.append(row);
-                });
+                    tableBody.append(messageRow);
+                }
             },
             error: function(xhr, status, error) {
                 console.error('Error al obtener los productores:', status, error);
@@ -379,29 +388,37 @@ function cargarAdministradores() {
             success: function(data) {
                 const tableBody = $('.table-body tbody');
                 tableBody.empty();
-
-                $.each(data, function(index, productor) {
-                    const row = `
-                        <tr>
-                            <td>${productor.id_productor}</td>
-                            <td>
-                                <button id="btnEdit" onclick="editRow(${productor.id_productor}, 'productor')">
-                                    <ion-icon name="pencil-outline"></ion-icon>
-                                </button>
-                                <button id="btnDelete" onclick="deleteRow(this)">
-                                    <ion-icon name="trash-outline"></ion-icon>
-                                </button>
-                            </td>
-                            <td>${productor.nombre}</td>
-                            <td>${productor.correo}</td>
-                            <td>${productor.teléfono}</td>
-                            <td>${productor.rfc}</td>
-                            <td>${productor.curp}</td>
-                            <td>${productor.estatus}</td>
-                        </tr>
+                if (data.length > 0 && !data.error) {
+                    $.each(data, function(index, productor) {
+                        const row = `
+                            <tr>
+                                <td>${productor.id_productor}</td>
+                                <td>
+                                    <button id="btnEdit" onclick="editRow(${productor.id_productor}, 'productor')">
+                                        <ion-icon name="pencil-outline"></ion-icon>
+                                    </button>
+                                    <button id="btnDelete" onclick="deleteRow(this)">
+                                        <ion-icon name="trash-outline"></ion-icon>
+                                    </button>
+                                </td>
+                                <td>${productor.nombre}</td>
+                                <td>${productor.correo}</td>
+                                <td>${productor.teléfono}</td>
+                                <td>${productor.rfc}</td>
+                                <td>${productor.curp}</td>
+                                <td>${productor.estatus}</td>
+                            </tr>
+                        `;
+                        tableBody.append(row);
+                    });
+                } else {
+                    const messageRow = `
+                    <tr>
+                        <td colspan="6" style="text-align: left;">No se encontraron productores</td>
+                    </tr>
                     `;
-                    tableBody.append(row);
-                });
+                    tableBody.append(messageRow);
+                }
             },
             error: function(xhr, status, error) {
                 console.error('Error al obtener los productores:', status, error);
@@ -459,12 +476,11 @@ function cargarAdministradores() {
                     tableBody.append(row);
                 });
             } else {
-                // Si no hay solicitudes, mostrar un mensaje
                 const messageRow = `
                     <tr>
-                        <td colspan="6" style="text-align: center;">${data.message}</td>
+                        <td colspan="6" style="text-align: left;">No se encontraron solicitudes</td>
                     </tr>
-                `;
+                    `;
                 tableBody.append(messageRow);
             }
         },
@@ -559,12 +575,12 @@ function cargarAdministradores() {
                 });
             } else {
                 // Mostrar un mensaje si no hay huertas disponibles o hay un error
-                const row = `
+                const messageRow = `
                     <tr>
-                        <td colspan="23">No se encontraron huertas</td>
+                        <td colspan="6" style="text-align: left;">No se encontraron huertas</td>
                     </tr>
-                `;
-                tableBody.append(row);
+                    `;
+                    tableBody.append(messageRow);
             }
         },
         error: function(xhr, status, error) {
@@ -626,12 +642,12 @@ function cargarAdministradores() {
                 });
             } else {
                 // Mostrar un mensaje si no hay técnicos disponibles o hay un error
-                const row = `
+                const messageRow = `
                     <tr>
-                        <td colspan="5">No se encontraron técnicos o ocurrió un error</td>
+                        <td colspan="6" style="text-align: left;">No se encontraron tecnicos</td>
                     </tr>
-                `;
-                tableBody.append(row);
+                    `;
+                tableBody.append(messageRow);
             }
         },
         error: function(xhr, status, error) {
@@ -690,12 +706,12 @@ function cargarLaboratorio() {
                 });
             } else {
                 // Mostrar un mensaje si no hay técnicos disponibles o hay un error
-                const row = `
+                const messageRow = `
                     <tr>
-                        <td colspan="5">No se encontraron personal de laboratorio disponibles o ocurrió un error</td>
+                        <td colspan="6" style="text-align: left;">No se encontraron personal de laboratorio</td>
                     </tr>
-                `;
-                tableBody.append(row);
+                    `;
+                tableBody.append(messageRow);
             }
         },
         error: function(xhr, status, error) {
@@ -746,15 +762,14 @@ function cargarLaboratorio() {
                     tableBody.append(row); // Agregar la fila a la tabla
                 });
             } else {
-                // Mostrar un mensaje si no hay municipios disponibles
-                const row = `
+                const messageRow = `
                     <tr>
-                        <td colspan="2">No hay municipios disponibles</td>
+                        <td colspan="6" style="text-align: left;">No se encontraron municipios</td>
                     </tr>
-                `;
-                tableBody.append(row);
-                }
-            },
+                    `;
+                tableBody.append(messageRow);
+            }
+        },
         error: function(xhr, status, error) {
             console.error('Error al obtener los municipios:', status, error);
             console.error('Respuesta del servidor:', xhr.responseText);
