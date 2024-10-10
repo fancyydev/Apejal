@@ -387,29 +387,38 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
             success: function(data) {
                 const tableBody = $('.table-body tbody');
                 tableBody.empty();
-
-                $.each(data, function(index, productor) {
-                    const row = `
-                        <tr>
-                            <td>${productor.id_productor}</td>
-                            <td>
-                                <button id="btnEdit" onclick="editRow(${productor.id_productor}, 'productor')">
-                                    <ion-icon name="pencil-outline"></ion-icon>
-                                </button>
-                                <button id="btnDelete" onclick="deleteRow(this)">
-                                    <ion-icon name="trash-outline"></ion-icon>
-                                </button>
-                            </td>
-                            <td>${productor.nombre}</td>
-                            <td>${productor.correo}</td>
-                            <td>${productor.teléfono}</td>
-                            <td>${productor.rfc}</td>
-                            <td>${productor.curp}</td>
-                            <td>${productor.estatus}</td>
-                        </tr>
-                    `;
-                    tableBody.append(row);
-                });
+                if (data.length > 0 && !data.error) {
+                    $.each(data, function(index, productor) {
+                        const row = `
+                            <tr>
+                                <td>${productor.id_productor}</td>
+                                <td>
+                                    <button id="btnEdit" onclick="editRow(${productor.id_productor}, 'productor')">
+                                        <ion-icon name="pencil-outline"></ion-icon>
+                                    </button>
+                                    <button id="btnDelete" onclick="deleteRow(this)">
+                                        <ion-icon name="trash-outline"></ion-icon>
+                                    </button>
+                                </td>
+                                <td>${productor.nombre}</td>
+                                <td>${productor.correo}</td>
+                                <td>${productor.teléfono}</td>
+                                <td>${productor.rfc}</td>
+                                <td>${productor.curp}</td>
+                                <td>${productor.estatus}</td>
+                            </tr>
+                        `;
+                        tableBody.append(row);
+                    });
+                } else {
+                    const messageRow = `
+                    <tr>
+                        <td colspan="6" style="text-align: left;">No se encontraron productores</td>
+                    </tr>
+                `;
+                tableBody.append(messageRow);
+                }
+                
             },
             error: function(xhr, status, error) {
                 console.error('Error al obtener los productores:', status, error);
@@ -517,7 +526,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                 // Si no hay solicitudes, mostrar un mensaje
                 const messageRow = `
                     <tr>
-                        <td colspan="6" style="text-align: center;">${data.message}</td>
+                        <td colspan="6" style="text-align: left;">No se encontraron solicitudes</td>
                     </tr>
                 `;
                 tableBody.append(messageRow);
@@ -618,12 +627,12 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                 });
             } else {
                 // Mostrar un mensaje si no hay huertas disponibles o hay un error
-                const row = `
+                const messageRow = `
                     <tr>
-                        <td colspan="23">No se encontraron huertas</td>
+                        <td colspan="6" style="text-align: left;">No se encontraron huertas</td>
                     </tr>
                 `;
-                tableBody.append(row);
+                tableBody.append(messageRow);
             }
         },
         error: function(xhr, status, error) {
@@ -685,12 +694,12 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                 });
             } else {
                 // Mostrar un mensaje si no hay técnicos disponibles o hay un error
-                const row = `
+                const messageRow = `
                     <tr>
-                        <td colspan="5">No se encontraron técnicos o ocurrió un error</td>
+                        <td colspan="6" style="text-align: left;">No se encontraron tecnicos</td>
                     </tr>
                 `;
-                tableBody.append(row);
+                tableBody.append(messageRow);
             }
         },
         error: function(xhr, status, error) {
@@ -749,12 +758,12 @@ function cargarLaboratorio() {
                 });
             } else {
                 // Mostrar un mensaje si no hay técnicos disponibles o hay un error
-                const row = `
+                const messageRow = `
                     <tr>
-                        <td colspan="5">No se encontraron personal de laboratorio disponibles o ocurrió un error</td>
+                        <td colspan="6" style="text-align: left;">No se encontro personal de laboratorio</td>
                     </tr>
                 `;
-                tableBody.append(row);
+                tableBody.append(messageRow);
             }
         },
         error: function(xhr, status, error) {
@@ -805,13 +814,12 @@ function cargarLaboratorio() {
                 });
             } else {
                 // Mostrar un mensaje si no hay municipios disponibles
-                const row = `
+                const messageRow = `
                     <tr>
-                        <td colspan="2">No hay municipios disponibles</td>
+                        <td colspan="6" style="text-align: left;">No se encontraron municipios</td>
                     </tr>
                 `;
-                tableBody.append(row);
-                }
+                tableBody.append(messageRow);
             },
         error: function(xhr, status, error) {
             console.error('Error al obtener los municipios:', status, error);
