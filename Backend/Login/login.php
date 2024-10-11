@@ -90,6 +90,6 @@ class Login {
     }
 }
 
-
-
 new Login();
+
+?>
