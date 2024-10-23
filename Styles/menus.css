@@ -290,10 +290,12 @@ body {
 
 /* Tabla bro you know what im saying */
 /* Contenido principal */
+
+
 .contenido-principal {
     flex-grow: 1;
     margin: 0;
-    padding: 0;
+    padding: 25px;
     box-sizing: border-box;
     background-color: #52672e; /* Color de fondo */
     font-family: sans-serif;
@@ -308,8 +310,14 @@ table, th, td {
     vertical-align: top; /* Alinea el contenido de las celdas en la parte superior */
 }
 
+table {
+    table-layout: fixed; /* Forzar ancho fijo en las columnas */
+}
+
 table th, table td {
+    width: 100%;
     min-width: 120px; /* Ancho mínimo de las celdas */
+    text-align: center; /* Centrar el texto */
 }
 
 thead th {
