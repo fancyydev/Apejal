@@ -295,7 +295,7 @@ body {
 .contenido-principal {
     flex-grow: 1;
     margin: 0;
-    padding: 25px;
+    padding: 0;
     box-sizing: border-box;
     background-color: #52672e; /* Color de fondo */
     font-family: sans-serif;
@@ -311,11 +311,10 @@ table, th, td {
 }
 
 table {
-    table-layout: fixed; /* Forzar ancho fijo en las columnas */
+    width: 100%;
 }
 
 table th, table td {
-    width: 100%;
     min-width: 120px; /* Ancho mínimo de las celdas */
     text-align: center; /* Centrar el texto */
 }

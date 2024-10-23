@@ -271,6 +271,13 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                 if (nombre.includes(searchValue) || correo.includes(searchValue)) {
                     showRow = true;
                 }
+            } else if (context === 'solicitudes') {
+                const nombre = row.find('td:eq(2)').text().toLowerCase(); // Nombre Usuario
+                const correo = row.find('td:eq(4)').text().toLowerCase(); // Correo
+                const junta = row.find('td:eq(3)').text().toLowerCase();  // Nombre Junta Local
+                if (nombre.includes(searchValue) || correo.includes(searchValue) || junta.includes(searchValue)) {
+                    showRow = true;
+                }  
             } else if (context === 'tecnicos') {
                 const nombre = row.find('td:eq(2)').text().toLowerCase(); // Nombre Usuario
                 const correo = row.find('td:eq(4)').text().toLowerCase(); // Correo
