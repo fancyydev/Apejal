@@ -1,6 +1,6 @@
 <?php
 // Conexión a la base de datos
-require_once($_SERVER['DOCUMENT_ROOT'] . "/proyectoApeajal/APEJAL/Backend/DataBase/connectividad.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/Apejal/Backend/DataBase/connectividad.php");
 
 // Verificar si los datos necesarios se han enviado
 if (!isset($_POST['id_solicitud']) || !isset($_POST['status']) || !isset($_POST['tecnico']) || !isset($_POST['fecha_programada'])) {

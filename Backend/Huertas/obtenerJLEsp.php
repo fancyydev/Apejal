@@ -2,7 +2,7 @@
 
 session_start();
 
-require_once($_SERVER['DOCUMENT_ROOT']."/proyectoApeajal/APEJAL/Backend/DataBase/connectividad.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/Apejal/Backend/DataBase/connectividad.php");
 
 if (!isset($_SESSION['id'])) {
     die("Error: No se ha iniciado sesión.");

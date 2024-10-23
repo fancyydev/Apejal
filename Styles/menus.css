@@ -1,15 +1,51 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500&display=swap');
 
-
-
-
 :root {
-    --color-barra-lateral: rgb(255,255,255);
-    --color-texto: rgb(0,0,0);
-    --color-texto-menu: rgb(134,136,144);
-
+    --color-barra-lateral: rgb(255, 255, 255);
+    --color-texto: rgb(0, 0, 0);
+    --color-texto-menu: rgb(134, 136, 144);
     --color-boton: #52672E;
-    --color-boton-texto: rgb(255,255,255);
+    --color-boton-texto: rgb(255, 255, 255);
+    --color-boton-hover: #4CAF50;
+    --color-boton-cancelar: #f44336;
+    --color-fondo: darkcyan;
+    --color-modal-fondo: rgba(0, 0, 0, 0.5);
+    --color-modal-contenido: white;
+}
+
+/* Animación de deslizamiento para la barra lateral */
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+/* Animación de pulsación */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Animación de aparición para el modal */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 * {
@@ -19,90 +55,11 @@
     font-family: 'Outfit', sans-serif;
 }
 
-
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
-
-.modal-content {
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    width: 300px; /* Ancho del modal */
-}
-
-.modal-content h2 {
-    margin: 0 0 15px;
-}
-
-.modal-content label {
-    display: block;
-    margin-bottom: 10px;
-}
-
-.modal-content select {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-}
-
-.button-container {
-    text-align: right;
-}
-
-.button-container button {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.button-container #generarReporteBtn {
-    background-color: #4CAF50;
-    color: white;
-}
-
-.button-container #cancelarBtn {
-    background-color: #f44336;
-    color: white;
-    margin-left: 10px;
-}
-
-.logout-button {
-    background-color: #ff4c4c;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 10px;
-    font-size: 14px;
-}
-
-.logout-button:hover {
-    background-color: #e60000;
-}
-
-
 body {
     height: 100vh;
     width: 100%;
     display: flex;
-    background-color: darkcyan;
+    background-color: var(--color-fondo);
 }
 
 .barra-lateral {
@@ -112,6 +69,8 @@ body {
     padding: 20px 15px;
     background-color: var(--color-barra-lateral);
     transition: width 0.5s ease;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+    animation: slideIn 0.5s forwards; /* Aplicar animación al entrar */
 }
 
 .mini-barra-lateral {
@@ -132,8 +91,7 @@ body {
     width: 0;
 }
 
-/* Nombre de la pagina */
-
+/* Nombre de la página */
 .barra-lateral .nombre-pagina {
     width: 100%;
     height: 45px;
@@ -144,7 +102,6 @@ body {
 
 .barra-lateral .nombre-pagina img {
     min-width: 50px;
-    font-size: 40px;
     cursor: pointer;
 }
 
@@ -153,7 +110,7 @@ body {
     font-size: 25px;
 }
 
-/*Boton*/
+/* Botones */
 .barra-lateral .boton {
     width: 100%;
     height: 45px;
@@ -166,6 +123,13 @@ body {
     color: var(--color-boton-texto);
     margin-bottom: 25px;
     cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.barra-lateral .boton:hover {
+    background-color: var(--color-boton-hover);
+    transform: translateY(-2px);
+    animation: pulse 0.3s; /* Añadir pulsación al hacer hover */
 }
 
 .barra-lateral .boton ion-icon {
@@ -173,23 +137,20 @@ body {
     font-size: 25px;
 }
 
-
 /* Usuario */
 .barra-lateral .usuario {
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding: 5px 0;
     margin-top: 150px;
     width: 100%;
     display: flex;
     align-items: center;
-    background-color: rgb(190,233,223);
+    background-color: rgb(190, 233, 223);
     border-radius: 10px;
 }
 
 #key {
     min-width: 50px;
     font-size: 25px;
-    border-radius: 10px;
 }
 
 .barra-lateral .usuario .info-usuario {
@@ -209,7 +170,6 @@ body {
 }
 
 .barra-lateral .usuario .nombre-email .nombre {
-    width: 120px;
     font-size: 13px;
     word-wrap: break-word;
     overflow-wrap: break-word;
@@ -219,31 +179,123 @@ body {
 }
 
 .barra-lateral .usuario .nombre-email .email {
-    width: 120px;
     font-size: 12px;
     word-wrap: break-word;
     overflow-wrap: break-word;
     white-space: normal;
     display: block;
 }
+
 #settings {
     width: 50px;
     cursor: pointer;
     font-size: 25px;
 }
 
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-modal-fondo);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: var(--color-modal-contenido);
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 300px; /* Ancho del modal */
+    animation: fadeIn 0.3s forwards; /* Aplicar animación al aparecer */
+}
+
+.modal-content h2 {
+    margin: 0 0 15px;
+}
+
+.modal-content label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.modal-content select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Botones en el Modal */
+.button-container {
+    text-align: right;
+}
+
+.button-container button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.button-container #generarReporteBtn {
+    background-color: var(--color-boton-hover);
+    color: white;
+}
+
+.button-container #generarReporteBtn:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+}
+
+.button-container #cancelarBtn {
+    background-color: var(--color-boton-cancelar);
+    color: white;
+    margin-left: 10px;
+}
+
+.button-container #cancelarBtn:hover {
+    background-color: #e60000;
+    transform: translateY(-2px);
+}
+
+.logout-button {
+    background-color: #ff4c4c;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+    background-color: #e60000;
+}
+
+
 
 /* Tabla bro you know what im saying */
 /* Contenido principal */
-
 .contenido-principal {
     flex-grow: 1;
     margin: 0;
     padding: 0;
-
     box-sizing: border-box;
-    background-color: #52672e;
-
+    background-color: #52672e; /* Color de fondo */
     font-family: sans-serif;
     display: flex;
     justify-content: center;
@@ -251,204 +303,183 @@ body {
 }
 
 table, th, td {
-    border-collapse: collapse;
-    padding: 1rem;
-    vertical-align: top; /* Aligns cell content to the top */
+    border-collapse: collapse; /* Colapsar bordes */
+    padding: 1rem; /* Espaciado interno */
+    vertical-align: top; /* Alinea el contenido de las celdas en la parte superior */
 }
 
 table th, table td {
-    min-width: 120px; /* Cambia este valor según tus necesidades */
+    min-width: 120px; /* Ancho mínimo de las celdas */
 }
 
 thead th {
-    position: sticky;
+    position: sticky; /* Fijar el encabezado */
     top: 0;
     left: 0;
-    background-color: #d5d1defe;
+    background-color: #d5d1defe; /* Color de fondo del encabezado */
+    transition: background-color 0.3s ease; /* Transición para el fondo */
+}
+
+thead th:hover {
+    background-color: #c0c0c0; /* Color de fondo al pasar el mouse */
 }
 
 .table {
-    width: 82vw;
-    height: 80%;
-    background-color: #fff5;
-    box-shadow: 0 .4rem .8rem #0005;
-    border-radius: .8rem;
-    overflow: hidden;
+    width: 82vw; /* Ancho de la tabla */
+    height: 80%; /* Altura de la tabla */
+    background-color: #fff5; /* Color de fondo de la tabla */
+    box-shadow: 0 .4rem .8rem #0005; /* Sombra de la tabla */
+    border-radius: .8rem; /* Bordes redondeados */
+    overflow: hidden; /* Oculta el desbordamiento */
+    transition: transform 0.3s ease; /* Animación al mover */
+}
+
+.table:hover {
+    transform: scale(1.02); /* Aumenta ligeramente la tabla al pasar el mouse */
 }
 
 .table-header {
     width: 100%;
     height: 10%;
-    background: rgba(119, 116, 116, 0.267);
-    padding: 0.8rem 1rem;
-    display: flex; /* Enable flexbox */
-    align-items: center; /* Center vertically */
-    justify-content: space-between; /* Space between h1 and button */
+    background: rgba(119, 116, 116, 0.267); /* Color de fondo del encabezado de la tabla */
+    padding: 0.8rem 1rem; /* Espaciado interno */
+    display: flex; /* Activar flexbox */
+    align-items: center; /* Centrar verticalmente */
+    justify-content: space-between; /* Espaciado entre el título y el botón */
 }
 
+/* Estilos de botones */
+#btnAdd, #btnReport, #btnSearch {
+    color: white; /* Color del texto */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    padding: 10px 20px; /* Espaciado interno */
+    font-size: 16px; /* Tamaño de la fuente */
+    font-weight: bold; /* Texto en negrita */
+    cursor: pointer; /* Cambiar cursor al pasar el ratón */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease; /* Transición suave */
+    width: 30%; /* Ancho del botón */
+}
 
-/*Boton de agregar*/
 #btnAdd {
-    background-color: #52672E; /* Pastel green color */
-    color: white; /* Text color */
-    border: none; /* Removes the default border */
-    border-radius: 5px; /* Rounded corners */
-    padding: 10px 20px; /* Padding inside the button */
-    font-size: 16px; /* Font size of the text */
-    font-weight: bold; /* Makes the text bold */
-    cursor: pointer; /* Changes the cursor to a pointer when hovering */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
-    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effects */
-    width: 15%;
+    background-color: #52672E; /* Color de fondo del botón Agregar */
 }
 
 #btnAdd:hover {
-    background-color: #93c738; /* Slightly darker green on hover */
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Increases shadow on hover */
+    background-color: #93c738; /* Color en hover */
+    transform: translateY(-2px); /* Levanta el botón al pasar el mouse */
 }
 
-#btnAdd:active {
-    background-color: #52672E; /* Even darker green when clicked */
-    box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2); /* Reduces shadow when clicked */
-    transform: translateY(2px); /* Slightly moves the button down when clicked */
-}
-
-/*Boton de reporte*/
 #btnReport {
-    background-color: #f35a02; /* Pastel green color */
-    color: white; /* Text color */
-    border: none; /* Removes the default border */
-    border-radius: 5px; /* Rounded corners */
-    padding: 10px 20px; /* Padding inside the button */
-    font-size: 16px; /* Font size of the text */
-    font-weight: bold; /* Makes the text bold */
-    cursor: pointer; /* Changes the cursor to a pointer when hovering */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
-    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effects */
-    width: 15%;
+    background-color: #f35a02; /* Color de fondo del botón Reporte */
 }
 
 #btnReport:hover {
-    background-color: #fd0000; /* Slightly darker green on hover */
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Increases shadow on hover */
-}
-
-#btnReport:active {
-    background-color: #f35a02; /* Even darker green when clicked */
-    box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2); /* Reduces shadow when clicked */
-    transform: translateY(2px); /* Slightly moves the button down when clicked */
+    background-color: #fd0000; /* Color en hover */
+    transform: translateY(-2px); /* Levanta el botón al pasar el mouse */
 }
 
 #btnSearch {
-    background-color: rgba(0, 13, 255, 0.333); /* Pastel green color */
-    color: white; /* Text color */
-    border: none; /* Removes the default border */
-    border-radius: 5px; /* Rounded corners */
-    padding: 10px 20px; /* Padding inside the button */
-    font-size: 16px; /* Font size of the text */
-    font-weight: bold; /* Makes the text bold */
-    cursor: pointer; /* Changes the cursor to a pointer when hovering */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
-    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effects */
-    width: 15%;
+    background-color: rgba(0, 13, 255, 0.333); /* Color de fondo del botón Buscar */
 }
 
 #btnSearch:hover {
-    background-color: rgb(4, 133, 219); /* Slightly darker green on hover */
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Increases shadow on hover */
+    background-color: rgb(4, 133, 219); /* Color en hover */
+    transform: translateY(-2px); /* Levanta el botón al pasar el mouse */
 }
 
-#btnSearch:active {
-    background-color: rgba(2, 9, 159, 0.333); /* Even darker green when clicked */
-    box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2); /* Reduces shadow when clicked */
-    transform: translateY(2px); /* Slightly moves the button down when clicked */
-}
-
-
+/* Estilos de la tabla */
 .table-body {
     width: 95%;
     height: 80%;
-    background-color: #fffb;
-    margin: .8rem auto;
-    border-radius: .6rem;
-    overflow: auto;
-} 
+    background-color: #fffb; /* Color de fondo del cuerpo de la tabla */
+    margin: .8rem auto; /* Margen automático */
+    border-radius: .6rem; /* Bordes redondeados */
+    overflow: auto; /* Desplazamiento automático */
+    transition: background-color 0.3s ease; /* Transición suave para el fondo */
+}
 
+.table-body:hover {
+    background-color: #f0f0f0; /* Color de fondo al pasar el mouse */
+}
 
 .table-body::-webkit-scrollbar-thumb {
-    visibility: hidden;
+    visibility: hidden; /* Oculta el thumb del scrollbar */
 }
 
-table {
-    width: 100%;
- 
-
-}
-
-/*Botones de borrar y editar*/
 /* Estilo general para los botones dentro de la tabla */
 table button {
     background-color: transparent; /* Fondo transparente */
     border: none; /* Sin borde */
-    cursor: pointer; /* Muestra un cursor de mano al pasar sobre el botón */
-    align-items: center; /* Center vertically */
-    justify-content: space-between; /* Space between h1 and button */; /* Flexbox para alinear icono y texto */
-    justify-content: center; /* Centra el contenido horizontalmente */
-    padding: 0.5rem; /* Espaciado dentro del botón */
+    cursor: pointer; /* Muestra un cursor de mano */
+    padding: 0.5rem; /* Espaciado interno */
     font-size: 16px; /* Tamaño de la fuente */
-    transition: background-color 0.3s ease, color 0.3s ease; /* Transición suave para cambios de color */
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease; /* Transición suave */
 }
 
-/* Estilo específico para el botón de editar (color verde) */
+/* Estilo para el botón de editar */
 #btnEdit {
-    color: white; /* Color del texto y el icono */
-    background-color: rgb(108, 194, 108);
-    border-radius: 5px;
+    color: white; /* Color del texto */
+    background-color: rgb(108, 194, 108); /* Color de fondo */
+    border-radius: 5px; /* Bordes redondeados */
 }
 
 #btnEdit:hover {
-    background-color: rgba(0, 128, 0, 0.1); /* Fondo verde claro al pasar el ratón */
-    color: black;
+    background-color: rgba(0, 128, 0, 0.1); /* Color en hover */
+    color: black; /* Color del texto en hover */
+    transform: translateY(-2px); /* Levanta el botón al pasar el mouse */
 }
 
-/* Estilo específico para el botón de eliminar (color rojo) */
+/* Estilo para el botón de eliminar */
 #btnDelete {
-    color: white; /* Color del texto y el icono */
-    background-color: rgb(206, 103, 103);
-    border-radius: 5px;
+    color: white; /* Color del texto */
+    background-color: rgb(206, 103, 103); /* Color de fondo */
+    border-radius: 5px; /* Bordes redondeados */
 }
 
 #btnDelete:hover {
-    background-color: rgba(255, 0, 0, 0.1); /* Fondo rojo claro al pasar el ratón */
-    color: black;
+    background-color: rgba(255, 0, 0, 0.1); /* Color en hover */
+    color: black; /* Color del texto en hover */
+    transform: translateY(-2px); /* Levanta el botón al pasar el mouse */
 }
 
-
-/*Input search*/
+/* Estilos para el input de búsqueda */
 #inputSearch {
-    height: 40px;
-    width: 50%;
-    border-radius: 5px;
-    padding: 5px;
+    height: 40px; /* Altura del input */
+    width: 50%; /* Ancho del input */
+    border-radius: 5px; /* Bordes redondeados */
+    padding: 5px; /* Espaciado interno */
+    transition: border-color 0.3s ease; /* Transición suave para el borde */
 }
 
+#inputSearch:focus {
+    border-color: #007bff; /* Color del borde al enfocar */
+    outline: none; /* Sin borde por defecto */
+}
+
+/* Clase para ocultar íconos */
 .ocultar-iconos {
-    display: none;
+    display: none; /* Oculta elementos */
 }
 
+/* Estilo para el botón de asignar */
 .btnAssign {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    font-size: 14px;
-    border-radius: 4px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    transition: background-color 0.3s ease;
-}
-.btnAssign:hover {
-    background-color: #0056b3; /* Un azul más oscuro en hover */
+    background-color: #007bff; /* Color de fondo */
+    color: white; /* Color del texto */
+    border: none; /* Sin borde */
+    padding: 5px 10px; /* Espaciado interno */
+    font-size: 14px; /* Tamaño de la fuente */
+    border-radius: 4px; /* Bordes redondeados */
     cursor: pointer; /* Cambia a la manita */
+    display: inline-flex; /* Flexbox en línea */
+    align-items: center; /* Centrar verticalmente */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Transición suave */
 }
+
+.btnAssign:hover {
+    background-color: #0056b3; /* Color más oscuro en hover */
+    cursor: pointer; /* Cambia a la manita */
+    transform: translateY(-2px); /* Levanta el botón al pasar el mouse */
+}
+

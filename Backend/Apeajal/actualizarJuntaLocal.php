@@ -1,6 +1,6 @@
 <?php
 
-require_once($_SERVER['DOCUMENT_ROOT']."/proyectoApeajal/APEJAL/Backend/DataBase/connectividad.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/Apejal/Backend/DataBase/connectividad.php");
 
 $idjuntalocal = $_POST['idjuntalocal'];
 $nombre = $_POST['nombre'];
@@ -14,7 +14,7 @@ $admin = $_POST['admin'];
 $status = $_POST['status'];
 $editarFoto = isset($_POST['editarFoto']) ? $_POST['editarFoto'] : 'no';
 //$carpetaDestinoBase = "../imagenesJuntaLocal/";
-$carpetaDestinoBase = $_SERVER['DOCUMENT_ROOT'] . "/proyectoApeajal/APEJAL/Assets/Img/imagenesJuntasLocales/";
+$carpetaDestinoBase = $_SERVER['DOCUMENT_ROOT'] . "/Apejal/Assets/Img/imagenesJuntasLocales/";
 
 $rutaIMG = $rutaDefault;
 

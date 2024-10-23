@@ -1,5 +1,5 @@
 <?php
-require_once($_SERVER['DOCUMENT_ROOT']."/proyectoApeajal/APEJAL/Backend/DataBase/connectividad.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/Apejal/Backend/DataBase/connectividad.php");
 
 try {
     // Conexión a la base de datos con PDO
@@ -60,7 +60,8 @@ try {
         }
 
         // Crear la carpeta base KMLS si no existe
-        $carpetaDestinoBase = $_SERVER['DOCUMENT_ROOT'] . "/proyectoApeajal/APEJAL/Assets/KMLS/";
+        $carpetaDestinoBase = $_SERVER['DOCUMENT_ROOT'] . "/Apejal/Assets/KMLS/";
+        $carpetaDestinoBase2 = "/Apejal/Assets/KMLS/";
         if (!file_exists($carpetaDestinoBase)) {
             if (!mkdir($carpetaDestinoBase, 0777, true)) {
                 throw new Exception("Error al crear la carpeta base.");
@@ -69,6 +70,8 @@ try {
     
         // Crear la carpeta específica para la huerta si no existe
         $carpetaDestinoHuerta = $carpetaDestinoBase . $id_hue . '/';
+        $carpetaDestinoHuerta2 = $carpetaDestinoBase2 . $id_hue . '/';
+
         if (!file_exists($carpetaDestinoHuerta)) {
             if (!mkdir($carpetaDestinoHuerta, 0777, true)) {
                 throw new Exception("Error al crear la carpeta de la huerta.");
@@ -84,6 +87,8 @@ try {
     
         // Crear la carpeta con formato id_hue_F-fecha_H-hora
         $carpetaDestinoFechaHora = $carpetaDestinoHuerta . $id_hue . "_F-$fecha" . "_H-$hora/";
+        $carpetaDestinoFechaHora2 = $carpetaDestinoHuerta2 . $id_hue . "_F-$fecha" . "_H-$hora/";
+
         if (!file_exists($carpetaDestinoFechaHora)) {
             if (!mkdir($carpetaDestinoFechaHora, 0777, true)) {
                 throw new Exception("Error al crear la carpeta con fecha y hora.");
@@ -92,6 +97,8 @@ try {
     
         // Mover el archivo KML subido a la carpeta específica con fecha y hora
         $destino = $carpetaDestinoFechaHora . $nombreArchivo;
+        $destino2 = $carpetaDestinoFechaHora2 . $nombreArchivo;
+
         if (!move_uploaded_file($origen, $destino)) {
             throw new Exception("Error al mover el archivo KML.");
         }
@@ -101,6 +108,8 @@ try {
 
         // Actualiza la ruta KML
         $rutaKML = $destino;
+        $rutaKML2 = $destino2;
+
     }
 
     // Log para la actualización de la base de datos
@@ -156,7 +165,7 @@ WHERE id_hue = :id_hue";
     $stmt->bindValue(':etapafenologica', $etapafenologica);
     $stmt->bindValue(':fechasv_01', $fechasv_01);
     $stmt->bindValue(':fechasv_02', $fechasv_02);
-    $stmt->bindValue(':rutaKML', $rutaKML);
+    $stmt->bindValue(':rutaKML', $rutaKML2);
     $stmt->bindValue(':id_hue', $id_hue);
 
     // Ejecutar la consulta

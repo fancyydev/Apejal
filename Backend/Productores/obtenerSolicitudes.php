@@ -1,8 +1,7 @@
 <?php
 header('Content-Type: application/json'); // Establecer el tipo de contenido como JSON
 
-require_once($_SERVER['DOCUMENT_ROOT']."/proyectoApeajal/APEJAL/Backend/DataBase/connectividad.php");
-
+require_once($_SERVER['DOCUMENT_ROOT']."/Apejal/Backend/DataBase/connectividad.php");
 // Iniciar la sesión
 session_start();
 $id_usuario = isset($_SESSION["id"]) ? $_SESSION["id"] : null; // Suponiendo que el ID del productor está en la sesión

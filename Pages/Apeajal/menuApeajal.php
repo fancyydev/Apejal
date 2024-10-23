@@ -10,89 +10,103 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu Apeajal</title>
     <link rel="stylesheet" href="../../Styles/menus.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/5.5.2/css/ionicons.min.css"> <!-- Iconos de Ionicons -->
 </head>
 <body>
 
     <div class="barra-lateral">
         <div class="nombre-pagina">
-            <img id="img_apeajal" src="../../Assets/Img/Imagenes/Logo.jpeg" width="50VW" height="50VH" class="d-inline-block align-top" alt="">
+            <img id="img_apeajal" src="../../Assets/Img/Imagenes/Logo.jpeg" width="50" height="50" alt="Logo de Apeajal" />
             <span>Apeajal</span>
         </div>
 
-        <button class="boton" data-content="solicitudes">
-            <ion-icon name="archive-outline"></ion-icon>
-            <span>Solicitudes</span>
-        </button>
+        <nav class="menu">
+            <button class="boton" data-content="solicitudes">
+                <ion-icon name="archive-outline"></ion-icon>
+                <span>Solicitudes</span>
+            </button>
 
-        <button class="boton" data-content="administradores">
-            <ion-icon name="archive-outline"></ion-icon>
-            <span>Admins
-            </span>
-        </button>
+            <button class="boton" data-content="administradores">
+                <ion-icon name="people-outline"></ion-icon>
+                <span>Administradores</span>
+            </button>
 
-        <button class="boton" data-content="juntalocal">
-            <ion-icon name="archive-outline"></ion-icon>
-            <span>Junta Local</span>
-        </button>
+            <button class="boton" data-content="juntalocal">
+                <ion-icon name="document-outline"></ion-icon>
+                <span>Junta Local</span>
+            </button>
 
+            <button class="boton" data-content="huertas">
+                <ion-icon name="leaf-outline"></ion-icon>
+                <span>Huertas</span>
+            </button>
 
-        <button class="boton" data-content="huertas">
-            <ion-icon name="flower-outline"></ion-icon>
-            <span>Huertas</span>
-        </button>
+            <button class="boton" data-content="tecnicos">
+                <ion-icon name="construct-outline"></ion-icon>
+                <span>Técnicos</span>
+            </button>
 
-        <button class="boton" data-content="tecnicos">
-            <ion-icon name="build-outline"></ion-icon>
-            <span>Tecnicos</span>
-        </button>
+            <button class="boton" data-content="productores">
+                <ion-icon name="person-circle-outline"></ion-icon>
+                <span>Productores</span>
+            </button>
 
-        <button class="boton" data-content="productores">
-            <ion-icon name="person-circle-outline"></ion-icon>
-            <span>Productores</span>
-        </button>
+            <button class="boton" data-content="laboratorio">
+                <ion-icon name="flask-outline"></ion-icon>
+                <span>Laboratorio</span>
+            </button>
 
-        <button class="boton" data-content="laboratorio">
-            <ion-icon name="location-outline"></ion-icon>
-            <span>Laboratorio</span>
-        </button>
-
-        <button class="boton" data-content="municipios">
-            <ion-icon name="location-outline"></ion-icon>
-            <span>Municipios</span>
-        </button>
+            <button class="boton" data-content="municipios">
+                <ion-icon name="map-outline"></ion-icon>
+                <span>Municipios</span>
+            </button>
+        </nav>
 
         <div class="usuario">
             <ion-icon id="key" name="key-outline"></ion-icon>
             <div class="info-usuario">
                 <div class="nombre-email">
-                    <span class="nombre">David Fregoso Leon</span>
-                    <span class="email">davidfregosoleon12@gmail.com</span>
+                    <span class="nombre" id="nombre">David Fregoso León</span>
+                    <span class="email" id="email">davidfregosoleon12@gmail.com</span>
                 </div>
-                <ion-icon id="settings" name="ellipsis-vertical-outline"></ion-icon>
+                <ion-icon id="settings" name="settings-outline"></ion-icon>
             </div>
         </div>
+
+        <button id="btnLogout" class="logout-button" onclick="window.location.href='../../Backend/Login/logout.php'">
+            <ion-icon name="log-out-outline"></ion-icon>
+            Cerrar Sesión
+        </button>
     </div>
 
     <div class="contenido-principal">
         <div class="table">
             <section class="table-header">
-                <h1 id="title" >Solicitudes</h1>
-                <input id="inputSearch" type="text">
-                <button id="btnSearch"> Buscar </button>
-                <button id="btnAdd"> Agregar </button>
+                <h1 id="title">Solicitudes</h1>
+                <div class="search-add">
+                    <input id="inputSearch" type="text" placeholder="Buscar..." aria-label="Buscar solicitudes">
+                    <button id="btnSearch">Buscar</button>
+                    <button id="btnAdd">Agregar</button>
+                </div>
             </section>
             
             <section class="table-body">
                 <table>
                     <thead>
-                        <!-- Aquí se cargarán los datos dinámicamente -->
+                        <tr>
+                            <th>ID</th>
+                            <th>Solicitante</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
                     </thead>
                     <tbody>
                         <!-- Aquí se cargarán los datos dinámicamente -->
@@ -911,5 +925,24 @@ function editRow(id, tipo) {
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <!-- Script of menu -->
     <script src="../../Components/Apeajal/menuDesplegable.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        // Realiza una solicitud para obtener los datos del usuario
+        fetch('../../Backend/Login/cargadatos.php')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data); // Verifica los datos aquí
+                if (!data.error && data.usuario) {
+                    document.getElementById('nombre').textContent = data.usuario.nombre;
+                    document.getElementById('email').textContent = data.usuario.correo;
+                } else {
+                    console.error('Error al obtener los datos del usuario:', data.mensaje);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+    
 </body>
 </html>

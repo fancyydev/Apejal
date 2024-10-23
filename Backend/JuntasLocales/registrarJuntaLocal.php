@@ -6,7 +6,7 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
-require_once($_SERVER['DOCUMENT_ROOT']."/proyectoApeajal/APEJAL/Backend/DataBase/connectividad.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/Apejal/Backend/DataBase/connectividad.php");
 
 
 // Conexión a la base de datos
@@ -27,20 +27,6 @@ $data = json_decode(file_get_contents("php://input"));
 if (!$data) {
     die('Error: No se recibieron datos correctamente.');
 }
-
-$archivo = 'datos_formulario.txt';
-
-// Abrir el archivo para escribir, si no existe, se creará
-$archivoTxt = fopen($archivo, 'a'); // 'a' para agregar datos sin borrar lo anterior
-
-// Obtener valores
-$nombre = $data->nombre;
-$domicilio = $data->domicilio;
-$telefono = $data->telefono;
-$correo = $data->correo;
-$municipios = implode(',', $data->municipios);
-$admin = $data->admin;
-$status = $data->status;
 
 
 // Preparar la consulta SQL

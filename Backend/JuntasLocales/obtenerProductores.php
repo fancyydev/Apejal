@@ -2,8 +2,7 @@
 session_start(); // Asegúrate de que la sesión esté iniciada
 header('Content-Type: application/json'); // Asegúrate de que el tipo de contenido es JSON
 
-require_once($_SERVER['DOCUMENT_ROOT']."/proyectoApeajal/APEJAL/Backend/DataBase/connectividad.php");
-
+require_once($_SERVER['DOCUMENT_ROOT']."/Apejal/Backend/DataBase/connectividad.php");
 // Crear conexión
 $conexion = new DB_Connect();
 $conn = $conexion->connect();

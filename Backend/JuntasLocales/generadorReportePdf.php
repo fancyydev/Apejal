@@ -26,7 +26,7 @@ session_start();
 $id_usuario = $_SESSION["id"];
 
 // Conectar a la base de datos
-require_once($_SERVER['DOCUMENT_ROOT']."/proyectoApeajal/APEJAL/Backend/DataBase/connectividad.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/Apejal/Backend/DataBase/connectividad.php");
 $conexion = new DB_Connect();
 $conn = $conexion->connect();
 

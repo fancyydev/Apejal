@@ -1,6 +1,6 @@
 <?php
 // Incluye la conexión a la base de datos
-require_once($_SERVER['DOCUMENT_ROOT']."/proyectoApeajal/Apejal/Backend/DataBase/connectividad.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/Apejal/Backend/DataBase/connectividad.php");
 
 session_start(); // Asegúrate de que la sesión esté iniciada
 

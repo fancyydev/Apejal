@@ -1,9 +1,10 @@
-<?php
 
+<?php
 session_start();
 
-require_once($_SERVER['DOCUMENT_ROOT']."/proyectoApeajal/Apejal/Backend/login/log.php");
-require_once($_SERVER['DOCUMENT_ROOT']."/proyectoApeajal/Apejal/Backend/DataBase/connectividad.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/Apejal/Backend/Login/log.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/Apejal/Backend/DataBase/connectividad.php");
+
 
 class Login {
     private $db;
@@ -93,3 +94,7 @@ class Login {
 
 
 new Login();
+
+
+?>
+

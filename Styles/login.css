@@ -1,20 +1,65 @@
+/* Estilos generales */
+body {
+    background-color: #f8f9fa; /* Color de fondo claro */
+}
+
 .card.login {
-    border-radius: 5rem;
-    border-color: #52672E;
+    border-radius: 20px; /* Bordes redondeados */
+    border: none; /* Sin borde */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Animación suave */
 }
 
+/* Animación de hover para la tarjeta de login */
+.card.login:hover {
+    transform: translateY(-10px); /* La tarjeta se levanta ligeramente */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Sombra para dar efecto de flotación */
+}
+
+/* Área de relleno */
 .area {
-    padding-left: 3rem!important;
-    padding-right: 3rem!important;
+    padding: 2rem; /* Relleno uniforme */
 }
 
-a.btn.link, button.btn.link{
-    margin-top: 20px;
-    margin-bottom: 15px;
-}
-
-a.btn.link, button.btn.link{
+/* Estilos para botones de enlace */
+a.btn.link, button.btn.link {
+    margin: 20px 0 15px 0;
     color: #FFFFFF;
-    background-color: #52672E;
-    border-color: #52672E;
+    background-color: #52672E; /* Color principal */
+    border-color: #52672E; /* Color del borde */
+    padding: 10px 20px;
+    font-size: 16px;
+    text-align: center;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Transición para cambios suaves */
+}
+
+/* Efecto hover para botones */
+a.btn.link:hover, button.btn.link:hover {
+    background-color: #435623; /* Tono más oscuro en hover */
+    border-color: #435623;
+    transform: scale(1.05); /* Efecto de agrandamiento al pasar el ratón */
+}
+
+/* Efecto de animación al hacer clic */
+a.btn.link:active, button.btn.link:active {
+    transform: scale(0.95); /* Efecto de pequeño encogimiento al hacer clic */
+}
+
+/* Animación de entrada para los botones */
+a.btn.link, button.btn.link {
+    opacity: 0;
+    animation: fadeIn 1s forwards ease-in-out; /* Animación de aparición suave */
+    animation-delay: 0.5s; /* Retardo para que sea más visible */
+}
+
+/* Definición de la animación de aparición */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px); /* Aparece desde abajo */
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

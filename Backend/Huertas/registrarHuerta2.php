@@ -1,5 +1,5 @@
 <?php
-require_once($_SERVER['DOCUMENT_ROOT']."/proyectoApeajal/APEJAL/Backend/DataBase/connectividad.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/Apejal/Backend/DataBase/connectividad.php");
 
 $id_huerta = $_POST['hue'];
 $id_productor = $_POST['propietario'];
@@ -25,7 +25,8 @@ $fechasv_02 = $_POST['fechaSV2'];
 $fechaReg = $_POST['fechaReg'];
 
 //$carpetaDestinoBase = "../kmls/";
-$carpetaDestinoBase = $_SERVER['DOCUMENT_ROOT'] . "/proyectoApeajal/APEJAL/Assets/KMLS/";
+$carpetaDestinoBase = $_SERVER['DOCUMENT_ROOT'] . "/Apejal/Assets/KMLS/";
+$carpetaDestinoBase2 = "/Apejal/Assets/KMLS/";
 
 
 $rutaKML = '';
@@ -65,6 +66,7 @@ if (isset($_FILES["file"])) {
 
     // Crear la carpeta específica para la huerta si no existe
     $carpetaDestinoHuerta = $carpetaDestinoBase . $id_huerta . '/';
+    $carpetaDestinoHuerta2 = $carpetaDestinoBase2 . $id_huerta . '/';
     if (!file_exists($carpetaDestinoHuerta)) {
         if (!mkdir($carpetaDestinoHuerta, 0777, true)) {
             echo json_encode(["error" => true, "messages" => ["Error al crear la carpeta de la huerta: $carpetaDestinoHuerta"]]);
@@ -81,6 +83,8 @@ if (isset($_FILES["file"])) {
 
     // Crear la carpeta con formato id_huerta_F-fecha_H-hora
     $carpetaDestinoFechaHora = $carpetaDestinoHuerta . $id_huerta . "_F-$fecha" . "_H-$hora/";
+    $carpetaDestinoFechaHora2 = $carpetaDestinoHuerta2 . $id_huerta . "_F-$fecha" . "_H-$hora/";
+
     if (!file_exists($carpetaDestinoFechaHora)) {
         if (!mkdir($carpetaDestinoFechaHora, 0777, true)) {
             echo json_encode(["error" => true, "messages" => ["Error al crear la carpeta con fecha y hora: $carpetaDestinoFechaHora"]]);
@@ -90,11 +94,15 @@ if (isset($_FILES["file"])) {
 
     // Mover el archivo KML a la carpeta destino
     $destino = $carpetaDestinoFechaHora . $nombreArchivo;
+    $destino2 = $carpetaDestinoFechaHora2 . $nombreArchivo;
+    
     if (!move_uploaded_file($origen, $destino)) {
         echo json_encode(["error" => true, "messages" => ["Error al mover el archivo KML a: $destino"]]);
         exit(); 
     } else {
         $rutaKML = $destino;
+        $rutaKML2 = $destino2;
+
     }
 } else {
     echo json_encode(["error" => true, "messages" => ["No se ha recibido un archivo KML."]]);
@@ -130,7 +138,7 @@ try {
     $stmt_huertas->bindParam(18, $etapafenologica, PDO::PARAM_STR);
     $stmt_huertas->bindParam(19, $fechasv_01, PDO::PARAM_STR);
     $stmt_huertas->bindParam(20, $fechasv_02, PDO::PARAM_STR);
-    $stmt_huertas->bindParam(21, $rutaKML, PDO::PARAM_STR);
+    $stmt_huertas->bindParam(21, $rutaKML2, PDO::PARAM_STR);
     $stmt_huertas->bindParam(22, $fechaReg, PDO::PARAM_STR);
     $stmt_huertas->bindParam(23, $jl, PDO::PARAM_INT);
 

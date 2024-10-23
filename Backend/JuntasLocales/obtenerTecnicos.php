@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json'); // Asegúrate de que el tipo de contenido es JSON
 
-require_once($_SERVER['DOCUMENT_ROOT']."/proyectoApeajal/APEJAL/Backend/DataBase/connectividad.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/Apejal/Backend/DataBase/connectividad.php");
 
 session_start(); // Asegúrate de que se inicia la sesión
 $id_usuario = $_SESSION["id"]; // Obtener el ID del usuario desde la sesión

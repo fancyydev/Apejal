@@ -151,3 +151,4 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
     </script>
 </body>
 </html>
+
