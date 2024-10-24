@@ -122,7 +122,7 @@
 
             // Cargar Juntas Locales
             $.ajax({
-                url: '../../Backend/Huertas/obtenerJL.php',
+                url: '../../Backend/Huertas/obtenerJLEsp.php',
                 type: 'GET',
                 dataType: 'json',
                 success: function(response) {
@@ -134,6 +134,7 @@
                     });
                     if (jl_id) {
                         $('#jlT').val(jl_id).change();  // Esto fuerza a que se seleccione la junta local y cargue los municipios
+                        $('#jlT').prop('disabled', true);
                     }
                 },
                 error: function(xhr, status, error) {

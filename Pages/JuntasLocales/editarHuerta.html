@@ -372,7 +372,7 @@
 
 $(document).ready(function() {
     $.ajax({
-        url: '../../Backend/Huertas/obtenerJL.php',
+        url: '../../Backend/Huertas/obtenerJLEsp.php',
         type: 'GET',
         dataType: 'json',
         success: function(response) {
@@ -396,6 +396,7 @@ $(document).ready(function() {
 
             // Si hay una Junta Local seleccionada, cargar los municipios
             if (juntaLocalSeleccionada) {
+                $('#jl').prop('disabled', true);
                 cargarMunicipios(juntaLocalSeleccionada);
             }
         },

@@ -129,7 +129,7 @@
 
             // Cargar Juntas Locales
             $.ajax({
-                url: '../../Backend/Huertas/obtenerJL.php',
+                url: '../../Backend/Huertas/obtenerJLEsp.php',
                 type: 'GET',
                 dataType: 'json',
                 success: function(response) {
@@ -142,6 +142,7 @@
 
                     if (jl_id) {
                          $('#jlLab').val(jl_id); // Asegúrate de usar el ID correcto
+                         $('#jlLab').prop('disabled', true);
                     }
                 },
                 error: function(xhr, statusLab, error) {
