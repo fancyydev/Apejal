@@ -297,7 +297,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['tipo']) || $_SESSION['tipo'] !=
                             <td>${juntalocal.correo}</td>
                             <td>${juntalocal.teléfono }</td>
                             <td>${juntalocal.domicilio }</td>
-                            <td>${juntalocal.carga_municipios}</td> 
+                            <td>${juntalocal.nombres_municipios}</td> 
                             <td>${juntalocal.estatus}</td>
                             <td>${juntalocal.ruta_img}</td>
                         </tr>
